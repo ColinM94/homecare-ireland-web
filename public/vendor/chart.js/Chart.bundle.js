@@ -7060,7 +7060,7 @@ var platform = helpers$1.extend({
 	 * Registers the specified listener on the given chart.
 	 * @param {Chart} chart - Chart from which to listen for event
 	 * @param {string} type - The ({@link IEvent}) type to listen for
-	 * @param {function} listener - Receives a notification (an object that implements
+	 * @param {function} listener - Receives a  (an object that implements
 	 * the {@link IEvent} interface) when an event of the specified type occurs.
 	 */
 	addEventListener: function() {},

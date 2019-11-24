@@ -4,7 +4,9 @@ var firebaseConfig = {
     authDomain: "carers-app.firebaseapp.com",
     databaseURL: "https://carers-app.firebaseio.com",
     projectId: "carers-app",
-    //appId: "1:128407070115:web:3903fd81347b8c4cc76616"
+    storageBucket: "carers-app.appspot.com",
+    messagingSenderId: "128407070115",
+    appId: "1:128407070115:web:3903fd81347b8c4cc76616"
 }
 
 // Initialize Firebase
