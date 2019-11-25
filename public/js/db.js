@@ -1,4 +1,4 @@
-function setupUI (user) {
+/*function setupUI (user) {
     if (user){
         // Account info 
         db.collection('users').doc(user.uid).get().then(doc =>{
@@ -7,3 +7,4 @@ function setupUI (user) {
         })
     }
 }
+*/

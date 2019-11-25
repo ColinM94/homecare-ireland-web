@@ -1,59 +1,61 @@
-//var currentUser = null
-//var name = document.querySelectorAll('#name')
-
 // Listen for auth state change.
 auth.onAuthStateChanged(user => {
     if(user){
         currentUser = user
-        setupUI(user)
+        //router("dashboard")
     } else{
-        
+        //router("signin")
     }   
 })
 
-
 // Sign in.
-const signinForm = document.querySelector('#form-signin') 
-signinForm && signinForm.addEventListener('submit', (e) => {
-    // Prevents page from reloading on submit.
-    e.preventDefault() 
-   
-    const email = signinForm['signin-email'].value
-    const password = signinForm['signin-password'].value
-
-    auth.signInWithEmailAndPassword(email, password).then(cred => {
-        window.location.href = "index.html"   
-    }).catch(error => {
-        console.log(error.message)
-        signinForm.querySelector('#signin-error').innerHTML = error.message
-    })
-})
-
-// Sign up.
-const signupForm = document.querySelector('#form-signup')
-signupForm && signupForm.addEventListener('submit', (e) => {
-    e.preventDefault()     
-  
-    const email = signupForm['signup-email'].value
-    const password = signupForm['signup-password'].value
-
-    // Sign up user.
-    auth.createUserWithEmailAndPassword(email, password).then(data => { 
-        db.collection('users').doc(data.user.uid).set({
-            name: signupForm['signup-name'].value
-        }).then(() => {
-            window.location.href = "index.html"  
+function signIn(){
+    var email = $("#signin-email").val()
+    var password = $("#signin-password").val()
+    
+    if(email != "" || password != ""){
+        auth.signInWithEmailAndPassword(email, password).then(cred => {
+            router("dashboard")
+        }).catch(error => {
+            $("#signin-error").html(error.message)
         })
-    }).catch(error => {
+    }
+
+    return false
+}
+
+// Sign Up.
+function signUp(){
+    var name = $("#signup-name").val()
+    var email = $("#signup-email").val()
+    var password = $("#signup-password").val()
+    console.log("hsdkjfh")
+    // Validation.
+    if(name != "" || email != "" || password != ""){
+        auth.createUserWithEmailAndPassword(email, password).then(data => { 
+            db.collection('users').doc(data.user.uid).set({
+                name: name
+                }).then(() => {
+                    router("dashboard")
+                })
+        }).catch(error => {
             console.log(error.message)
-            signupForm.querySelector('#signup-error').innerHTML = error.message
+            $("#signup-error").html(error.message)
         })
-})
+    }
+
+    return false 
+}
 
 // Sign out. 
 const signOut = document.querySelector('#sign-out')
 signOut && signOut.addEventListener('click', (e) => {
     auth.signOut()
-    window.location.href = "signin.html"
-
+    router("signin")
 })
+
+function setupSelectors(){
+    console.log("Selectors setup")
+    signinForm = document.querySelector('#form-signin') 
+    signupForm = document.querySelector('#form-signup')
+}
