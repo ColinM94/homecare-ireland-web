@@ -1,4 +1,4 @@
-class userInfo{
+class UserInfo{
     constructor(name){
         this.name = name
     }

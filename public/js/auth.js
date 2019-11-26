@@ -1,17 +1,11 @@
-// Check out js modules
-var currentUser = null
-var signedIn = false
-
-//var currentUser = null
 // Listen for auth state change.
 auth.onAuthStateChanged(user => {
     if(user){
-        //signedIn = true
-                //console.log(signedIn)
-
+        router("dashboard")
+        getUserInfo(user)
     } else{
+        router("signin")
         //signedIn = false
-                //console.log(signedIn)
     }   
 })
 
@@ -22,8 +16,7 @@ function signIn(){
     
     if(email != "" || password != ""){
         auth.signInWithEmailAndPassword(email, password).then(cred => {
-            router("dashboard")
-            console.log("hello")
+            //router("dashboard")
             signedIn = true
         }).catch(error => {
             $("#signin-error").html(error.message)
@@ -38,14 +31,14 @@ function signUp(){
     var name = $("#signup-name").val()
     var email = $("#signup-email").val()
     var password = $("#signup-password").val()
-    console.log("hsdkjfh")
+
     // Validation.
     if(name != "" || email != "" || password != ""){
         auth.createUserWithEmailAndPassword(email, password).then(data => { 
             db.collection('users').doc(data.user.uid).set({
                 name: name
                 }).then(() => {
-                    router("dashboard")
+                    //router("dashboard")
                 })
         }).catch(error => {
             console.log(error.message)
@@ -60,23 +53,9 @@ function signUp(){
 const signOut = document.querySelector('#sign-out')
 signOut && signOut.addEventListener('click', (e) => {
     auth.signOut()
-    signedOut = false
+    FirebaseAuth.getInstance().signOut();
     router("signin")
 })
 
-function setupSelectors(){
-    console.log("Selectors setup")
-    signinForm = document.querySelector('#form-signin') 
-    signupForm = document.querySelector('#form-signup')
-}
 
-document.onload = function(){
-    if(signedIn){
-    console.log("Signed in: " + signedIn)
-    //router("dashboard")
-    console.log("Signed in: Routing to dashboard")
-    }else{
-    console.log("Signed in = " + signedIn + " routing to signin")
-    router("signin")
-    }
-}
+
