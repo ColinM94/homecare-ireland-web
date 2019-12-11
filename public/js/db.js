@@ -41,29 +41,38 @@ function setupUsers () {
 
 function setupClients () {
     var clients = new Array()
-    
-    db.collection('clients').onSnapshot(data => {
-        data.forEach(doc => {
+ 
+    var clientDetails = db.collection('clientDetails').get().then( snapshot => {
+        snapshot.forEach(doc => {
             var client = new Array()
+
             client[0] = doc.id
             client[1] = doc.data().name
-            client[2] = doc.data().maritalstatus
-            client[3] = doc.data().mobile
-            client[4] = doc.data().telephone
+            client[2] = doc.data().address1
+            client[3] = doc.data().address2
+            client[4] = doc.data().town
+            client[5] = doc.data().county
+            client[6] = doc.data().eircode
+            client[7] = doc.data().mobile
+            client[8] = doc.data().marital
+
             clients.push(client)
-            return clients
         })
 
-        $('#clients').DataTable( {
+            $('#clients').DataTable( {
             data: clients,
             columns: [
                 { title: "ID" },
                 { title: "Name" },
-                { title: "Marital Status"},
+                { title: "Address 1"},
+                { title: "Address 2"},
+                { title: "Town"},
+                { title: "County"},
+                { title: "Eircode"},
                 { title: "Mobile"},
-                { title: "Telephone"}
+                { title: "Marital Status"},
             ],
-  
-        } )
+        })
     })
 }
+
