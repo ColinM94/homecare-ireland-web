@@ -8,3 +8,9 @@ component{
     all:unset;
 }
 
+.form-select{
+    font-size: 0.8rem;
+    border-radius: 0.5rem;
+    height: 3.2rem;
+}
+
