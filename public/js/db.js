@@ -19,11 +19,17 @@ function setupUI(){
 function setupUsers () {
     var users = new Array()
     
-    db.collection('users').onSnapshot(data => {
+    db.collection('userDetails').onSnapshot(data => {
         data.forEach(doc => {
             var user = new Array()
             user[0] = doc.id
-            user[1] = doc.data().name
+            user[1] = doc.data().role
+            user[2] = doc.data().name
+            user[3] = doc.data().address1
+            user[4] = doc.data().address2
+            user[5] = doc.data().town
+            user[6] = doc.data().county
+            user[7] = doc.data().eircode
             users.push(user)
             return users
         })
@@ -32,7 +38,13 @@ function setupUsers () {
             data: users,
             columns: [
                 { title: "ID"},
-                { title: "Name" }
+                { title: "Role"},
+                { title: "Name"},
+                { title: "Address 1"},
+                { title: "Address 2"},
+                { title: "Town"},
+                { title: "County"},
+                { title: "Eircode"},
             ],
             "bLengthChange": false
         } )
@@ -131,5 +143,67 @@ function deleteClient (clientId) {
     } )
     .remove()
     .draw();
+}
+
+function addConnection(){
+    var userId = $("#connection-userid").val()
+    var clientId = $("#connection-clientid").val()
+
+    log(userId)
+    log(clientId)
+
+    db.collection('connections').doc(userId).get().then(doc => {
+        if(doc.exists){
+            var newClients = doc.data().clients
+
+            if(!newClients.includes(clientId)){
+                newClients.push(clientId)
+
+                let data = {
+                    clients : newClients
+                }
+
+                db.collection('connections').doc(userId).set(data);
+            }
+
+        }else{
+            var newClients = [clientId]
+
+            let data = {
+                clients : newClients
+            }
+
+            db.collection('connections').doc(userId).set(data);
+        }
+    })
+
+    db.collection('connections').doc(clientId).get().then(doc => {
+        if(doc.exists){
+            var newUsers = doc.data().users
+
+            if(!newUsers.includes(userId)){
+                newUsers.push(userId)
+
+                newUsers.push(userId)
+
+                let data = {
+                    connections: newUsers
+                }
+
+                db.collection('connections').doc(clientId).set(data)
+            }
+            
+        }else{
+            var newUsers = [userId]
+
+            let data = {
+                users : newUsers
+            }
+
+            db.collection('connections').doc(clientId).set(data);
+        }
+    })
+    
+    return false
 }
 
