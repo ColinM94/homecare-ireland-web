@@ -1,3 +1,5 @@
+// Custom logger. 
+
 // Default colour
 var color = "#0000ff"
 

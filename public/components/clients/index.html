@@ -1,113 +1,116 @@
 
-  <div class="card shadow mb-4">
-    <div class="card-header py-3">
-      Clients
-      <a class="float-right" href="#" data-toggle="modal" data-target="#clientModal">Add New Client</a>
-    </div>
-    <div class="card-body">
-      <table class="table table-bordered" id="clientsTable" width="100%" cellspacing="0">
-            <hr>
-      </table>  
+<div class="card shadow mb-4">
+  <div class="card-header row">
+    <h6 class="col-md m-0 font-weight-bold my-auto">Clients</h6>
+    <div id="datatableSearch" class="col-md my-auto"></div>
+    <div class="col-md text-right">
+      <a href="#" data-toggle="modal" data-target="#clientModal">Add Client</a>
     </div>
   </div>
+  <div class="card-body">
+    <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+          
+    </table>  
+  </div>
+</div>
 
-  <div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form class="user" onsubmit="return addClient()">
-            <div class="form-group">
-              <input type="text" class="form-control form-control-user" id="client-name" placeholder="Name">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control form-control-user" id="client-mobile" placeholder="Mobile">
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control form-control-user" id="client-address1" placeholder="Address Line 1">
-              </div>
-            <div class="form-group">
-              <input type="text" class="form-control form-control-user" id="client-address2" placeholder="Address Line 2">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control form-control-user" id="client-town" placeholder="Town">
-            </div>
-            <div class="form-group">
-                <select class="form-control form-select" id="client-county">
-                  <option value="" selected disabled hidden>Select County</option>
-                  <option value="Carlow">Carlow</option>
-                  <option value="Cavan">Cavan</option>
-                  <option value="Clare">Clare</option>
-                  <option value="Cork">Cork</option>
-                  <option value="Donegal">Donegal</option>
-                  <option value="Dublin">Dublin</option>
-                  <option value="Galway">Galway</option>
-                  <option value="Kerry">Kerry</option>
-                  <option value="Kildare">Kildare</option>
-                  <option value="Kilkenny">Kilkenny</option>
-                  <option value="Laois">Laois</option>
-                  <option value="Leitrim">Leitrim</option>
-                  <option value="Limerick">Limerick</option>
-                  <option value="Longford">Longford</option>
-                  <option value="Louth">Louth</option>
-                  <option value="Mayo">Mayo</option>
-                  <option value="Meath">Meath</option>
-                  <option value="Monaghan">Monaghan</option>
-                  <option value="Offaly">Offaly</option>
-                  <option value="Roscommon">Roscommon</option>
-                  <option value="Sligo">Sligo</option>
-                  <option value="Tipperary">Tipperary</option>
-                  <option value="Waterford">Waterford</option>
-                  <option value="Westmeath">Westmeath</option>
-                  <option value="Wexford">Wexford</option>
-                  <option value="Wicklow">Wicklow</option>
-                </select>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control form-control-user" id="client-eircode" placeholder="Eircode">
-            </div>
-            <div class="form-group">
-              <select class="form-control form-select" id="client-marital">
-                <option value="" selected disabled hidden>Select Marital Status</option>
-                <option value="Single">Single</option>
-                <option value="Married">Married</option>
-                <option value="Widowed">Widowed</option>
-                <option value="Divorced">Divorced</option>
-                <option value="Relationship">Relationship</option>
-              </select>
-            </div>
-            <button class="btn btn-primary btn-user btn-block">
-              Add Client
-            </button>
-            <p class="form-error" id="client-error"></p>
-            <hr>
-          </form>
-        </div>
+<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
       </div>
-    </div>
-  </div>
-
-    <!-- Remove Client Modal -->
-    <div class="modal fade" id="deleteClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-              <a class="btn btn-primary" href="javascript:removeClient()">Yes</a>
-            </div>
+      <div class="modal-body">
+        <form class="user" id="form-client">
+          <div class="form-group">
+            <input type="text" class="form-control form-control-user" id="client-name" placeholder="Name">
           </div>
-        </div>
+          <div class="form-group">
+            <input type="text" class="form-control form-control-user" id="client-mobile" placeholder="Mobile">
+          </div>
+          <div class="form-group">
+              <input type="text" class="form-control form-control-user" id="client-address1" placeholder="Address Line 1">
+            </div>
+          <div class="form-group">
+            <input type="text" class="form-control form-control-user" id="client-address2" placeholder="Address Line 2">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control form-control-user" id="client-town" placeholder="Town">
+          </div>
+          <div class="form-group">
+              <select class="form-control form-select" id="client-county">
+                <option value="" selected disabled hidden>Select County</option>
+                <option value="Carlow">Carlow</option>
+                <option value="Cavan">Cavan</option>
+                <option value="Clare">Clare</option>
+                <option value="Cork">Cork</option>
+                <option value="Donegal">Donegal</option>
+                <option value="Dublin">Dublin</option>
+                <option value="Galway">Galway</option>
+                <option value="Kerry">Kerry</option>
+                <option value="Kildare">Kildare</option>
+                <option value="Kilkenny">Kilkenny</option>
+                <option value="Laois">Laois</option>
+                <option value="Leitrim">Leitrim</option>
+                <option value="Limerick">Limerick</option>
+                <option value="Longford">Longford</option>
+                <option value="Louth">Louth</option>
+                <option value="Mayo">Mayo</option>
+                <option value="Meath">Meath</option>
+                <option value="Monaghan">Monaghan</option>
+                <option value="Offaly">Offaly</option>
+                <option value="Roscommon">Roscommon</option>
+                <option value="Sligo">Sligo</option>
+                <option value="Tipperary">Tipperary</option>
+                <option value="Waterford">Waterford</option>
+                <option value="Westmeath">Westmeath</option>
+                <option value="Wexford">Wexford</option>
+                <option value="Wicklow">Wicklow</option>
+              </select>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control form-control-user" id="client-eircode" placeholder="Eircode">
+          </div>
+          <div class="form-group">
+            <select class="form-control form-select" id="client-marital">
+              <option value="" selected disabled hidden>Select Marital Status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Widowed">Widowed</option>
+              <option value="Divorced">Divorced</option>
+              <option value="Relationship">Relationship</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-user btn-block">
+            Add Client
+          </button>
+          <p class="form-error" id="client-error"></p>
+          <hr>
+        </form>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Remove Client Modal -->
+<div class="modal fade" id="deleteClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary" href="javascript:removeClient()">Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>setupClients()</script>

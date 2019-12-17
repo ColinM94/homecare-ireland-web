@@ -16,8 +16,16 @@ function setupUsers () {
             return users
         })
 
-        $('#users').DataTable( {
+        $('#datatable').DataTable( {
             data: users,
+            "lengthChange": false,
+            oLanguage: {
+                sLengthMenu: "_MENU_",
+                sSearch: '', searchPlaceholder: "Search..." 
+            },
+            initComplete : function() {
+                $("#datatable_filter").detach().appendTo('#datatableSearch');
+            },
             columns: [
                 { title: "ID"},
                 { title: "Role"},
