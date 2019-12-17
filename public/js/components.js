@@ -13,6 +13,9 @@ function loadComponents(){
     })
 }
 
+
+
+/*
 function loadComponent(component, location, force){
     //console.log("Loading component: components/" + component + "into " + location + " div")
 
@@ -33,6 +36,7 @@ function loadComponent(component, location, force){
     //$.getScript("components/topbar/topbar.js")
   
 }
+*/
 
 function isEmpty( el ){
     return !$.trim(el.html())

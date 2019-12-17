@@ -1,13 +1,5 @@
-// Listen for auth state change.
-auth.onAuthStateChanged(user => {
-    if(user){
-        router("dashboard")
-        getUserInfo(user)
-    } else{
-        router("signin")
-        //signedIn = false
-    }   
-})
+
+
 
 // Sign in.
 function signIn(){
@@ -16,7 +8,7 @@ function signIn(){
     
     if(email != "" || password != ""){
         auth.signInWithEmailAndPassword(email, password).then(cred => {
-            //router("dashboard")
+            window.location = "dashboard.html"
             signedIn = true
         }).catch(error => {
             $("#signin-error").html(error.message)
@@ -49,13 +41,9 @@ function signUp(){
     return false 
 }
 
-// Sign out. 
-const signOut = document.querySelector('#sign-out')
-signOut && signOut.addEventListener('click', (e) => {
+function signOut(){
     auth.signOut()
-    FirebaseAuth.getInstance().signOut();
-    router("signin")
-})
+}
 
 
 
