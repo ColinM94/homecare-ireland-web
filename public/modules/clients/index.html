@@ -4,7 +4,7 @@
     <h6 class="col-md m-0 font-weight-bold my-auto">Clients</h6>
     <div id="datatableSearch" class="col-md my-auto"></div>
     <div class="col-md text-right">
-      <a href="#" data-toggle="modal" data-target="#clientModal">Add Client</a>
+      <a href="#" data-toggle="modal" data-target="#addClientModal">Add Client</a>
     </div>
   </div>
   <div class="card-body">
@@ -14,7 +14,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -96,7 +96,7 @@
 </div>
 
 <!-- Remove Client Modal -->
-<div class="modal fade" id="deleteClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -105,9 +105,10 @@
           <span aria-hidden="true">×</span>
         </button>
       </div>
+      <span id="idHolder" style="display: none;"></span>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a class="btn btn-primary" href="javascript:removeClient()">Yes</a>
+        <a class="btn btn-primary" id="confirmDeleteBtn" href="#">Delete</a>
       </div>
     </div>
   </div>

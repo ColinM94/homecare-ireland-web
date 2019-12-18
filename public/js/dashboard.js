@@ -37,35 +37,38 @@ function setActive(item){
     }
 }
 
-function loadComponent(component){
-    // Gets the location of the element and inserts the component into it. 
-    $("#"+component).addClass("active")
-    $("#component").load("components/" + component)
+function loadModule(module){
+    // Gets the location of the element and inserts the module into it. 
+    $("#"+module).addClass("active")
+    $("#module").load("modules/" + module)
 }
 
-// Sidebar buttons. 
+// Default module. 
 $( document ).ready(function() {
-    loadComponent("users")
-    setActive("users")
+    var module = "clients"
+    
+    loadModule(module)
+    setActive(module)
 })
 
+// Sidebar buttons.
 $("#nav-brand").click(function (){
-    loadComponent("users")
+    loadModule("users")
     setActive("users")
 })
 
 $("#nav-users").click(function (){
-    loadComponent("users")
+    loadModule("users")
     setActive("users")
 })
 
 $("#nav-clients").click(function (){
-    loadComponent("clients")
+    loadModule("clients")
     setActive("clients")
 })
 
 $("#nav-connections").click(function (){
-    loadComponent("connections")
+    loadModule("connections")
     setActive("connections")
 })
 
