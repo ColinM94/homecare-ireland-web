@@ -1,8 +1,7 @@
 // Listen for auth state change.
 auth.onAuthStateChanged(user => {
     if(user){
-        //window.location = "dashboard.html";
-        //getUserInfo(user)
+        getUserInfo(user)
     } else{
         signOut()
         window.location = "index.html"
@@ -17,59 +16,54 @@ function getUserInfo(user){
             id : user.uid,
             email : user.email,
             name :  doc.data().name
-
         }
         setupUI()
     })
 }
 
 function setupUI(){
-    document.getElementById("topbar-name").innerHTML = currentUser.name  
-}
-
-// Sets active nav item in sidebar. 
-function setActive(item){
-    // Default
-    $("#nav-users").addClass("active")
-
-    if(item != "users"){
-        $("#nav-users").removeClass("active")
-    }
+    $('#topbar-name').html(currentUser.name) 
+    loadModule("clients")
 }
 
 function loadModule(module){
     // Gets the location of the element and inserts the module into it. 
     $("#"+module).addClass("active")
     $("#module").load("modules/" + module)
+    setActive(module)
 }
 
-// Default module. 
-$( document ).ready(function() {
-    var module = "clients"
-    
-    loadModule(module)
-    setActive(module)
-})
+// Sets active nav item in sidebar. 
+function setActive(module){
+    // Default
+    $("#nav-"+module).addClass("active")
+
+    if(module != "users"){
+        $("#nav-users").removeClass("active")
+    }
+    if(module != "clients"){
+        $("#nav-clients").removeClass("active")
+    }    
+    if(module != "connections"){
+        $("#nav-connections").removeClass("active")
+    }
+}
 
 // Sidebar buttons.
 $("#nav-brand").click(function (){
     loadModule("users")
-    setActive("users")
 })
 
 $("#nav-users").click(function (){
     loadModule("users")
-    setActive("users")
 })
 
 $("#nav-clients").click(function (){
     loadModule("clients")
-    setActive("clients")
 })
 
 $("#nav-connections").click(function (){
     loadModule("connections")
-    setActive("connections")
 })
 
 // Topbar buttons. 
