@@ -1,42 +1,63 @@
-function setupUsers () {
-    var users = new Array()
+async function setupUsers () {
+    let users = await getUsers()
     
-    db.collection('userDetails').onSnapshot(data => {
-        data.forEach(doc => {
-            var user = new Array()
-            user[0] = doc.id
-            user[1] = doc.data().role
-            user[2] = doc.data().name
-            user[3] = doc.data().address1
-            user[4] = doc.data().address2
-            user[5] = doc.data().town
-            user[6] = doc.data().county
-            user[7] = doc.data().eircode
-            users.push(user)
-            return users
-        })
-
-        $('#datatable').DataTable( {
-            data: users,
-            "lengthChange": false,
-            oLanguage: {
-                sLengthMenu: "_MENU_",
-                sSearch: '', searchPlaceholder: "Search..." 
-            },
-            initComplete : function() {
-                $("#datatable_filter").detach().appendTo('#datatableSearch');
-            },
-            columns: [
-                { title: "ID"},
-                { title: "Role"},
-                { title: "Name"},
-                { title: "Address 1"},
-                { title: "Address 2"},
-                { title: "Town"},
-                { title: "County"},
-                { title: "Eircode"},
-            ],
-            "bLengthChange": false
-        } )
+    $('#datatable').DataTable({
+        data: users,
+        "lengthChange": false,
+        oLanguage: {
+            sLengthMenu: "_MENU_",
+            sSearch: '', searchPlaceholder: "Search..." 
+        },
+        initComplete : function() {
+            $("#datatable_filter").detach().appendTo('#datatableSearch');
+        },
+        columns: [
+            { title: "Name", data: "name"},
+            { title: "Role", data: "role"},
+            { title: "Address 1", data: "address1"},
+            { title: "Address 2", data: "address2"},
+            { title: "Town", data: "town"},
+            { title: "County", data: "county"},
+            { title: "Eircode", data: "eircode"},
+        ],
+        "bLengthChange": false
     })
+}
+
+// Returns array of users from DB.
+async function getUsers() {
+    let users = new Array()
+
+    let result = await db.collection('userDetails').get()
+    result.forEach(doc => {
+        let user = new User()   
+        user.docToUser(doc)
+        users.push(user)
+    })
+
+    return users
+}
+
+class User {
+    constructor(id, role, name, address1, address2, town, county, eircode) {
+        this.id = id
+        this.role = role
+        this.name = name
+        this.address1 = address1
+        this.address2 = address2
+        this.town = town
+        this.county = county
+        this.eircode = eircode
+    }
+
+    docToUser(doc) {
+        this.id = doc.id
+        this.role = doc.data().role
+        this.name = doc.data().name
+        this.address1 = doc.data().address1
+        this.address2 = doc.data().address2
+        this.town = doc.data().town
+        this.county = doc.data().county
+        this.eircode = doc.data().eircode
+    }
 }

@@ -14,8 +14,9 @@ async function setupClients () {
             $("#datatable_filter").detach().appendTo('#datatableSearch');
         },
         columns: [
-            { title: "ID", data: "id" },
+            { title: "ID", data: "id", visible: false},
             { title: "Name", data: "name" },
+            { title: "DOB", data: "dob"},
             { title: "Mobile", data: "mobile"},
             { title: "Address 1", data: "address1"},
             { title: "Address 2",data: "address2"},
@@ -27,7 +28,7 @@ async function setupClients () {
                 return `<a href="javascript:editClientForm('${row.id}')">Edit</a>`
             }},
             {mRender: function (data, type, row) {
-                return `<a href="javascript:confirmDelete('${row.id}')">Delete</a>`
+                return `<a href="javascript:confirmDeactivate('${row.id}')">Deactivate</a>`
             }},
             {mRender: function (data, type, row) {
                 return `<a href="javascript:viewProfile('${row.id}')">View Profile</a>`
@@ -35,14 +36,15 @@ async function setupClients () {
         ]
     })
 
-    startListeners()
+    listeners()
 }
 
 // Returns array of clients from DB.  
 async function getClients() {
     let clients = new Array()
 
-    let result = await db.collection('clientDetails').get()
+    let result = await db.collection('clients').where('active' ,'==', true).get()
+
     result.forEach(doc => {
         let client = new Client()   
         client.docToClient(doc)
@@ -54,7 +56,7 @@ async function getClients() {
 
 // Returns client from DB. 
 async function getClient(clientId) {
-    let doc = await db.collection('clientDetails').doc(clientId).get()
+    let doc = await db.collection('clients').doc(clientId).get()
 
     let client = new Client()
 
@@ -64,64 +66,26 @@ async function getClient(clientId) {
 }
 
 // Adds a new client to DB.  
-async function addClient(name, mobile, address1, address2, town, county, eircode, marital) {
-    let client = {
-        name: name,
-        mobile: mobile
-    }
-
-    let clientDetails = {
-        name : name,
-        mobile : mobile,
-        address1 : address1,
-        address2 : address2 ,
-        town : town,
-        county : county,
-        eircode : eircode,
-        marital : marital
-    }
-
-    db.collection("clients").add(client).then(ref => {
-        db.collection("clientDetails").doc(ref.id).set(clientDetails) 
-        refreshTable()
-    }).catch(error => {
-        log(error.message)
-    })
+async function addClient(name, dob, mobile, address1, address2, town, county, eircode, marital, active) {  
+    let client = new Client(null, name, dob, mobile, address1, address2, town, county, eircode, marital, active)
+    await db.collection("clients").add(client.toFirestore())
+    refreshTable()
 }
 
 // Updates existing client details in DB.
-async function updateClient(id, name, mobile, address1, address2, town, county, eircode, marital) {
-    let client = {
-        name: name,
-        mobile: mobile
-    }
+async function updateClient(id, name, dob, mobile, address1, address2, town, county, eircode, marital, active) {
+    let client = new Client(id, name, dob, mobile, address1, address2, town, county, eircode, marital, active)
 
-    let clientDetails = {
-        name : name,
-        mobile : mobile,
-        address1 : address1,
-        address2 : address2 ,
-        town : town,
-        county : county,
-        eircode : eircode,
-        marital : marital
-    }
-
-    await Promise.all([
-        db.collection("clients").doc(id).set(client),
-        db.collection("clientDetails").doc(id).set(clientDetails) 
-    ])
+    db.collection("clients").doc(id).set(client.toFirestore())
 
     refreshTable()
 }
 
-// Removes client from DB.
-async function deleteClient (clientId) {
-    await Promise.all([
-        db.collection('clients').doc(clientId).delete(),
-        db.collection('clientDetails').doc(clientId).delete(),
-        db.collection('connections').doc(clientId).delete()     
-    ])
+// Deactivates client account. 
+async function deactivateClient (clientId) {
+    db.collection('clients').doc(clientId).update({
+        "active": false
+    })
 
     refreshTable()
 }
@@ -132,7 +96,8 @@ function editClientForm(clientId) {
 
     getClient(clientId).then(result => {
         $("#editClientId").val(clientId)
-        $("#editClientName").val(result.name) 
+        $("#editClientName").val(result.name)
+        $("#editClientDob").val(result.dob) 
         $("#editClientMobile").val(result.mobile) 
         $("#editClientAddress1").val(result.address1) 
         $("#editClientAddress2").val(result.address2) 
@@ -157,16 +122,15 @@ function viewProfile(clientId){
 }
 
 // Prompts user to confirm client deletion. 
-function confirmDelete(clientId){
-    log(clientId)
-    $('#modalConfirmDelete').modal('show')
+function confirmDeactivate(clientId){
+    $('#modalConfirmDeactivate').modal('show')
     $('#idHolder').text(clientId)
 }
 
 // Resets and reloads datatable. 
 async function refreshTable(){
     let clients = await getClients()
-
+    log("old refresh")
     let table = $('#datatable').DataTable()
 
     table.clear() 
@@ -177,27 +141,29 @@ async function refreshTable(){
 // Instantiates listeners. 
 function listeners() {
     $("#formAddClient").submit(function(event) {
-        event.preventDefault();
+        event.preventDefault()
 
-        let name = $("#client-name").val()
-        let mobile = $("#client-mobile").val()
-        let address1 = $("#client-address1").val()
-        let address2 = $("#client-address2").val()
-        let town = $("#client-town").val()
-        let county = $("#client-county").val()
-        let eircode = $("#client-eircode").val()
-        let marital = $("#client-marital").val()
+        let name = $("#addClientName").val()
+        let dob = $("#addClientDob").val()
+        let mobile = $("#addClientMobile").val()
+        let address1 = $("#addClientAddress1").val()
+        let address2 = $("#addClientAddress2").val()
+        let town = $("#addClientTown").val()
+        let county = $("#addClientCounty").val()
+        let eircode = $("#addClientEircode").val()
+        let marital = $("#addClientMarital").val()
 
-        addClient(name, mobile, address1, address2, town, county, eircode, marital)
+        addClient(name, dob, mobile, address1, address2, town, county, eircode, marital, true)
 
         $('#addClientModal').modal('hide')
     })
 
-    $("#formUpdateClient").submit(function( event ) {
+    $("#formEditClient").submit(function(event) {
         event.preventDefault()
 
         let id = $("#editClientId").val()
         let name = $("#editClientName").val()
+        let dob = $("#editClientDob").val()
         let mobile = $("#editClientMobile").val()
         let address1 = $("#editClientAddress1").val()
         let address2 = $("#editClientAddress2").val()
@@ -206,15 +172,15 @@ function listeners() {
         let eircode = $("#editClientEircode").val()
         let marital = $("#editClientMarital").val()
 
-        updateClient(id, name, mobile, address1, address2, town, county, eircode, marital)
+        updateClient(id, name, dob, mobile, address1, address2, town, county, eircode, marital, true)
 
         $('#modalEditClient').modal('hide')
     })
 
-    $('#btnConfirmDelete').click(function(){
+    $('#btnConfirmDeactivate').click(function(){
         var clientId = $('#idHolder').text()
-        $('#modalConfirmDelete').modal('hide')
-        deleteClient(clientId)
+        $('#modalConfirmDeactivate').modal('hide')
+        deactivateClient(clientId)
     })
 
     $('#btnCloseProfile').click(function(){
@@ -224,9 +190,10 @@ function listeners() {
 }
 
 class Client {
-    constructor(id, name, mobile, address1, address2, town, county, eircode, marital){
+    constructor(id, name, dob, mobile, address1, address2, town, county, eircode, marital, active){
         this.id = id
         this.name = name
+        this.dob = dob
         this.mobile = mobile
         this.address1 = address1
         this.address2 = address2
@@ -234,12 +201,14 @@ class Client {
         this.county = county
         this.eircode = eircode
         this.marital = marital
+        this.active = active
     }
 
     // Gets values from firestore document. 
-    docToClient(doc){
+    docToClient(doc) {
         this.id = doc.id
         this.name = doc.data().name
+        this.dob = doc.data().dob
         this.mobile = doc.data().mobile
         this.address1 = doc.data().address1
         this.address2 = doc.data().address2
@@ -247,6 +216,25 @@ class Client {
         this.county = doc.data().county
         this.eircode = doc.data().eircode
         this.marital = doc.data().marital
+        this.active = doc.data().active
+    }
+
+    // Returns object that can be used with Firestore. 
+    toFirestore() {
+        let client = {
+            name : this.name,
+            dob : this.dob,
+            mobile : this.mobile,
+            address1 : this.address1,
+            address2 : this.address2 ,
+            town : this.town,
+            county : this.county,
+            eircode : this.eircode,
+            marital : this.marital,
+            active : this.active
+        }
+
+        return client
     }
 }
 

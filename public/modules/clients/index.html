@@ -46,22 +46,25 @@
       <div class="modal-body">
         <form class="user" id="formAddClient">
           <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="client-name" placeholder="Name">
+            <input type="text" class="form-control form-control-user" id="addClientName" placeholder="Name">
           </div>
           <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="client-mobile" placeholder="Mobile">
+            <input type="date" class="form-control form-control-user" id="addClientDob">
           </div>
           <div class="form-group">
-              <input type="text" class="form-control form-control-user" id="client-address1" placeholder="Address Line 1">
+            <input type="text" class="form-control form-control-user" id="addClientMobile" placeholder="Mobile">
+          </div>
+          <div class="form-group">
+              <input type="text" class="form-control form-control-user" id="addClientAddress1" placeholder="Address Line 1">
             </div>
           <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="client-address2" placeholder="Address Line 2">
+            <input type="text" class="form-control form-control-user" id="addClientAddress2" placeholder="Address Line 2">
           </div>
           <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="client-town" placeholder="Town">
+            <input type="text" class="form-control form-control-user" id="addClientTown" placeholder="Town">
           </div>
           <div class="form-group">
-              <select class="form-control form-select" id="client-county">
+              <select class="form-control form-select" id="addClientCounty">
                 <option value="" selected disabled hidden>Select County</option>
                 <option value="Carlow">Carlow</option>
                 <option value="Cavan">Cavan</option>
@@ -92,10 +95,10 @@
               </select>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="client-eircode" placeholder="Eircode">
+            <input type="text" class="form-control form-control-user" id="addClientEircode" placeholder="Eircode">
           </div>
           <div class="form-group">
-            <select class="form-control form-select" id="client-marital">
+            <select class="form-control form-select" id="addClientMarital">
               <option value="" selected disabled hidden>Select Marital Status</option>
               <option value="Single">Single</option>
               <option value="Married">Married</option>
@@ -115,23 +118,26 @@
   </div>
 </div>
 
-<!-- UDPATE CLIENT MODAL -->
+<!-- EDIT CLIENT MODAL -->
 <div class="modal fade" id="modalEditClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Update Client Details</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Update Client</h5>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
       </div>
       <div class="modal-body">
-        <form class="user" id="formUpdateClient">
+        <form class="user" id="formEditClient">
           <div class="form-group">
             <input type="text" class="form-control form-control-user" id="editClientId" hidden>
           </div>
           <div class="form-group">
             <input type="text" class="form-control form-control-user" id="editClientName" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <input type="date" class="form-control form-control-user" id="editClientDob" placeholder="Name">
           </div>
           <div class="form-group">
             <input type="text" class="form-control form-control-user" id="editClientMobile" placeholder="Mobile">
@@ -222,8 +228,8 @@
   </div>
 </div>
 
-<!-- Delete Client Modal -->
-<div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- DEACTIVATE CLIENT MODAL -->
+<div class="modal fade" id="modalConfirmDeactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -235,7 +241,7 @@
       <span id="idHolder" style="display: none;"></span>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a class="btn btn-primary" id="btnConfirmDelete" href="#">Delete</a>
+        <a class="btn btn-primary" id="btnConfirmDeactivate" href="#">Deactivate Account</a>
       </div>
     </div>
   </div>

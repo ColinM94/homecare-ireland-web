@@ -23,7 +23,7 @@ function getUserInfo(user){
 
 function setupUI(){
     $('#topbar-name').html(currentUser.name) 
-    loadModule("clients")
+    loadModule("users")
 }
 
 function loadModule(module){
@@ -43,7 +43,10 @@ function setActive(module){
     }
     if(module != "clients"){
         $("#nav-clients").removeClass("active")
-    }    
+    }
+    if(module != "clientsDeactive") {
+        $("#clientsDeactive").removeClass("active")
+    } 
     if(module != "connections"){
         $("#nav-connections").removeClass("active")
     }
@@ -60,6 +63,10 @@ $("#nav-users").click(function (){
 
 $("#nav-clients").click(function (){
     loadModule("clients")
+})
+
+$("#navClientsDeactive").click(function (){
+    loadModule("clientsDeactive")
 })
 
 $("#nav-connections").click(function (){
