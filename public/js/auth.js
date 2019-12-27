@@ -1,6 +1,3 @@
-
-
-
 // Sign in.
 function signIn(){
     var email = $("#signin-email").val()

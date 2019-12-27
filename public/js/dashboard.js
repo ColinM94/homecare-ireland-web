@@ -44,8 +44,8 @@ function setActive(module){
     if(module != "clients"){
         $("#nav-clients").removeClass("active")
     }
-    if(module != "clientsDeactive") {
-        $("#clientsDeactive").removeClass("active")
+    if(module != "clients-deactive") {
+        $("#clients-deactive").removeClass("active")
     } 
     if(module != "connections"){
         $("#nav-connections").removeClass("active")
@@ -65,7 +65,7 @@ $("#nav-clients").click(function (){
     loadModule("clients")
 })
 
-$("#navClientsDeactive").click(function (){
+$("#nav-clients-deactive").click(function (){
     loadModule("clientsDeactive")
 })
 

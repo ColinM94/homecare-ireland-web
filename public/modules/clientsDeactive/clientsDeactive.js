@@ -1,9 +1,8 @@
 // Requires that client module is loaded first. 
-
 async function setupClientsDeactive() {
     let clients = await getClientsDeactive()
 
-    $('#datatable').DataTable( {
+    $('#datatable').DataTable({
         data: clients,
         "lengthChange": false,
         paging: false,

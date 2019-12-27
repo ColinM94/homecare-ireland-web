@@ -29,9 +29,39 @@
     Mobile:<span id="clientProfileMobile"></span><br>
     Address:<span id="clientProfileAddress"></span>
     <hr>
+    <h6 style="font-weight: bold;">Connections</h6>
+    <div id="users">
+    </div>
+    <a href="#" data-toggle="modal" data-target="#modal-add-connection">Add Connection</a>
   </div>
 </div>
 
+<!-- ADD CONNECTION MODAL -->
+<div class="modal fade" id="modal-add-connection" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Connection</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="user" id="form-add-connection">
+          <select class="form-control form-select">
+            <option value="" selected disabled hidden>Select User</option>
+          </select>
+          <br>
+          <button class="btn btn-primary btn-user btn-block">
+            Add Connection
+          </button>
+          <p class="form-error" id="client-error"></p>
+          <hr>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ADD CLIENT MODAL -->
 <div class="modal fade" id="addClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
