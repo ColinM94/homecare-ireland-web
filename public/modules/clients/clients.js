@@ -25,7 +25,7 @@ async function setupClients () {
             { title: "Eircode", data: "eircode"},
             { title: "Marital Status", data: "marital"},
             {mRender: function (data, type, row) {
-                return `<a href="javascript:editClient('${row.id}')">Edit</a>`
+                return `<a href="javascript:editClientForm('${row.id}')">Edit</a>`
             }},
             {mRender: function (data, type, row) {
                 return `<a href="javascript:confirmDeactivate('${row.id}')">Deactivate</a>`
@@ -154,7 +154,6 @@ function listeners() {
     })
 
     $('#btnConfirmDeactivate').click(function(){
-
         var clientId = $('#idHolder').text()
         $('#modalConfirmDeactivate').modal('hide')
         deactivateClient(clientId)

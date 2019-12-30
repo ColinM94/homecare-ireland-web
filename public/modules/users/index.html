@@ -1,15 +1,35 @@
 <div class="card shadow mb-4">
-    <div class="card-header row">
-      <h6 class="col-md m-0 font-weight-bold my-auto">Users</h6>
-      <div id="datatableSearch" class="col-md my-auto"></div>
-      <div class="col-md text-right">
-        
-      </div>
-    </div>
-    <div class="card-body">
-      <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
-            
-      </table>  
+  <div class="card-header row">
+    <h6 class="col-md m-0 font-weight-bold my-auto">Users</h6>
+    <div id="datatableSearch" class="col-md my-auto"></div>
+    <div class="col-md text-right">
+      
     </div>
   </div>
+  <div class="card-body">
+    <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+          
+    </table>  
+  </div>
+</div>
+
+<!-- DEACTIVATE USER MODAL -->
+<div class="modal fade" id="modal-user-deactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <span id="userid-holder" style="display: none;"></span>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary" id="btn-user-deactivate" href="#">Deactivate Account</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>setupUsers()</script>    

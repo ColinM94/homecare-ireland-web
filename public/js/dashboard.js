@@ -45,10 +45,10 @@ function setActive(module){
         $("#nav-clients").removeClass("active")
     }
     if(module != "clients-deactive") {
-        $("#clients-deactive").removeClass("active")
+        $("#nav-clients-deactive").removeClass("active")
     } 
-    if(module != "connections"){
-        $("#nav-connections").removeClass("active")
+    if(module != "users-deactive"){
+        $("#nav-users-deactive").removeClass("active")
     }
 }
 
@@ -67,6 +67,10 @@ $("#nav-clients").click(function (){
 
 $("#nav-clients-deactive").click(function (){
     loadModule("clientsDeactive")
+})
+
+$("#nav-users-deactive").click(function (){
+    loadModule("usersDeactive")
 })
 
 $("#nav-connections").click(function (){
