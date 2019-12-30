@@ -10,7 +10,6 @@ function signIn(){
         auth.signInWithEmailAndPassword(email, password).then(cred => {
             getUser(cred.user.uid).then(user => {
                 console.log(user)
-                log(user.active)
                 if(user.active == true){
                     window.location = "dashboard.html"
                     signedIn = true
