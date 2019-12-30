@@ -25,7 +25,7 @@ async function setupClients () {
             { title: "Eircode", data: "eircode"},
             { title: "Marital Status", data: "marital"},
             {mRender: function (data, type, row) {
-                return `<a href="javascript:editClientForm('${row.id}')">Edit</a>`
+                return `<a href="javascript:editClient('${row.id}')">Edit</a>`
             }},
             {mRender: function (data, type, row) {
                 return `<a href="javascript:confirmDeactivate('${row.id}')">Deactivate</a>`
@@ -38,58 +38,6 @@ async function setupClients () {
 
     listeners()
 }
-
-// Returns array of clients from DB.  
-async function getClients() {
-    let clients = new Array()
-
-    let result = await db.collection('clients').where('active' ,'==', true).get()
-
-    result.forEach(doc => {
-        let client = new Client()   
-        client.docToClient(doc)
-        clients.push(client)
-    })
-
-    return clients
-}
-
-// Returns client from DB. 
-async function getClient(clientId) {
-    let doc = await db.collection('clients').doc(clientId).get()
-
-    let client = new Client()
-
-    client.docToClient(doc)
-
-    return client
-}
-
-// Adds a new client to DB.  
-async function addClient(name, dob, mobile, address1, address2, town, county, eircode, marital, active) {  
-    let client = new Client(null, name, dob, mobile, address1, address2, town, county, eircode, marital, active)
-    await db.collection("clients").add(client.toFirestore())
-    refreshTable()
-}
-
-// Updates existing client details in DB.
-async function updateClient(id, name, dob, mobile, address1, address2, town, county, eircode, marital, active) {
-    let client = new Client(id, name, dob, mobile, address1, address2, town, county, eircode, marital, active)
-
-    db.collection("clients").doc(id).set(client.toFirestore())
-
-    refreshTable()
-}
-
-// Deactivates client account. 
-async function deactivateClient (clientId) {
-    db.collection('clients').doc(clientId).update({
-        "active": false
-    })
-
-    refreshTable()
-}
-
 
 // Opens modal and inserts values into edit client form. 
 function editClientForm(clientId) {
@@ -110,16 +58,25 @@ function editClientForm(clientId) {
 }
 
 // Displays selected clients details. 
-function viewProfile(clientId){
+async function viewProfile(clientId){
     $('#clientsList').hide()
     $('#clientProfile').show() 
 
-    getClient(clientId).then(client => {    
-        $('#clientProfileTitle').html(` ${client.name}'s Profile`)
-        $('#clientProfileName').text(` ${client.name}`)
-        $('#clientProfileMobile').text(` ${client.mobile}`)
-        $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
-    })
+    await Promise.all([
+        getClient(clientId).then(client => {    
+            $('#clientProfileTitle').html(` ${client.name}'s Profile`)
+            $('#clientProfileName').text(` ${client.name}`)
+            $('#clientProfileMobile').text(` ${client.mobile}`)
+            $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
+        }),
+        getConnections(clientId).then(users => {
+            users.forEach(userId => {
+                getUser(userId).then(user => {
+                    $("#client-connections").append(`<a href="${user.id}">${user.name}</a>`)
+                })
+            })
+        })
+    ])  
 }
 
 // Prompts user to confirm client deletion. 
@@ -131,74 +88,11 @@ function confirmDeactivate(clientId){
 // Resets and reloads datatable. 
 async function refreshTable(){
     let clients = await getClients()
-    log("old refresh")
     let table = $('#datatable').DataTable()
 
     table.clear() 
     table.rows.add(clients)
     table.draw()
-}
-
-function addConnection(){
-    var userId = $("#connection-userid").val()
-    var clientId = $("#connection-clientid").val()
-
-    log(userId)
-    log(clientId)
-
-    db.collection('connections').doc(userId).get().then(doc => {
-        if(doc.exists){
-            var newClients = doc.data().clients
-
-            if(!newClients.includes(clientId)){
-                newClients.push(clientId)
-
-                let data = {
-                    clients : newClients
-                }
-
-                db.collection('connections').doc(userId).set(data);
-            }
-
-        }else{
-            var newClients = [clientId]
-
-            let data = {
-                clients : newClients
-            }
-
-            db.collection('connections').doc(userId).set(data);
-        }
-    })
-
-    db.collection('connections').doc(clientId).get().then(doc => {
-        if(doc.exists){
-            var newUsers = doc.data().users
-
-            if(!newUsers.includes(userId)){
-                newUsers.push(userId)
-
-                newUsers.push(userId)
-
-                let data = {
-                    connections: newUsers
-                }
-
-                db.collection('connections').doc(clientId).set(data)
-            }
-            
-        }else{
-            var newUsers = [userId]
-
-            let data = {
-                users : newUsers
-            }
-
-            db.collection('connections').doc(clientId).set(data);
-        }
-    })
-    
-    return false
 }
 
 // Instantiates listeners. 
@@ -240,65 +134,37 @@ function listeners() {
         $('#modalEditClient').modal('hide')
     })
 
+    $("#form-add-connection").submit(function(event) {
+        event.preventDefault()
+
+        let userId = $('#select-user-list').val()
+        //let clientId = $('#select-user-list').val()
+
+        addConnection(userId, "TQwBIveC0ImAb3pt7bmb")
+    })
+
+    $('#btn-add-connection').click(function(){
+        $('#modal-add-connection').modal('show')
+
+        getUsers().then(users => {
+            users.forEach(user => {
+                $("#select-user-list").append(new Option(`${user.name} : ${user.id}`, user.id))
+            })
+        })
+    })
+
     $('#btnConfirmDeactivate').click(function(){
+
         var clientId = $('#idHolder').text()
         $('#modalConfirmDeactivate').modal('hide')
         deactivateClient(clientId)
+        refreshTable()
     })
 
     $('#btnCloseProfile').click(function(){
         $('#clientsList').show()
         $('#clientProfile').hide()
     })
-}
-
-class Client {
-    constructor(id, name, dob, mobile, address1, address2, town, county, eircode, marital, active){
-        this.id = id
-        this.name = name
-        this.dob = dob
-        this.mobile = mobile
-        this.address1 = address1
-        this.address2 = address2
-        this.town = town
-        this.county = county
-        this.eircode = eircode
-        this.marital = marital
-        this.active = active
-    }
-
-    // Gets values from firestore document. 
-    docToClient(doc) {
-        this.id = doc.id
-        this.name = doc.data().name
-        this.dob = doc.data().dob
-        this.mobile = doc.data().mobile
-        this.address1 = doc.data().address1
-        this.address2 = doc.data().address2
-        this.town = doc.data().town
-        this.county = doc.data().county
-        this.eircode = doc.data().eircode
-        this.marital = doc.data().marital
-        this.active = doc.data().active
-    }
-
-    // Returns object that can be used with Firestore. 
-    toFirestore() {
-        let client = {
-            name : this.name,
-            dob : this.dob,
-            mobile : this.mobile,
-            address1 : this.address1,
-            address2 : this.address2 ,
-            town : this.town,
-            county : this.county,
-            eircode : this.eircode,
-            marital : this.marital,
-            active : this.active
-        }
-
-        return client
-    }
 }
 
 

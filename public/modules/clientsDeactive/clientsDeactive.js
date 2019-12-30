@@ -25,40 +25,20 @@ async function setupClientsDeactive() {
             { title: "Eircode", data: "eircode"},
             { title: "Marital Status", data: "marital"},
             {mRender: function (data, type, row) {
-                return `<a href="javascript:activateClient('${row.id}')">Activate</a>`
+                return `<a href="javascript:activateClientClick('${row.id}')">Activate</a>`
             }},
         ]
     })
 }
 
-// Returns array of clients from DB.  
-async function getClientsDeactive() {
-    let clients = new Array()
-
-    let result = await db.collection('clients').where('active' ,'==', false).get()
-
-    result.forEach(doc => {
-        let client = new Client()   
-        client.docToClient(doc)
-        clients.push(client)
-    })
-
-    return clients
-}
-
-// Activates client account. 
-async function activateClient (clientId) {
-    db.collection('clients').doc(clientId).update({
-        "active": true
-    })
-
+function activateClientClick(clientId) {
+    activateClient(clientId)
     refreshDeactiveTable()
 }
 
 // Resets and reloads datatable. 
 async function refreshDeactiveTable(){
     let clients = await getClientsDeactive()
-    log("new refresh")
     let table = $('#datatable').DataTable()
 
     table.clear() 
