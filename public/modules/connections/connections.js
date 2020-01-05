@@ -2,9 +2,6 @@ function addConnection(){
     var userId = $("#connection-userid").val()
     var clientId = $("#connection-clientid").val()
 
-    log(userId)
-    log(clientId)
-
     db.collection('connections').doc(userId).get().then(doc => {
         if(doc.exists){
             var newClients = doc.data().clients

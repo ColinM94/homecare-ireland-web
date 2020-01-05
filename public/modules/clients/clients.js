@@ -31,7 +31,7 @@ async function setupClients () {
                 return `<a href="javascript:confirmDeactivate('${row.id}')">Deactivate</a>`
             }},
             {mRender: function (data, type, row) {
-                return `<a href="javascript:viewProfile('${row.id}')">View Profile</a>`
+                return `<a href="javascript:viewClientProfile('${row.id}')">View Profile</a>`
             }},
         ]
     })
@@ -57,19 +57,20 @@ function editClientForm(clientId) {
     })
 }
 
-// Displays selected clients details. 
-async function viewProfile(clientId){
+// Displays selected client details. 
+async function viewClientProfile(clientId){
     $('#clientsList').hide()
     $('#clientProfile').show() 
 
     await Promise.all([
         getClient(clientId).then(client => {    
+            $('#client-profile-id').text(` ${client.id}`)
             $('#clientProfileTitle').html(` ${client.name}'s Profile`)
             $('#clientProfileName').text(` ${client.name}`)
             $('#clientProfileMobile').text(` ${client.mobile}`)
             $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
         }),
-        getConnections(clientId).then(users => {
+        getClientConnections(clientId).then(users => {
             users.forEach(userId => {
                 getUser(userId).then(user => {
                     $("#client-connections").append(`<a href="${user.id}">${user.name}</a>`)
@@ -81,7 +82,7 @@ async function viewProfile(clientId){
 
 // Prompts user to confirm client deletion. 
 function confirmDeactivate(clientId){
-    $('#modalConfirmDeactivate').modal('show')
+    $('#modal-client-deactivate').modal('show')
     $('#idHolder').text(clientId)
 }
 
@@ -153,9 +154,9 @@ function listeners() {
         })
     })
 
-    $('#btnConfirmDeactivate').click(function(){
+    $('#btn-client-deactivate').click(function(){
         var clientId = $('#idHolder').text()
-        $('#modalConfirmDeactivate').modal('hide')
+        $('#modal-client-deactivate').modal('hide')
         deactivateClient(clientId)
         refreshTable()
     })

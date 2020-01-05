@@ -23,10 +23,36 @@ async function setupUsers () {
             {mRender: function (data, type, row) {
                 return `<a href="javascript:confirmUserDeactivate('${row.id}')">Deactivate</a>`
             }},
+            {mRender: function (data, type, row) {
+                return `<a href="javascript:viewUserProfile('${row.id}')">View Profile</a>`
+            }},
         ],
     })
 
     usersListeners()
+}
+
+// Displays selected user details. 
+async function viewUserProfile(userId){
+    $('#user-list').hide()
+    $('#user-profile').show() 
+
+    await Promise.all([
+        getUser(userId).then(user => {    
+            $('#user-profile-title').html(` ${user.name}'s Profile`)
+            $('#user-profile-id').text(` ${user.id}`)
+            $('#user-profile-name').text(` ${user.name}`)
+            $('#user-profile-mobile').text(` ${user.mobile}`)
+            $('#user-profile-address').text(` ${user.address1}, ${user.address2}, ${user.town}, ${user.county}, ${user.eircode}`)
+        }),
+        getUserConnections(userId).then(clients => {
+            clients.forEach(clientId => {
+                getClient(clientId).then(client => {
+                    $("#user-connections").append(`<a href="${client.id}">${client.name}</a>`)
+                })
+            })
+        })
+    ])  
 }
 
 // Prompts user to confirm user deletion. 
@@ -48,7 +74,17 @@ async function usersListeners(){
         var userId = $('#userid-holder').text()
         handleDeactivateUser(userId)
     })
+
+    $('#btn-user-add-connection').click(function(){
+        $('#modal-user-add-connection').modal('show')
+        getClients().then(clients => {
+            clients.forEach(client => {
+                $("#select-client-list").append(new Option(`${client.name} : ${client.id}`, client.id))
+            })
+        })
+    })
 }
+
 
 // Resets and reloads datatable. 
 async function refreshUsersTable(){

@@ -1,4 +1,4 @@
-<div class="card shadow mb-4">
+<div id="user-list" class="card shadow mb-4">
   <div class="card-header row">
     <h6 class="col-md m-0 font-weight-bold my-auto">Users</h6>
     <div id="datatableSearch" class="col-md my-auto"></div>
@@ -10,6 +10,58 @@
     <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
           
     </table>  
+  </div>
+</div>
+
+<div id="user-profile" class="card shadow mb-4" style="display: none">
+  <div class="card-header row">
+    <h6 id="user-profile-title" class="col-md m-0 font-weight-bold my-auto"></h6>
+    <div class="col-md text-right">
+      <button id="btn-close-profile" class="close" type="button" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    ID:<span id="user-profile-id"></span><br>
+    <br>
+    <h6 style="font-weight: bold;">Personal Details</h6>
+    Name:<span id="user-profile-name"></span><br>
+    Mobile:<span id="user-profile-mobile"></span><br>
+    Address:<span id="user-profile-address"></span> 
+    <hr>
+    <h6 style="font-weight: bold;">Connections</h6>
+    <div id="user-connections">
+    </div>
+    <a href="#" id="btn-user-add-connection">Add User Connection</a>
+  </div>
+</div>
+
+<!-- ADD CONNECTION MODAL -->
+<div class="modal fade" id="modal-user-add-connection" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Connection</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="user" id="form-add-connection">
+          <select id="select-client-list" class="form-control form-select">
+            <option value="" selected disabled hidden>Select Client</option>
+          </select>
+          <input type="hidden" id="clientId">
+          <br>
+          <button class="btn btn-primary btn-user btn-block">
+            Add Connection
+          </button>
+          <p class="form-error" id="client-error"></p>
+          <hr>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 

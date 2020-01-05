@@ -48,7 +48,6 @@ async function deactivateClient (clientId) {
         return true
     }).catch(error => {
         return false
-        //log("Failed: " + error.message)
     })
 }
 
@@ -59,10 +58,9 @@ async function activateClient (clientId) {
     })
 }
 
-// Returns array of user ids. 
-async function getConnections(clientId) {
-    log("Client ID: " + clientId)
-    let doc = await db.collection('connections').doc(clientId).get()
+// Returns array of user ids.  
+async function getClientConnections(id) {
+    let doc = await db.collection('connections').doc(id).get()
     return doc.data().users
 }
 
@@ -170,6 +168,7 @@ class Client {
     // Returns object that can be used with Firestore. 
     toFirestore() {
         let client = {
+            id : this.id,
             name : this.name,
             dob : this.dob,
             mobile : this.mobile,

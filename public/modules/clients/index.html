@@ -1,4 +1,3 @@
-
 <div id="clientsList" class="card shadow mb-4">
   <div class="card-header row">
     <h6 class="col-md m-0 font-weight-bold my-auto">Clients</h6>
@@ -25,6 +24,7 @@
   </div>
   <div class="card-body">
     <h6 style="font-weight: bold;">Personal Details</h6>
+    ID:<span id="client-profile-id"></span><br>
     Name:<span id="clientProfileName"></span><br>
     Mobile:<span id="clientProfileMobile"></span><br>
     Address:<span id="clientProfileAddress"></span>
@@ -260,7 +260,7 @@
 </div>
 
 <!-- DEACTIVATE CLIENT MODAL -->
-<div class="modal fade" id="modal-deactivate-user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-client-deactivate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -272,7 +272,7 @@
       <span id="idHolder" style="display: none;"></span>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a class="btn btn-primary" id="btnConfirmDeactivate" href="#">Deactivate Account</a>
+        <a class="btn btn-primary" id="btn-client-deactivate" href="#">Deactivate Account</a>
       </div>
     </div>
   </div>

@@ -76,8 +76,14 @@ async function activateUser (userId) {
     })
 }
 
+// Returns array of client ids.  
+async function getUserConnections(id) {
+    let doc = await db.collection('connections').doc(id).get()
+    return doc.data().clients
+}
+
 class User {
-    constructor(id, role, name, address1, address2, town, county, eircode, active) {
+    constructor(id, role, name, address1, address2, town, county, mobile, eircode, active) {
         this.id = id
         this.role = role
         this.name = name
@@ -86,6 +92,7 @@ class User {
         this.town = town
         this.county = county
         this.eircode = eircode
+        this.mobile = mobile
         this.active = active
     }
 
@@ -99,6 +106,7 @@ class User {
         this.town = doc.data().town
         this.county = doc.data().county
         this.eircode = doc.data().eircode
+        this.mobile = doc.data().mobile
         this.active = doc.data().active
     }
 
@@ -113,6 +121,7 @@ class User {
             town : this.town,
             county : this.county,
             eircode : this.eircode,
+            mobile : this.mobile,
             active: this.active
         }
 
