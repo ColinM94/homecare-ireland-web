@@ -76,12 +76,6 @@ async function activateUser (userId) {
     })
 }
 
-// Returns array of client ids.  
-async function getUserConnections(id) {
-    let doc = await db.collection('connections').doc(id).get()
-    return doc.data().clients
-}
-
 class User {
     constructor(id, role, name, address1, address2, town, county, mobile, eircode, active) {
         this.id = id

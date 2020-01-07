@@ -62,28 +62,50 @@ async function viewClientProfile(clientId){
     $('#clientsList').hide()
     $('#clientProfile').show() 
 
-    await Promise.all([
-        getClient(clientId).then(client => {    
-            $('#client-profile-id').text(` ${client.id}`)
-            $('#clientProfileTitle').html(` ${client.name}'s Profile`)
-            $('#clientProfileName').text(` ${client.name}`)
-            $('#clientProfileMobile').text(` ${client.mobile}`)
-            $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
-        }),
-        getClientConnections(clientId).then(users => {
-            users.forEach(userId => {
-                getUser(userId).then(user => {
-                    $("#client-connections").append(`<a href="${user.id}">${user.name}</a>`)
-                })
+    let client = await getClient(clientId)
+    let connections = await getConnections(clientId)
+
+    $('#client-profile-id').text(` ${client.id}`)
+    $('#clientProfileTitle').html(` ${client.name}'s Profile`)
+    $('#clientProfileName').text(` ${client.name}`)
+    $('#clientProfileMobile').text(` ${client.mobile}`)
+    $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
+        
+    if(connections != null){
+        connections.forEach(userId => {
+            getUser(userId).then(user => {
+                $("#client-connections").append(`${user.role}: <a href="${user.id}">${user.name}</a> <a href="javascript:confirmDeleteConn('${client.id}','${user.id}')" style="color:red;">[X]</a>`)
             })
         })
-    ])  
+    }
+}
+
+function refreshProfile(clientId){
+    // Clears connections. 
+    $("#client-connections").html("")
+
+    $('#client-profile-id').text("")
+    $('#clientProfileTitle').html("")
+    $('#clientProfileName').text("")
+    $('#clientProfileMobile').text("")
+    $('#clientProfileAddress').text("")
+
+    $('#select-user-list').empty()
+
+    viewClientProfile(clientId)
 }
 
 // Prompts user to confirm client deletion. 
 function confirmDeactivate(clientId){
     $('#modal-client-deactivate').modal('show')
     $('#idHolder').text(clientId)
+}
+
+// Prompts user to confirm connection deletion. 
+function confirmDeleteConn(clientId, userId){
+    $('#modal-client-delete-conn').modal('show')
+    $('#client-conn-clientidholder').text(clientId)
+    $('#client-conn-useridholder').text(userId)
 }
 
 // Resets and reloads datatable. 
@@ -94,6 +116,18 @@ async function refreshTable(){
     table.clear() 
     table.rows.add(clients)
     table.draw()
+}
+
+// Handlers.
+async function addConnectionHandler(clientId, userId){
+    await addConnection(userId, clientId)
+    viewClientProfile(clientId)
+}
+
+async function deleteConnHandler(clientId, userId){
+    $('#modal-client-delete-conn').modal('hide')
+    await deleteConnection(clientId, userId)
+    refreshProfile(clientId)
 }
 
 // Instantiates listeners. 
@@ -138,20 +172,25 @@ function listeners() {
     $("#form-add-connection").submit(function(event) {
         event.preventDefault()
 
+        let clientId = $('#client-profile-id').text().replace(/\s/g, '')
         let userId = $('#select-user-list').val()
-        //let clientId = $('#select-user-list').val()
-
-        addConnection(userId, "TQwBIveC0ImAb3pt7bmb")
+        
+        addConnectionHandler(clientId, userId)
     })
 
     $('#btn-add-connection').click(function(){
         $('#modal-add-connection').modal('show')
+
+        // Clears list. 
+        $('#select-user-list').empty()
 
         getUsers().then(users => {
             users.forEach(user => {
                 $("#select-user-list").append(new Option(`${user.name} : ${user.id}`, user.id))
             })
         })
+
+        $('#modal-add-connection').modal('hide')
     })
 
     $('#btn-client-deactivate').click(function(){
@@ -161,10 +200,17 @@ function listeners() {
         refreshTable()
     })
 
+    $('#btn-client-delete-conn').click(function(){
+        var clientId = $('#client-conn-clientidholder').text()
+        var userId = $('#client-conn-useridholder').text()
+        deleteConnHandler(clientId, userId)
+    })
+
     $('#btnCloseProfile').click(function(){
         $('#clientsList').show()
         $('#clientProfile').hide()
     })
 }
+
 
 

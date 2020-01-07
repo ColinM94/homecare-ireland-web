@@ -45,7 +45,7 @@ async function viewUserProfile(userId){
             $('#user-profile-mobile').text(` ${user.mobile}`)
             $('#user-profile-address').text(` ${user.address1}, ${user.address2}, ${user.town}, ${user.county}, ${user.eircode}`)
         }),
-        getUserConnections(userId).then(clients => {
+        getConnections(userId).then(clients => {
             clients.forEach(clientId => {
                 getClient(clientId).then(client => {
                     $("#user-connections").append(`<a href="${client.id}">${client.name}</a>`)
