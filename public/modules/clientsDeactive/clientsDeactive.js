@@ -1,72 +1,75 @@
-// Requires that client module is loaded first. 
-async function setupClientsDeactive() {
-    let clients = await getClientsDeactive()
+class ClientsDeactive{
+    // Requires that client module is loaded first. 
+    static async setupClientsDeactive() {
+        let clients = await ClientsDB.getClientsDeactive()
 
-    $('#datatable').DataTable({
-        data: clients,
-        "lengthChange": false,
-        paging: false,
-        oLanguage: {
-            sLengthMenu: "_MENU_",
-            sSearch: '', searchPlaceholder: "Search..." 
-        },
-        initComplete : function() {
-            $("#datatable_filter").detach().appendTo('#datatableSearch');
-        },
-        columns: [
-            { title: "ID", data: "id", visible: false},
-            { title: "Name", data: "name" },
-            { title: "DOB", data: "dob"},
-            { title: "Mobile", data: "mobile"},
-            { title: "Address 1", data: "address1"},
-            { title: "Address 2",data: "address2"},
-            { title: "Town",data: "town"},
-            { title: "County", data: "county"},
-            { title: "Eircode", data: "eircode"},
-            { title: "Marital Status", data: "marital"},
-            {mRender: function (data, type, row) {
-                return `<a href="javascript:activateClientClick('${row.id}')">Activate</a>`
-            }},
-            {mRender: function (data, type, row) {
-                return `<a href="javascript:confirmDeleteClient('${row.id}')">Delete</a>`
-            }},
-        ]
-    })
+        $('#datatable').DataTable({
+            data: clients,
+            "lengthChange": false,
+            paging: false,
+            oLanguage: {
+                sLengthMenu: "_MENU_",
+                sSearch: '', searchPlaceholder: "Search..." 
+            },
+            initComplete : function() {
+                $("#datatable_filter").detach().appendTo('#datatableSearch');
+            },
+            columns: [
+                { title: "ID", data: "id", visible: false},
+                { title: "Name", data: "name" },
+                { title: "DOB", data: "dob"},
+                { title: "Mobile", data: "mobile"},
+                { title: "Address 1", data: "address1"},
+                { title: "Address 2",data: "address2"},
+                { title: "Town",data: "town"},
+                { title: "County", data: "county"},
+                { title: "Eircode", data: "eircode"},
+                { title: "Marital Status", data: "marital"},
+                {mRender: function (data, type, row) {
+                    return `<a href="javascript:ClientsDeactive.activateClient('${row.id}')">Activate</a>`
+                }},
+                {mRender: function (data, type, row) {
+                    return `<a href="javascript:ClientsDeactive.confirmDeleteClient('${row.id}')">Delete</a>`
+                }},
+            ]
+        })
 
-    clientsDeactiveListeners()
-}
+        this.listeners()
+    }
 
-function activateClientClick(clientId) {
-    activateClient(clientId)
-    refreshDeactiveTable()
-}
+    static activateClient(clientId) {
+        ClientsDB.activateClient(clientId)
+        this.refreshTable()
+    }
 
-function confirmDeleteClient(clientId) {
-    $('#modal-client-delete').modal('show')
-    $('#client-deactive-idholder').text(clientId)
-}
+    static confirmDeleteClient(clientId) {
+        $('#modal-client-delete').modal('show')
+        $('#client-deactive-idholder').text(clientId)
+    }
 
-function deleteClientHandler(){
-    let clientId = $('#client-deactive-idholder').text()
-    deleteClient(clientId)
-    $('#modal-client-delete').modal('hide')
-}
+    static async deleteClient(){
+        let clientId = $('#client-deactive-idholder').text()
+        await ClientsDB.deleteClient(clientId)
+        $('#modal-client-delete').modal('hide')
+        this.refreshTable()
+    }
 
-// Resets and reloads datatable. 
-async function refreshDeactiveTable(){
-    let clients = await getClientsDeactive()
-    let table = $('#datatable').DataTable()
+    // Resets and reloads datatable. 
+    static async refreshTable(){
+        let clients = await ClientsDB.getClientsDeactive()
+        let table = $('#datatable').DataTable()
 
-    table.clear() 
-    table.rows.add(clients)
-    table.draw()
-}
+        table.clear() 
+        table.rows.add(clients)
+        table.draw()
+    }
 
-// Instantiates listeners.
-function clientsDeactiveListeners(){
-    $('#btn-clientsdeactive-delete').click(function(event) {
-        event.preventDefault()
+    // Instantiates listeners.
+    static listeners(){
+        $('#btn-clientsdeactive-delete').click(function(event) {
+            event.preventDefault()
 
-        deleteClientHandler()
-    })
+            this.deleteClient()
+        })
+    }
 }
