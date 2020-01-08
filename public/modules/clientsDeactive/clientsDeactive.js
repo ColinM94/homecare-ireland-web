@@ -27,13 +27,29 @@ async function setupClientsDeactive() {
             {mRender: function (data, type, row) {
                 return `<a href="javascript:activateClientClick('${row.id}')">Activate</a>`
             }},
+            {mRender: function (data, type, row) {
+                return `<a href="javascript:confirmDeleteClient('${row.id}')">Delete</a>`
+            }},
         ]
     })
+
+    clientsDeactiveListeners()
 }
 
 function activateClientClick(clientId) {
     activateClient(clientId)
     refreshDeactiveTable()
+}
+
+function confirmDeleteClient(clientId) {
+    $('#modal-client-delete').modal('show')
+    $('#client-deactive-idholder').text(clientId)
+}
+
+function deleteClientHandler(){
+    let clientId = $('#client-deactive-idholder').text()
+    deleteClient(clientId)
+    $('#modal-client-delete').modal('hide')
 }
 
 // Resets and reloads datatable. 
@@ -44,4 +60,13 @@ async function refreshDeactiveTable(){
     table.clear() 
     table.rows.add(clients)
     table.draw()
+}
+
+// Instantiates listeners.
+function clientsDeactiveListeners(){
+    $('#btn-clientsdeactive-delete').click(function(event) {
+        event.preventDefault()
+
+        deleteClientHandler()
+    })
 }

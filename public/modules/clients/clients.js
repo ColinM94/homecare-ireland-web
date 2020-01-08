@@ -36,7 +36,7 @@ async function setupClients () {
         ]
     })
 
-    listeners()
+    clientListeners()
 }
 
 // Opens modal and inserts values into edit client form. 
@@ -135,7 +135,7 @@ async function deleteConnHandler(clientId, userId){
 }
 
 // Instantiates listeners. 
-function listeners() {
+function clientListeners() {
     $("#formAddClient").submit(function(event) {
         event.preventDefault()
 

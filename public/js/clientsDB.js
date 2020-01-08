@@ -79,6 +79,16 @@ async function getClientsDeactive() {
     return clients
 }
 
+// Deletes client from DB.
+async function deleteClient(clientId) {
+    await deleteConnections(clientId)
+
+    await Promise.all([
+        db.collection('clients').doc(clientId).delete(),
+        db.collection('connections').doc(clientId).delete()
+    ])
+}
+
 class Client {
     constructor(id, name, dob, mobile, address1, address2, town, county, eircode, marital, active){
         this.id = id
