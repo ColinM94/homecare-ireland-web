@@ -25,7 +25,7 @@ async function setupClients () {
             { title: "Eircode", data: "eircode"},
             { title: "Marital Status", data: "marital"},
             {mRender: function (data, type, row) {
-                return `<a href="javascript:editClientForm('${row.id}')">Edit</a>`
+                return `<a href="javascript:viewEditClientForm('${row.id}')">Edit</a>`
             }},
             {mRender: function (data, type, row) {
                 return `<a href="javascript:confirmDeactivate('${row.id}')">Deactivate</a>`
@@ -40,7 +40,7 @@ async function setupClients () {
 }
 
 // Opens modal and inserts values into edit client form. 
-function editClientForm(clientId) {
+function viewEditClientForm(clientId) {
     $('#modalEditClient').modal('show')
 
     getClient(clientId).then(result => {
@@ -59,14 +59,10 @@ function editClientForm(clientId) {
 
 // Displays selected client details. 
 async function viewClientProfile(clientId){
-    // Clears client connections. 
-    $("#client-connections").html("")
-
     $('#clientsList').hide()
     $('#clientProfile').show() 
 
     let client = await getClient(clientId)
-    let connections = await getConnections(clientId)
 
     $('#client-profile-id').text(` ${client.id}`)
     $('#clientProfileTitle').html(` ${client.name}'s Profile`)
@@ -74,28 +70,49 @@ async function viewClientProfile(clientId){
     $('#clientProfileMobile').text(` ${client.mobile}`)
     $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
         
+    loadConnections(clientId)
+}
+
+// Opens add connection modal form. 
+async function viewAddConnForm(){
+    $('#modal-add-connection').modal('show')
+
+    // Clears list. 
+    $('#select-user-list').empty()
+
+    getUsers().then(users => {
+        users.forEach(user => {
+            $("#select-user-list").append(new Option(`${user.name} : ${user.id}`, user.id))
+        })
+    })
+
+    $('#modal-add-connection').modal('hide')
+}
+
+// Gets and displays connections. 
+async function loadConnections(clientId){
+    // Clears client connections. 
+    $("#client-connections").html("")
+
+    let connections = await getConnections(clientId)
+
     if(connections != null){
         connections.forEach(userId => {
             getUser(userId).then(user => {
-                $("#client-connections").append(`${user.role}: <a href="${user.id}">${user.name}</a> <a href="javascript:confirmDeleteConn('${client.id}','${user.id}')" style="color:red;">[X]</a><br>`)
+                $("#client-connections").append(`${user.role}: <a href="${user.id}">${user.name}</a> <a href="javascript:confirmDeleteConn('${clientId}','${user.id}')" style="color:red;">[X]</a><br>`)
             })
         })
     }
 }
 
-function refreshProfile(clientId){
-    // Clears connections. 
-    $("#client-connections").html("")
+// Resets and reloads datatable. 
+async function refreshTable(){
+    let clients = await getClients()
+    let table = $('#datatable').DataTable()
 
-    $('#client-profile-id').text("")
-    $('#clientProfileTitle').html("")
-    $('#clientProfileName').text("")
-    $('#clientProfileMobile').text("")
-    $('#clientProfileAddress').text("")
-
-    $('#select-user-list').empty()
-
-    viewClientProfile(clientId)
+    table.clear() 
+    table.rows.add(clients)
+    table.draw()
 }
 
 // Prompts user to confirm client deletion. 
@@ -111,103 +128,89 @@ function confirmDeleteConn(clientId, userId){
     $('#client-conn-useridholder').text(userId)
 }
 
-// Resets and reloads datatable. 
-async function refreshTable(){
-    let clients = await getClients()
-    let table = $('#datatable').DataTable()
+async function addClientHandler(){
+    let name = $("#addClientName").val()
+    let dob = $("#addClientDob").val()
+    let mobile = $("#addClientMobile").val()
+    let address1 = $("#addClientAddress1").val()
+    let address2 = $("#addClientAddress2").val()
+    let town = $("#addClientTown").val()
+    let county = $("#addClientCounty").val()
+    let eircode = $("#addClientEircode").val()
+    let marital = $("#addClientMarital").val()
 
-    table.clear() 
-    table.rows.add(clients)
-    table.draw()
+    addClient(name, dob, mobile, address1, address2, town, county, eircode, marital, true)
+
+    $('#addClientModal').modal('hide')
 }
 
-// Handlers.
-async function addConnectionHandler(clientId, userId){
+async function editClientHandler(){
+    let id = $("#editClientId").val()
+    let name = $("#editClientName").val()
+    let dob = $("#editClientDob").val()
+    let mobile = $("#editClientMobile").val()
+    let address1 = $("#editClientAddress1").val()
+    let address2 = $("#editClientAddress2").val()
+    let town = $("#editClientTown").val()
+    let county = $("#editClientCounty").val()
+    let eircode = $("#editClientEircode").val()
+    let marital = $("#editClientMarital").val()
+
+    updateClient(id, name, dob, mobile, address1, address2, town, county, eircode, marital, true)
+
+    $('#modalEditClient').modal('hide')
+}
+
+async function addConnHandler(){
+    let clientId = $('#client-profile-id').text().replace(/\s/g, '')
+    let userId = $('#select-user-list').val()
     await addConnection(userId, clientId)
     viewClientProfile(clientId)
     $('#modal-add-connection').modal('hide')
 }
 
-async function deleteConnHandler(clientId, userId){
+async function deleteConnHandler(){
+    var clientId = $('#client-conn-clientidholder').text()
+    var userId = $('#client-conn-useridholder').text()
     $('#modal-client-delete-conn').modal('hide')
-    await deleteConnection(clientId, userId)
-    refreshProfile(clientId)
+    await deleteConnection(clientId, userId) 
+    loadConnections(clientId)
+}
+
+async function deactivateClientHandler(){
+    var clientId = $('#idHolder').text()
+    $('#modal-client-deactivate').modal('hide')
+    deactivateClient(clientId)
+    refreshTable()
 }
 
 // Instantiates listeners. 
 function clientListeners() {
     $("#formAddClient").submit(function(event) {
         event.preventDefault()
-
-        let name = $("#addClientName").val()
-        let dob = $("#addClientDob").val()
-        let mobile = $("#addClientMobile").val()
-        let address1 = $("#addClientAddress1").val()
-        let address2 = $("#addClientAddress2").val()
-        let town = $("#addClientTown").val()
-        let county = $("#addClientCounty").val()
-        let eircode = $("#addClientEircode").val()
-        let marital = $("#addClientMarital").val()
-
-        addClient(name, dob, mobile, address1, address2, town, county, eircode, marital, true)
-
-        $('#addClientModal').modal('hide')
+        addClientHandler()
     })
 
     $("#formEditClient").submit(function(event) {
         event.preventDefault()
-
-        let id = $("#editClientId").val()
-        let name = $("#editClientName").val()
-        let dob = $("#editClientDob").val()
-        let mobile = $("#editClientMobile").val()
-        let address1 = $("#editClientAddress1").val()
-        let address2 = $("#editClientAddress2").val()
-        let town = $("#editClientTown").val()
-        let county = $("#editClientCounty").val()
-        let eircode = $("#editClientEircode").val()
-        let marital = $("#editClientMarital").val()
-
-        updateClient(id, name, dob, mobile, address1, address2, town, county, eircode, marital, true)
-
-        $('#modalEditClient').modal('hide')
+        editClientHandler()
     })
 
     $("#form-add-connection").submit(function(event) {
         event.preventDefault()
-
-        let clientId = $('#client-profile-id').text().replace(/\s/g, '')
-        let userId = $('#select-user-list').val()
-        
-        addConnectionHandler(clientId, userId)
+        addConnHandler()
     })
 
     $('#btn-add-connection').click(function(){
-        $('#modal-add-connection').modal('show')
-
-        // Clears list. 
-        $('#select-user-list').empty()
-
-        getUsers().then(users => {
-            users.forEach(user => {
-                $("#select-user-list").append(new Option(`${user.name} : ${user.id}`, user.id))
-            })
-        })
-
-        $('#modal-add-connection').modal('hide')
+        viewAddConnForm()
     })
 
     $('#btn-client-deactivate').click(function(){
-        var clientId = $('#idHolder').text()
-        $('#modal-client-deactivate').modal('hide')
-        deactivateClient(clientId)
-        refreshTable()
+        deactivateClientHandler()
     })
 
     $('#btn-client-delete-conn').click(function(){
-        var clientId = $('#client-conn-clientidholder').text()
-        var userId = $('#client-conn-useridholder').text()
-        deleteConnHandler(clientId, userId)
+        deleteConnHandler()
     })
 
     $('#btnCloseProfile').click(function(){
@@ -215,6 +218,5 @@ function clientListeners() {
         $('#clientProfile').hide()
     })
 }
-
 
 

@@ -1,4 +1,4 @@
-// Returns array of user ids.  
+// Returns array of user ids from connections/{id}/ids.
 async function getConnections(id) {
     let doc = await db.collection('connections').doc(id).get()
 
@@ -13,7 +13,7 @@ async function addConnection(id1, id2) {
     ])
 }
 
-// Adds id to array in DB connections/{fromId}/ids.
+// Adds id to array at connections/{fromId}/ids.
 async function addConn(fromId, toId){
     db.collection('connections').doc(fromId).get().then(doc => {
         if(doc != null){
@@ -48,7 +48,7 @@ async function deleteConnection(id1, id2){
     ])
 }
 
-// Deletes id in DB from connections/{fromId}/ids.
+// Deletes id from connections/{fromId}/ids.
 async function deleteConn(fromId, toId) {
     let doc = await db.collection('connections').doc(fromId).get()
 
@@ -60,7 +60,7 @@ async function deleteConn(fromId, toId) {
     await updateConnection(fromId, conns)
 }
 
-// Deletes all instances of this id in connections collection. 
+// Deletes all instances of {id} in connections collection.  
 async function deleteConnections(id){
     let docs = await db.collection('connections').get()
 
