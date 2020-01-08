@@ -7,15 +7,15 @@ async function getConnections(id) {
 
 // Sets up connection between user and client. 
 async function addConnection(id1, id2) {
-    Promise.all([
-        addConn(id1, id2),
-        addConn(id2, id1)
+    await Promise.all([
+        await addConn(id1, id2),
+        await addConn(id2, id1)
     ])
 }
 
 // Adds id to array at connections/{fromId}/ids.
 async function addConn(fromId, toId){
-    db.collection('connections').doc(fromId).get().then(doc => {
+    await db.collection('connections').doc(fromId).get().then(doc => {
         if(doc != null){
             
             // Array to store connection ids. 

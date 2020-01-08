@@ -37,22 +37,44 @@ async function viewUserProfile(userId){
     $('#user-list').hide()
     $('#user-profile').show() 
 
-    await Promise.all([
-        getUser(userId).then(user => {    
-            $('#user-profile-title').html(` ${user.name}'s Profile`)
-            $('#user-profile-id').text(` ${user.id}`)
-            $('#user-profile-name').text(` ${user.name}`)
-            $('#user-profile-mobile').text(` ${user.mobile}`)
-            $('#user-profile-address').text(` ${user.address1}, ${user.address2}, ${user.town}, ${user.county}, ${user.eircode}`)
-        }),
-        getConnections(userId).then(clients => {
-            clients.forEach(clientId => {
-                getClient(clientId).then(client => {
-                    $("#user-connections").append(`<a href="${client.id}">${client.name}</a>`)
-                })
+    let user = await getUser(userId)
+
+    $('#user-profile-title').html(` ${user.name}'s Profile`)
+    $('#user-profile-id').text(` ${user.id}`)
+    $('#user-profile-name').text(` ${user.name}`)
+    $('#user-profile-mobile').text(` ${user.mobile}`)
+    $('#user-profile-address').text(` ${user.address1}, ${user.address2}, ${user.town}, ${user.county}, ${user.eircode}`)
+
+    loadUserConns(userId)
+}
+
+async function loadUserConns(userId){
+    // Clears connections. 
+    $("#user-connections").html("")
+
+    let connections = await getConnections(userId)
+
+    if(connections != null){
+        connections.forEach(clientId => {
+            getClient(clientId).then(client => {
+                $("#user-connections").append(`<a href="${client.id}">${client.name}</a><a href="javascript:confirmDeleteUserConn('${client.id}','${userId}')" style="color:red;"> [X]</a><br>`)
             })
         })
-    ])  
+    }
+}
+
+function confirmDeleteUserConn(clientId, userId){
+    $('#modal-user-delete-conn').modal('show')
+    $('#user-conn-clientidholder').text(clientId)
+    $('#user-conn-useridholder').text(userId)
+}
+
+async function deleteUserConnHandler(){
+    var clientId = $('#user-conn-clientidholder').text()
+    var userId = $('#user-conn-useridholder').text()
+    $('#modal-user-delete-conn').modal('hide')
+    await deleteConnection(clientId, userId) 
+    loadUserConns(userId)
 }
 
 // Prompts user to confirm user deletion. 
@@ -64,8 +86,16 @@ function confirmUserDeactivate(userId){
 async function handleDeactivateUser(userId){
     $('#modal-user-deactivate').modal('hide')
     let result = await deactivateUser(userId)
-    console.log(result)
     refreshUsersTable()
+}
+
+async function addUserConnHandler(){
+    let userId = $('#user-profile-id').text().replace(/\s/g, '')
+    let clientId = $('#select-client-list').val()
+
+    await addConnection(userId, clientId)
+    loadUserConns(userId)
+    $('#modal-user-add-connection').modal('hide')
 }
 
 // Instantiate listeners.
@@ -83,8 +113,16 @@ async function usersListeners(){
             })
         })
     })
-}
 
+    $('#form-add-user-conn').submit(function(){
+        event.preventDefault()
+        addUserConnHandler()
+    })
+
+    $('#btn-user-delete-conn').click(function(){
+        deleteUserConnHandler()
+    })
+}
 
 // Resets and reloads datatable. 
 async function refreshUsersTable(){

@@ -165,7 +165,7 @@ async function addConnHandler(){
     let clientId = $('#client-profile-id').text().replace(/\s/g, '')
     let userId = $('#select-user-list').val()
     await addConnection(userId, clientId)
-    viewClientProfile(clientId)
+    loadConnections(clientId)
     $('#modal-add-connection').modal('hide')
 }
 
