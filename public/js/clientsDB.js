@@ -1,7 +1,13 @@
 // Adds a new client to DB.  
 async function addClient(name, dob, mobile, address1, address2, town, county, eircode, marital, active) {  
     let client = new Client(null, name, dob, mobile, address1, address2, town, county, eircode, marital, active)
-    await db.collection("clients").add(client.toFirestore())
+    await db.collection("clients").add(client.toFirestore()).then(function(ref){
+        let connections = {
+            ids : []
+        }
+
+        db.collection('connections').doc(ref.id).set(connections)
+    })
     refreshTable()
 }
 

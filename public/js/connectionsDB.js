@@ -8,6 +8,7 @@ async function addConnection(userId, clientId) {
 
 async function addConn(id1, id2){
     db.collection('connections').doc(id1).get().then(doc => {
+        
         if(doc != null){
             let newConns = []
  
@@ -64,6 +65,6 @@ async function deleteConnection(clientId, userId) {
 // Returns array of user ids.  
 async function getConnections(id) {
     let doc = await db.collection('connections').doc(id).get()
-    
+
     if(doc.data().ids !== null) return doc.data().ids
 }

@@ -59,6 +59,9 @@ function editClientForm(clientId) {
 
 // Displays selected client details. 
 async function viewClientProfile(clientId){
+    // Clears client connections. 
+    $("#client-connections").html("")
+
     $('#clientsList').hide()
     $('#clientProfile').show() 
 
@@ -74,7 +77,7 @@ async function viewClientProfile(clientId){
     if(connections != null){
         connections.forEach(userId => {
             getUser(userId).then(user => {
-                $("#client-connections").append(`${user.role}: <a href="${user.id}">${user.name}</a> <a href="javascript:confirmDeleteConn('${client.id}','${user.id}')" style="color:red;">[X]</a>`)
+                $("#client-connections").append(`${user.role}: <a href="${user.id}">${user.name}</a> <a href="javascript:confirmDeleteConn('${client.id}','${user.id}')" style="color:red;">[X]</a><br>`)
             })
         })
     }
@@ -122,6 +125,7 @@ async function refreshTable(){
 async function addConnectionHandler(clientId, userId){
     await addConnection(userId, clientId)
     viewClientProfile(clientId)
+    $('#modal-add-connection').modal('hide')
 }
 
 async function deleteConnHandler(clientId, userId){
