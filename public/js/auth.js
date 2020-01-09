@@ -8,7 +8,7 @@ function signIn(){
     
     if(email != "" || password != ""){
         auth.signInWithEmailAndPassword(email, password).then(cred => {
-            getUser(cred.user.uid).then(user => {
+            UsersDB.getUser(cred.user.uid).then(user => {
                 console.log(user)
                 if(user.active == true){
                     window.location = "dashboard.html"

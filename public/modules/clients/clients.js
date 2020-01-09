@@ -72,6 +72,7 @@ class Clients{
         $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
             
         this.loadConns(clientId)
+        this.loadVisits(clientId)
     }
 
     // Opens add connection modal form. 
@@ -189,6 +190,17 @@ class Clients{
         $('#modal-client-deactivate').modal('hide')
         ClientsDB.deactivateClient(clientId)
         this.refreshTable()
+    }
+
+    static async loadVisits(clientId){
+        let visits = await VisitsDB.getVisits("WxsLU401U6e7RBGZ2xvuwwJaRbm2")
+        console.log(visits)
+        visits.forEach(visit => {
+            $('#client-visits').html(visit.id)
+        })
+
+        //READ THIS!
+        //(await visits).forEach
     }
 
     // Instantiates listeners. 
