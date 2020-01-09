@@ -172,6 +172,8 @@ class Clients{
         await ConnsDB.addConn(userId, clientId)
         this.loadConns(clientId)
         $('#modal-add-connection').modal('hide')
+
+        Dashboard.message("Hiiiiiiiiii")
     }
 
     static async deleteConn(){

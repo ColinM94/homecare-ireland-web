@@ -28,3 +28,34 @@ input[type=date]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     display: none;
 }
+
+/* The alert message box */
+.alert {
+    display: none;
+    position:absolute;
+    bottom:0;
+    right:0;
+    margin: 0px 50px 50px 0px;
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    font-size: 1.7em;
+  }
+  
+  /* The close button */
+  .closebtn {
+    margin-left: 15px;
+    margin-top: 8px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 35px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  /* When moving the mouse over the close button */
+  .closebtn:hover {
+    color: black;
+  }

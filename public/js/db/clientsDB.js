@@ -16,11 +16,17 @@ class ClientsDB{
 
     // Returns Client object from clients/{clientId}.
     static async getClient(clientId) {
-        let doc = await db.collection('clients').doc(clientId).get()
+        let result 
+        await db.collection('clients').doc(clientId).get()
+            .then(doc => {
+                result = doc
+            }).catch(error => {
+                Message.display(2, "Error Getting Clients!")
+            })
 
         let client = new Client()
 
-        client.docToClient(doc)
+        client.docToClient(result)
 
         return client
     }
@@ -29,7 +35,14 @@ class ClientsDB{
     static async getClientsDeactive() {
         let clients = new Array()
 
-        let result = await db.collection('clients').where('active' ,'==', false).get()
+        let result 
+
+        await db.collection('clients').where('active' ,'==', false).get()
+            .then(docs => {
+                result = docs
+            }).catch(error => {
+                Message.display(2, "Error Getting Deactive Client!")
+            })
 
         result.forEach(doc => {
             let client = new Client()   
@@ -49,6 +62,10 @@ class ClientsDB{
             }
 
             db.collection('connections').doc(ref.id).set(connections)
+        }).then(() => {
+            Message.display(1, "Client Added!")
+        }).catch(error => {
+            Message.display(2, "Error Adding Client!")
         })
     }
 
@@ -74,9 +91,9 @@ class ClientsDB{
         await db.collection('clients').doc(clientId).update({
             "active": false
         }).then(() => {
-            return true
+            Message.display(1, "Client Deactivated!")
         }).catch(error => {
-            return false
+            Message.display(2, "Error De-activating Client!")
         })
     }
 
@@ -84,6 +101,10 @@ class ClientsDB{
     static async activateClient (clientId) {
         db.collection('clients').doc(clientId).update({
             "active": true
+        }).then(() => {
+            Message.display(1, "Client Activated!")
+        }).catch(error => {
+            Message.display(2, "Error Activating Client!")
         })
     }
 }
