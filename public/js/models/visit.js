@@ -1,12 +1,12 @@
 class Visit{
     constructor(id, clientId, userId, clockInTime, clockOutTime, startTime, endTime) {
         this.id = id
-        this.clientId = this.clientId
-        this.userId = this.userId
-        this.clockInTime = this.clockInTime
-        this.clockOutTime = this.clockOutTime
-        this.startTime = this.startTime
-        this.endTime = this.endTime
+        this.clientId = clientId
+        this.userId = userId
+        this.clockInTime = clockInTime
+        this.clockOutTime = clockOutTime
+        this.startTime = startTime
+        this.endTime = endTime
     }
 
     // Instantiates class with values from firestore document. 
@@ -16,14 +16,17 @@ class Visit{
         this.userId = doc.data().userId
         this.clockInTime = doc.data().clockInTime
         this.clockOutTime = doc.data().clockOutTime
-        this.starttTime = doc.data().startTime
+        this.startTime = doc.data().startTime
         this.endTime = doc.data().endTime
+    }
+
+    formatDate(dateString){
+
     }
 
     // Returns object that can be used with Firestore. 
     toFirestore() {
         let visit = {
-            id : this.id,
             clientId : this.clientId,
             userId : this.userId,
             clockInTime : this.clockInTime,

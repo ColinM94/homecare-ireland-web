@@ -32,7 +32,7 @@ class Clients{
                     return `<a href="javascript:Clients.confirmDeactivate('${row.id}')">Deactivate</a>`
                 }},
                 {mRender: function (data, type, row) {
-                    return `<a href="javascript:Clients.viewClientProfile('${row.id}')">View Profile</a>`
+                    return `<a href="javascript:ClientProfile.show('${row.id}')">View Profile</a>`
                 }},
             ]
         })
@@ -58,54 +58,6 @@ class Clients{
         })
     }
 
-    // Displays selected client details. 
-    static async viewClientProfile(clientId){
-        $('#clientsList').hide()
-        $('#clientProfile').show() 
-
-        let client = await ClientsDB.getClient(clientId)
-
-        $('#client-profile-id').text(` ${client.id}`)
-        $('#clientProfileTitle').html(` ${client.name}'s Profile`)
-        $('#clientProfileName').text(` ${client.name}`)
-        $('#clientProfileMobile').text(` ${client.mobile}`)
-        $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
-            
-        this.loadConns(clientId)
-        this.loadVisits(clientId)
-    }
-
-    // Opens add connection modal form. 
-    static async viewAddConnForm(){
-        $('#modal-add-connection').modal('show')
-
-        // Clears list. 
-        $('#select-user-list').empty()
-
-        UsersDB.getUsers().then(users => {
-            users.forEach(user => {
-                $("#select-user-list").append(new Option(`${user.name} : ${user.id}`, user.id))
-            })
-        })
-
-        $('#modal-add-connection').modal('hide')
-    }
-
-    // Gets and displays connections. 
-    static async loadConns(clientId){
-        // Clears client connections. 
-        $("#client-connections").html("")
-
-        let connections = await ConnsDB.getConns(clientId)
-
-        if(connections != null){
-            connections.forEach(userId => {
-                UsersDB.getUser(userId).then(user => {
-                    $("#client-connections").append(`${user.role}: <a href="${user.id}">${user.name}</a> <a href="javascript:Clients.confirmDeleteConn('${clientId}','${user.id}')" style="color:red;">[X]</a><br>`)
-                })
-            })
-        }
-    }
 
     // Resets and reloads datatable. 
     static async refreshTable(){
@@ -121,13 +73,6 @@ class Clients{
     static confirmDeactivate(clientId){
         $('#modal-client-deactivate').modal('show')
         $('#idHolder').text(clientId)
-    }
-
-    // Prompts user to confirm connection deletion. 
-    static confirmDeleteConn(clientId, userId){
-        $('#modal-client-delete-conn').modal('show')
-        $('#client-conn-clientidholder').text(clientId)
-        $('#client-conn-useridholder').text(userId)
     }
 
     static async addClient(){
@@ -167,40 +112,11 @@ class Clients{
         this.refreshTable()
     }
 
-    static async addConn(){
-        let clientId = $('#client-profile-id').text().replace(/\s/g, '')
-        let userId = $('#select-user-list').val()
-        await ConnsDB.addConn(userId, clientId)
-        this.loadConns(clientId)
-        $('#modal-add-connection').modal('hide')
-
-        Dashboard.message("Hiiiiiiiiii")
-    }
-
-    static async deleteConn(){
-        var clientId = $('#client-conn-clientidholder').text()
-        var userId = $('#client-conn-useridholder').text()
-        $('#modal-client-delete-conn').modal('hide')
-        await ConnsDB.deleteConn(clientId, userId) 
-        this.loadConns(clientId)
-    }
-
     static async deactivateClient(){
         var clientId = $('#idHolder').text()
         $('#modal-client-deactivate').modal('hide')
         ClientsDB.deactivateClient(clientId)
         this.refreshTable()
-    }
-
-    static async loadVisits(clientId){
-        let visits = await VisitsDB.getVisits("WxsLU401U6e7RBGZ2xvuwwJaRbm2")
-        console.log(visits)
-        visits.forEach(visit => {
-            $('#client-visits').html(visit.id)
-        })
-
-        //READ THIS!
-        //(await visits).forEach
     }
 
     // Instantiates listeners. 
@@ -215,26 +131,8 @@ class Clients{
             Clients.editClient()
         })
 
-        $("#form-add-connection").submit(function(event) {
-            event.preventDefault()
-            Clients.addConn()
-        })
-
-        $('#btn-add-connection').click(function(){
-            Clients.viewAddConnForm()
-        })
-
         $('#btn-client-deactivate').click(function(){
             Clients.deactivateClient()
-        })
-
-        $('#btn-client-delete-conn').click(function(){
-            Clients.deleteConn()
-        })
-
-        $('#btnCloseProfile').click(function(){
-            $('#clientsList').show()
-            $('#clientProfile').hide()
         })
     }
 }
