@@ -1,6 +1,7 @@
 class UsersDeactive{
+    overlay = false
     // Requires that client module is loaded first. 
-    static async setupUsersDeactive() {
+    static async load() {
         let users = await UsersDB.getUsersDeactive()
 
         $('#datatable').DataTable({

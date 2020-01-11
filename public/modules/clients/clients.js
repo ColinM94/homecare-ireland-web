@@ -1,6 +1,8 @@
 class Clients{
+    static overlay = false
+
     // Populates clients datatable and sets up listeners. 
-    static async setupClients () {
+    static async load() {
         let clients = await ClientsDB.getClients()
 
         $('#datatable').DataTable( {
@@ -32,7 +34,7 @@ class Clients{
                     return `<a href="javascript:Clients.confirmDeactivate('${row.id}')">Deactivate</a>`
                 }},
                 {mRender: function (data, type, row) {
-                    return `<a href="javascript:ClientProfile.show('${row.id}')">View Profile</a>`
+                    return `<a href="javascript:Module.load('ClientProfile', '${row.id}')">View Profile</a>`
                 }},
             ]
         })

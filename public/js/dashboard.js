@@ -1,81 +1,3 @@
-class Message{
-    static display(type, message){   
-        switch(type){
-            case 1:
-                $('#alert-box-text').html(message)
-                $('#alert-box').css('background-color', '#6BBD6E')
-                break
-            case 2:
-                $('#alert-box-text').html(message)
-                $('#alert-box').css('background-color', '#F66459')
-                break
-            case 3:
-                $('#alert-box-text').html(message)
-                $('#alert-box').css('background-color', '#47A8F5')
-                break
-            case 4:
-                $('#alert-box-text').html(message)
-                $('#alert-box').css('background-color', '#FFAA2C')
-            break
-        }
-
-        $('#alert-box').css('display', 'block')
-
-        $('#btn-close-msg').click(function(){
-            $('#alert-box').css('display', 'none')
-        })
-
-        this.fadeOut()
-    }
-
-    // Fades out message box after timer. 
-    static fadeOut(){
-        $("#alert-box").delay(5000).fadeOut()
-    }
-}
-
-class Prompt{
-    static userInput = false
-
-    static async sleep(msec) {
-        return new Promise(resolve => setTimeout(resolve, msec));
-    }
-
-    static async confirm(){
-        this.userInput = false
-        let result = null
-
-        $('#modal-confirm').modal('show')
-    
-        this.listeners()
-
-        while(result == null){ 
-            await this.sleep(300)      
-
-            if(this.userInput == "yes"){
-                result = true
-            }else if(this.userInput == "cancel"){
-                result = false
-            }else if($('#modal-confirm').css('display') == 'none'){
-                result = false
-            }
-        }
-
-        $('#modal-confirm').modal('hide')
-        return result
-    }
-
-    static listeners(){
-        $('#btn-modal-confirm-yes').click(function(){
-            Prompt.userInput = "yes"
-        })
-
-        $('#btn-modal-confirm-cancel').click(function(){
-            Prompt.userInput = "cancel"
-        })
-    }
-}
-
 // Listen for auth state change.
 auth.onAuthStateChanged(user => {
     if(user){
@@ -107,8 +29,9 @@ function setupUI(){
 function loadModule(module){
     // Gets the location of the element and inserts the module into it. 
     $("#"+module).addClass("active")
+
+    // Loads {module}.html into #module.     
     $("#module").load("modules/" + module)
-    setActive(module)
 }
 
 // Sets active nav item in sidebar. 
@@ -132,27 +55,23 @@ function setActive(module){
 
 // Sidebar buttons.
 $("#nav-brand").click(function (){
-    loadModule("users")
+    Module.load("Users")
 })
 
 $("#nav-users").click(function (){
-    loadModule("users")
+    Module.load("Users")
 })
 
 $("#nav-clients").click(function (){
-    loadModule("clients")
+    Module.load("Clients")
 })
 
 $("#nav-clients-deactive").click(function (){
-    loadModule("clientsDeactive")
+    Module.load("ClientsDeactive")
 })
 
 $("#nav-users-deactive").click(function (){
-    loadModule("usersDeactive")
-})
-
-$("#nav-connections").click(function (){
-    loadModule("connections")
+    Module.load("UsersDeactive")
 })
 
 // Topbar buttons. 

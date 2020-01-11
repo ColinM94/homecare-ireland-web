@@ -1,6 +1,7 @@
 class ClientsDeactive{
+    overlay = false
     // Requires that client module is loaded first. 
-    static async setupClientsDeactive() {
+    static async load() {
         let clients = await ClientsDB.getClientsDeactive()
 
         $('#datatable').DataTable({
@@ -69,7 +70,7 @@ class ClientsDeactive{
         $('#btn-clientsdeactive-delete').click(function(event) {
             event.preventDefault()
 
-            this.deleteClient()
+            ClientsDeactive.deleteClient()
         })
     }
 }

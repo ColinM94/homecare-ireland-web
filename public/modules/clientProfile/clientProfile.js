@@ -1,10 +1,10 @@
 class ClientProfile{
-    clientId = null
+    static overlay = true
+    static clientId = null
 
-    static async show(clientId){
-        $('#clientsList').hide()
-        $('#clientProfile').show() 
-        
+    static async load(clientId){  
+        this.clientId = clientId
+
         let client = await ClientsDB.getClient(clientId)
 
         $('#client-profile-id').text(` ${client.id}`)
@@ -12,8 +12,6 @@ class ClientProfile{
         $('#clientProfileName').text(` ${client.name}`)
         $('#clientProfileMobile').text(` ${client.mobile}`)
         $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
-
-        this.clientId = clientId
 
         this.loadConns(clientId)
         this.loadVisits(clientId)
@@ -50,14 +48,12 @@ class ClientProfile{
         $('#modal-add-connection').modal('hide')
     }
 
-    static async deleteConn(){
-        if(await Prompt.confirm()){
-            
+    static async deleteConn(userId){
+        if(await Prompt.confirm()){ 
+            $('#modal-client-delete-conn').modal('hide')
+            await ConnsDB.deleteConn(this.clientId, userId) 
+            this.loadConns(this.clientId)
         }
-
-        $('#modal-client-delete-conn').modal('hide')
-        await ConnsDB.deleteConn(clientId, userId) 
-        this.loadConns(clientId)
     }
 
     // Gets and displays connections. 
@@ -70,7 +66,7 @@ class ClientProfile{
         if(connections != null){
             connections.forEach(userId => {
                 UsersDB.getUser(userId).then(user => {
-                    $("#client-connections").append(`${user.role}: <a href="${user.id}">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${clientId}','${user.id}')" style="color:red;">[X]</a><br>`)
+                    $("#client-connections").append(`${user.role}: <a href="${user.id}">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${user.id}')" style="color:red;">[X]</a><br>`)
                 })
             })
         }
@@ -129,9 +125,9 @@ class ClientProfile{
     }
 
     // Prompts user to confirm connection deletion. 
-    static confirmDeleteConn(clientId, userId){
+    static confirmDeleteConn(){
         $('#modal-client-delete-conn').modal('show')
-        $('#client-conn-clientidholder').text(clientId)
+        $('#client-conn-clientidholder').text(this.clientId)
         $('#client-conn-useridholder').text(userId)
     }
 
