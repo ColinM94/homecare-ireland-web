@@ -6,12 +6,13 @@ class ClientProfile{
         this.clientId = clientId
 
         let client = await ClientsDB.getClient(clientId)
-
+        
         $('#client-profile-id').text(` ${client.id}`)
-        $('#clientProfileTitle').html(` ${client.name}'s Profile`)
-        $('#clientProfileName').text(` ${client.name}`)
-        $('#clientProfileMobile').text(` ${client.mobile}`)
-        $('#clientProfileAddress').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
+        $('#client-profile-title').html(` ${client.name}'s Profile`)
+        $('#client-profile-name').text(` ${client.name}`)
+        $('#client-profile-dob').text(` ${client.dob}`)
+        $('#client-profile-mobile').text(` ${client.mobile}`)
+        $('#client-profile-address').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
 
         this.loadConns(clientId)
         this.loadVisits(clientId)
@@ -42,8 +43,10 @@ class ClientProfile{
     }
 
     static async addConn(){
+        console.log("Hello")
         let userId = $('#select-add-conn').val()
-        await ConnsDB.addConn(userId, clientId)
+
+        await ConnsDB.addConn(userId, this.clientId)
         this.loadConns()
         $('#modal-add-connection').modal('hide')
     }
@@ -66,7 +69,7 @@ class ClientProfile{
         if(connections != null){
             connections.forEach(userId => {
                 UsersDB.getUser(userId).then(user => {
-                    $("#client-connections").append(`${user.role}: <a href="${user.id}">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${user.id}')" style="color:red;">[X]</a><br>`)
+                    $("#client-connections").append(`${user.role}: <a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${user.id}')" style="color:red;">[X]</a><br>`)
                 })
             })
         }
@@ -133,9 +136,8 @@ class ClientProfile{
 
     // Instantiate listeners. 
     static async listeners() {
-        $('#btnCloseProfile').click(function(){
-            $('#clientsList').show()
-            $('#clientProfile').hide()
+        $('#btn-close-client-profile').click(function(){
+            Module.closeOverlay()
         })
 
         $("#form-add-connection").submit(function(event) {

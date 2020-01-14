@@ -21,7 +21,7 @@ class ClientsDB{
             .then(doc => {
                 result = doc
             }).catch(error => {
-                Message.display(2, "Error Getting Clients!")
+                Message.display(2, "Error Getting Client!")
             })
 
         let client = new Client()

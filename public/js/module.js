@@ -34,7 +34,6 @@ class Module{
     }
 
     static closeOverlay(){
-        console.log("hello")
         $("#module").show()
         $("#module-overlay").hide()
     }

@@ -17,6 +17,9 @@ class UsersDB{
     // Returns User object from users/{userId}. 
     static async getUser(userId) {
         let doc = await db.collection('users').doc(userId).get()
+            .catch(error => {
+                Message.display(2, "Error Getting User!")
+            })
 
         let user = new User()
 
@@ -46,6 +49,8 @@ class UsersDB{
         await db.collection("users").add(user.toFirestore()).then(() => {
             return true
         }).catch(error => {
+            Message.display(2, "Error Adding User!")
+
             return false
         })
     }

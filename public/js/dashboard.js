@@ -23,7 +23,7 @@ function getUserInfo(user){
 
 function setupUI(){
     $('#topbar-name').html(currentUser.name) 
-    loadModule("users")
+    Module.load("Users")
 }
 
 function loadModule(module){

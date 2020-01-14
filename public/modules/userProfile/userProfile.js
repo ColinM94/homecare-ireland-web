@@ -1,7 +1,10 @@
 class UserProfile{
-    overlay = true
+    static overlay = true
+    static userId = null
 
     static async load(userId){
+        this.userId = userId
+
         let user = await UsersDB.getUser(userId)
 
         $('#user-profile-title').html(` ${user.name}'s Profile`)
@@ -11,6 +14,8 @@ class UserProfile{
         $('#user-profile-address').text(` ${user.address1}, ${user.address2}, ${user.town}, ${user.county}, ${user.eircode}`)
 
         this.loadConns(userId)
+
+        this.listeners()
     }
 
     static async loadConns(userId){
@@ -22,7 +27,7 @@ class UserProfile{
         if(connections != null){
             connections.forEach(clientId => {
                 ClientsDB.getClient(clientId).then(client => {
-                    $("#user-connections").append(`<a href="${client.id}">${client.name}</a><a href="javascript:Users.deleteConn('${client.id}','${userId}')" style="color:red;"> [X]</a><br>`)
+                    $("#user-connections").append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:Users.deleteConn('${client.id}','${userId}')" style="color:red;"> [X]</a><br>`)
                 })
             })
         }
@@ -60,6 +65,11 @@ class UserProfile{
 
         $('#btn-user-delete-conn').click(function(){
             Users.deleteConn()
+        })
+
+        $('#btn-close-user-profile').click(function(){
+            console.log("hello")
+            Module.closeOverlay()
         })
     }
 }
