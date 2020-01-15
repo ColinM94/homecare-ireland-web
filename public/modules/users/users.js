@@ -51,12 +51,15 @@ class Users{
         this.loadConns(userId)
     }
 
+    static async deactivateUser(userId){
+        if(await Prompt.confirm()){
+            await UsersDB.deactivateUser(userId)
+            this.refreshTable()
+        }
+    }
     // Instantiate listeners.
     static async listeners(){
-        $("#btn-user-deactivate").click(function(){
-            var userId = $('#userid-holder').text()
-            Users.deactivateUser(userId)
-        })
+
     }
 
     // Resets and reloads datatable. 

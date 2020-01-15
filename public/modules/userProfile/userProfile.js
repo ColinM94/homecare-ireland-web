@@ -7,7 +7,7 @@ class UserProfile{
 
         let user = await UsersDB.getUser(userId)
 
-        $('#user-profile-title').html(` ${user.name}'s Profile`)
+        $('#user-profile-title').html(` User Profile: ${user.name}`)
         $('#user-profile-id').text(` ${user.id}`)
         $('#user-profile-name').text(` ${user.name}`)
         $('#user-profile-mobile').text(` ${user.mobile}`)
@@ -27,44 +27,57 @@ class UserProfile{
         if(connections != null){
             connections.forEach(clientId => {
                 ClientsDB.getClient(clientId).then(client => {
-                    $("#user-connections").append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:Users.deleteConn('${client.id}','${userId}')" style="color:red;"> [X]</a><br>`)
+                    $("#user-connections").append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:UserProfile.deleteConn('${client.id}')" style="color:red;"> [X]</a><br>`)
                 })
             })
         }
     }
 
-    static async deleteConn(){
+    static async deleteConn(clientId){
         if(await Prompt.confirm()){
-            var clientId = $('#user-conn-clientidholder').text()
-            var userId = $('#user-conn-useridholder').text()
             $('#modal-user-delete-conn').modal('hide')
-            await ConnsDB.deleteConn(clientId, userId) 
-            this.loadConns(userId)
+            await ConnsDB.deleteConn(clientId, this.userId) 
+            this.loadConns(this.userId)
         }
     }
 
-    static async addConn(){
-        let userId = $('#user-profile-id').text().replace(/\s/g, '')
-        let clientId = $('#select-client-list').val()
+    static async viewAddConnForm(){
+        $('#modal-add-connection').modal('show')
 
-        await ConnsDB.addConn(userId, clientId)
-        this.loadConns(userId)
+        // Clears list. 
+        $('#select-add-conn').empty()
+
+        ClientsDB.getClients().then(clients => {
+            $("#select-add-conn").prepend("<option value='' selected disabled hidden>Select Client</option>").val('');
+            clients.forEach(client => {
+                $("#select-add-conn").append(new Option(`${client.name}`, client.id))
+            })
+        }) 
+    }
+
+    static async addConn(){
+        let clientId = $('#select-add-conn').val()
+
+        await ConnsDB.addConn(this.userId, clientId)
+        this.loadConns(this.userId)
         $('#modal-user-add-connection').modal('hide')
+
+        $('#modal-add-connection').modal('hide')
     }
 
     // Instantiate listeners.
     static async listeners(){
-        $('#btn-user-add-connection').click(function(){
-            Users._addConn()
+        $('#btn-user-add-conn').click(function(){
+            UserProfile.viewAddConnForm()
         })
 
-        $('#form-add-user-conn').submit(function(){
+        $('#form-add-conn').submit(function(){
             event.preventDefault()
-            Users.addConn()
+            UserProfile.addConn()
         })
 
         $('#btn-user-delete-conn').click(function(){
-            Users.deleteConn()
+            UserProfile.deleteConn()
         })
 
         $('#btn-close-user-profile').click(function(){

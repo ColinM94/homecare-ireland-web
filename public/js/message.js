@@ -1,13 +1,13 @@
 // Displays messages to the user. 
 class Message{
-    static display(type, message){   
+    static display(type, message){  
         switch(type){
             case 1:
-                $('#alert-box-text').html(message)
+                $('#alert-box-text').html("Success: " + message + "!")
                 $('#alert-box').css('background-color', '#6BBD6E')
                 break
             case 2:
-                $('#alert-box-text').html(message)
+                $('#alert-box-text').html("Error: " + message + "!")
                 $('#alert-box').css('background-color', '#F66459')
                 break
             case 3:
@@ -27,10 +27,15 @@ class Message{
         })
 
         this.fadeOut()
+        this.listeners()
     }
 
-    // Fades out message box after timer. 
+    // Message box fades out after timer. 
     static fadeOut(){
         $("#alert-box").delay(5000).fadeOut()
+    }
+
+    static listeners(){
+
     }
 }

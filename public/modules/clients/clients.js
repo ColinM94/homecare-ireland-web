@@ -31,7 +31,7 @@ class Clients{
                     return `<a href="javascript:Clients.viewEditClientForm('${row.id}')">Edit</a>`
                 }},
                 {mRender: function (data, type, row) {
-                    return `<a href="javascript:Clients.confirmDeactivate('${row.id}')">Deactivate</a>`
+                    return `<a href="javascript:Clients.deactivateClient('${row.id}')">Deactivate</a>`
                 }},
                 {mRender: function (data, type, row) {
                     return `<a href="javascript:Module.load('ClientProfile', '${row.id}')">View Profile</a>`
@@ -69,12 +69,6 @@ class Clients{
         table.clear() 
         table.rows.add(clients)
         table.draw()
-    }
-
-    // Prompts user to confirm client deletion. 
-    static confirmDeactivate(clientId){
-        $('#modal-client-deactivate').modal('show')
-        $('#idHolder').text(clientId)
     }
 
     static async addClient(){
@@ -115,10 +109,11 @@ class Clients{
     }
 
     static async deactivateClient(){
-        var clientId = $('#idHolder').text()
-        $('#modal-client-deactivate').modal('hide')
-        ClientsDB.deactivateClient(clientId)
-        this.refreshTable()
+        if(await Prompts.confirm()){
+            var clientId = $('#idHolder').text()
+            ClientsDB.deactivateClient(clientId)
+            this.refreshTable()
+        }
     }
 
     // Instantiates listeners. 

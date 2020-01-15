@@ -63,9 +63,9 @@ class ClientsDB{
 
             db.collection('connections').doc(ref.id).set(connections)
         }).then(() => {
-            Message.display(1, "Client Added!")
+            Message.display(1, "Client Added")
         }).catch(error => {
-            Message.display(2, "Error Adding Client!")
+            Message.display(2, "Error Adding Client")
         })
     }
 
@@ -74,6 +74,11 @@ class ClientsDB{
         let client = new Client(clientId, name, dob, mobile, address1, address2, town, county, eircode, marital, active)
 
         db.collection("clients").doc(clientId).set(client.toFirestore())
+            .then(() => {
+                Message.display(1, "Client Updated")
+            }).catch(error => {
+                Message.display(2, "Error Updating Client")
+            })
     }
 
     // Deletes doc at clients/{clientId}.
@@ -91,9 +96,10 @@ class ClientsDB{
         await db.collection('clients').doc(clientId).update({
             "active": false
         }).then(() => {
-            Message.display(1, "Client Deactivated!")
+            Message.display(1, "Client Deactivated")
         }).catch(error => {
-            Message.display(2, "Error De-activating Client!")
+            console.log(error.message())
+            Message.display(2, "Error De-activating Client")
         })
     }
 
@@ -104,7 +110,7 @@ class ClientsDB{
         }).then(() => {
             Message.display(1, "Client Activated!")
         }).catch(error => {
-            Message.display(2, "Error Activating Client!")
+            Message.display(2, "Error Activating Client")
         })
     }
 }

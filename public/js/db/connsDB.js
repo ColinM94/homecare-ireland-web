@@ -33,6 +33,12 @@ class ConnsDB{
                     }
 
                     db.collection('connections').doc(fromId).set(data)
+                    .then(() => {
+                        Message.display(1, "Connection Added")
+                    }).catch(error => {
+                        console.log(error.message)
+                        Message.display(2, "Unable to Add Connection")
+                    })
                 }
             }
             else{
@@ -46,7 +52,12 @@ class ConnsDB{
         await Promise.all([
             this._deleteConn(id1, id2),
             this._deleteConn(id2, id1)
-        ])
+        ]).then(() => {
+            Message.display(1, "Connection Deleted")
+        }).catch(error => {
+            console.log(error.message)
+            Message.display(2, "Unable to Delete Connection")
+        })
     }
 
     // Deletes id from connections/{fromId}/ids.

@@ -18,7 +18,7 @@ class UsersDB{
     static async getUser(userId) {
         let doc = await db.collection('users').doc(userId).get()
             .catch(error => {
-                Message.display(2, "Error Getting User!")
+                Message.display(2, "Error Getting User")
             })
 
         let user = new User()
@@ -49,7 +49,7 @@ class UsersDB{
         await db.collection("users").add(user.toFirestore()).then(() => {
             return true
         }).catch(error => {
-            Message.display(2, "Error Adding User!")
+            Message.display(2, "Unable to Add User")
 
             return false
         })
@@ -57,18 +57,14 @@ class UsersDB{
 
     // Sets users/{userId}/active field to false. 
     static async deactivateUser (userId) {
-        let result 
-        
         await db.collection('users').doc(userId).update({
             "active": false
         }).then(() => {
-            result = true
+            Message.display(1, "User De-activated!")
         }).catch(error => {
             console.log(error.message)
-            result = false
+            Message.display(2, "Unable to De-activating User")
         })
-
-        return result
     }
 
     // Sets users/{userId}/active field to true. 
@@ -76,9 +72,9 @@ class UsersDB{
         db.collection('users').doc(userId).update({
             "active": true
         }).then(() => {
-            return true
+            Message.display(1, "User Activated")
         }).catch(error => {
-            return false
+            Message.display(2, "Unable to Activate User")
         })
     }
 }

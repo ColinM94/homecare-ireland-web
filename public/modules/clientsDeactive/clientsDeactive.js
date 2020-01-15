@@ -38,8 +38,8 @@ class ClientsDeactive{
         this.listeners()
     }
 
-    static activateClient(clientId) {
-        ClientsDB.activateClient(clientId)
+    static async activateClient(clientId) {
+        await ClientsDB.activateClient(clientId)
         this.refreshTable()
     }
 

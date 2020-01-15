@@ -1,6 +1,6 @@
 <div id="clientProfile" class="card shadow mb-4">
     <div class="card-header row">
-      <h6 id="clientProfileTitle" class="col-md m-0 font-weight-bold my-auto"></h6>
+      <h6 id="client-profile-title" class="col-md m-0 font-weight-bold my-auto"></h6>
       <div class="col-md text-right">
         <button id="btn-close-client-profile" class="close" type="button" aria-label="Close">
           <span aria-hidden="true">×</span>
@@ -18,7 +18,7 @@
       <h6 style="font-weight: bold;">Connections</h6>
       <div id="client-connections"></div>
       <br>
-      <a href="#" id="btn-add-connection">Add Connection</a>
+      <a href="#" id="btn-client-add-conn">Add Connection</a>
       <hr>
       <h6 style="font-weight: bold;">Visits</h6>
       <div id="client-visits"></div>
@@ -53,34 +53,6 @@
           <br>
           <button class="btn btn-primary btn-user btn-block">
             Add Visit
-          </button>
-          <p class="form-error" id="client-error"></p>
-          <hr>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ADD CONNECTION MODAL -->
-<div class="modal fade" id="modal-add-connection" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Connection</h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form class="user" id="form-add-connection">
-          <select id="select-add-conn" class="form-control form-select">
-            <option value="" selected disabled hidden>Select User</option>
-          </select>
-          <br>
-          <button class="btn btn-primary btn-user btn-block">
-            Add Connection
           </button>
           <p class="form-error" id="client-error"></p>
           <hr>

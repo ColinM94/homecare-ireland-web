@@ -8,7 +8,7 @@ class ClientProfile{
         let client = await ClientsDB.getClient(clientId)
         
         $('#client-profile-id').text(` ${client.id}`)
-        $('#client-profile-title').html(` ${client.name}'s Profile`)
+        $('#client-profile-title').html(` Client: ${client.name}'s Profile`)
         $('#client-profile-name').text(` ${client.name}`)
         $('#client-profile-dob').text(` ${client.dob}`)
         $('#client-profile-mobile').text(` ${client.mobile}`)
@@ -43,7 +43,6 @@ class ClientProfile{
     }
 
     static async addConn(){
-        console.log("Hello")
         let userId = $('#select-add-conn').val()
 
         await ConnsDB.addConn(userId, this.clientId)
@@ -127,25 +126,18 @@ class ClientProfile{
         }
     }
 
-    // Prompts user to confirm connection deletion. 
-    static confirmDeleteConn(){
-        $('#modal-client-delete-conn').modal('show')
-        $('#client-conn-clientidholder').text(this.clientId)
-        $('#client-conn-useridholder').text(userId)
-    }
-
     // Instantiate listeners. 
     static async listeners() {
         $('#btn-close-client-profile').click(function(){
             Module.closeOverlay()
         })
 
-        $("#form-add-connection").submit(function(event) {
+        $("#form-add-conn").submit(function(event) {
             event.preventDefault()
             ClientProfile.addConn()
         })
 
-        $('#btn-add-connection').click(function(){
+        $('#btn-client-add-conn').click(function(){
             ClientProfile.viewAddConnForm()
         })
 

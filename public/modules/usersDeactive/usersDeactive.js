@@ -30,8 +30,8 @@ class UsersDeactive{
         })
     }
 
-    static activateUser(userId) {
-        UsersDB.activateUser(userId)
+    static async activateUser(userId) {
+        await UsersDB.activateUser(userId)
         this.refreshTable()
     }
 
