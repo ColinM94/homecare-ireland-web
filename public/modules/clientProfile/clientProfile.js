@@ -19,12 +19,9 @@ class ClientProfile{
 
         this.listeners()
     }
-
-    static hide(){
-        $('#clientsList').show()
-        $('#clientProfile').hide() 
-    }
     
+    // <-- CONNECTIONS --> //
+
     // Opens add connection modal form. 
     static async viewAddConnForm(){
         $('#modal-add-connection').modal('show')
@@ -74,7 +71,6 @@ class ClientProfile{
         }
     }
 
-
     // <-- VISITS --> //
     static async viewAddVisitForm(){
         $('#modal-visit-add').modal('show')
@@ -110,7 +106,7 @@ class ClientProfile{
         let visits = await VisitsDB.getAllVisits()
 
         visits.forEach(visit => {
-           $("#client-visits").append(`${visit.startTime}<a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
+           $("#client-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
         })
 
         console.log(visits)

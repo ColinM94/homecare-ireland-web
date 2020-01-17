@@ -8,7 +8,8 @@ class Module{
             "ClientProfile" : ClientProfile,
             "ClientsDeactive" : ClientsDeactive,
             "UsersDeactive" : UsersDeactive,
-            "UserProfile" : UserProfile
+            "UserProfile" : UserProfile,
+            "VisitDetails" : VisitDetails
         }
 
         var module = moduleRefs[moduleName]
