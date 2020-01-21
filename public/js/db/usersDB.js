@@ -1,19 +1,4 @@
 class UsersDB{
-    // Returns array of User objects from users. 
-    static async getUsers() {
-        let users = new Array()
-
-        let result = await db.collection('users').where('active' ,'==', true).get()
-
-        result.forEach(doc => {
-            let user = new User()   
-            user.docToUser(doc)
-            users.push(user)
-        })
-
-        return users
-    }
-
     // Returns User object from users/{userId}. 
     static async getUser(userId) {
         let doc = await db.collection('users').doc(userId).get()
@@ -28,8 +13,23 @@ class UsersDB{
         return user
     }
 
+    // Returns array of User objects from users. 
+    static async getActiveUsers() {
+        let users = new Array()
+
+        let result = await db.collection('users').where('active' ,'==', true).get()
+
+        result.forEach(doc => {
+            let user = new User()   
+            user.docToUser(doc)
+            users.push(user)
+        })
+
+        return users
+    }
+
     // Returns array of User objects from all docs in users.   
-    static async getUsersDeactive() {
+    static async getDeactiveUsers() {
         let users = new Array()
 
         let result = await db.collection('users').where('active' ,'==', false).get()
@@ -69,7 +69,7 @@ class UsersDB{
 
     // Sets users/{userId}/active field to true. 
     static async activateUser (userId) {
-        db.collection('users').doc(userId).update({
+        await db.collection('users').doc(userId).update({
             "active": true
         }).then(() => {
             Message.display(1, "User Activated")

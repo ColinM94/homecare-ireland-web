@@ -3,7 +3,7 @@ class Clients{
 
     // Populates clients datatable and sets up listeners. 
     static async load() {
-        let clients = await ClientsDB.getClients()
+        let clients = await ClientsDB.getActiveClients()
 
         $('#datatable').DataTable( {
             data: clients,
@@ -63,7 +63,7 @@ class Clients{
 
     // Resets and reloads datatable. 
     static async refreshTable(){
-        let clients = await ClientsDB.getClients()
+        let clients = await ClientsDB.getActiveClients()
         let table = $('#datatable').DataTable()
 
         table.clear() 
@@ -109,7 +109,6 @@ class Clients{
     }
 
     static async deactivateClient(clientId){
-        console.log("hello")
         if(await Prompt.confirm()){
             ClientsDB.deactivateClient(clientId)
             this.refreshTable()

@@ -2,7 +2,7 @@ class ClientsDeactive{
     overlay = false
     // Requires that client module is loaded first. 
     static async load() {
-        let clients = await ClientsDB.getClientsDeactive()
+        let clients = await ClientsDB.getDeactiveClients()
 
         $('#datatable').DataTable({
             data: clients,
@@ -57,7 +57,7 @@ class ClientsDeactive{
 
     // Resets and reloads datatable. 
     static async refreshTable(){
-        let clients = await ClientsDB.getClientsDeactive()
+        let clients = await ClientsDB.getDeactiveClients()
         let table = $('#datatable').DataTable()
 
         table.clear() 

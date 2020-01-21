@@ -13,22 +13,38 @@ class UserProfile{
         $('#user-profile-mobile').text(` ${user.mobile}`)
         $('#user-profile-address').text(` ${user.address1}, ${user.address2}, ${user.town}, ${user.county}, ${user.eircode}`)
 
-        this.loadConns(userId)
-
+        this.loadConns()
+        this.loadVisits()
         this.listeners()
     }
 
-    static async loadConns(userId){
+    static async loadConns(){
         // Clears connections. 
         $("#user-connections").html("")
 
-        let connections = await ConnsDB.getConns(userId)
+        let connections = await ConnsDB.getConns(this.userId)
 
-        if(connections != null){
+        if(connections.length < 1){
+            $("#user-connections").append("No Connections!")
+        }else{
             connections.forEach(clientId => {
                 ClientsDB.getClient(clientId).then(client => {
                     $("#user-connections").append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:UserProfile.deleteConn('${client.id}')" style="color:red;"> [X]</a><br>`)
                 })
+            })
+        }
+    }
+
+    static async loadVisits(){
+        $('#user-visits').empty()
+
+        let visits = await VisitsDB.getVisits(this.userId)
+
+        if(visits.length < 1){
+            $("#user-visits").append("No Visits!")
+        }else{
+            visits.forEach(visit => {
+                $("#user-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
             })
         }
     }
@@ -47,12 +63,24 @@ class UserProfile{
         // Clears list. 
         $('#select-add-conn').empty()
 
-        ClientsDB.getClients().then(clients => {
-            $("#select-add-conn").prepend("<option value='' selected disabled hidden>Select Client</option>").val('');
-            clients.forEach(client => {
-                $("#select-add-conn").append(new Option(`${client.name}`, client.id))
-            })
-        }) 
+        let conns, allClients
+
+        await Promise.all([
+            conns = await ConnsDB.getConns(this.userId),
+            allClients = await ClientsDB.getActiveClients()
+        ])
+
+        // Clients which are not connected to this user. 
+        let clients = []
+        allClients.forEach(client => {
+            if(!conns.includes(client.id)){
+                clients.push(client)
+            }
+        })
+
+        clients.forEach(client => {
+            $("#select-add-conn").append(new Option(`${client.name} : ${client.address1}, ${client.address2}, ${client.county}`, client.id))
+        })
     }
 
     static async addConn(){
@@ -81,7 +109,6 @@ class UserProfile{
         })
 
         $('#btn-close-user-profile').click(function(){
-            console.log("hello")
             Module.closeOverlay()
         })
     }

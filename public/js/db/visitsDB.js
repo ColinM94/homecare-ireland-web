@@ -5,19 +5,20 @@ class VisitsDB{
     }
 
     static async getVisits(id) {
-     
         let doc = await db.collection('visits').doc(id).get()
-
+    console.log(doc.data())
         let visitIds = []
 
         if(doc.exists) visitIds = doc.data().ids 
 
-        let visits = new Array()
+        let visits = []
 
         for(const visitId of visitIds){
             let visit = await this.getVisitDetails(visitId)
+
             visits.push(visit)
         }
+
         return visits
     }
 
@@ -54,15 +55,15 @@ class VisitsDB{
 
     // Creates new doc in visitDetails. 
     static async addVisit(userId, clientId, startDate, startTime, endDate, endTime){
-        let visitDetails = new Visit(null, clientId, userId, null, null, startDate, startTime, endDate, endTime)
+        let visitDetails = new Visit(null, clientId, userId, "", "", startDate, startTime, endDate, endTime)
 
-        await db.collection("visitDetails").add(visitDetails.toFirestore())
-            .then(function(docRef) {
-                VisitsDB.addVisitId(userId, docRef.id)
-                VisitsDB.addVisitId(clientId, docRef.id)
-            }).catch(error => {
+        let docRef = await db.collection("visitDetails").add(visitDetails.toFirestore())
+            .catch(error => {
                 Message.display(2, "Error Adding Visit!")
             })
+
+            await VisitsDB.addVisitId(userId, docRef.id)
+            await VisitsDB.addVisitId(clientId, docRef.id)
     }
 
     // Adds {visitId} to visits/{id}/ids array.
@@ -82,13 +83,48 @@ class VisitsDB{
         })
     }
 
+    // Updates ids array in DB visits/{id}/ids.
+    static async updateVisit(id, data){
+        let doc = {
+            ids : data
+        }
+
+        db.collection('visits').doc(id).set(doc)
+    }
+
+    static async deleteVisits(id){
+        let visitIds = await this.getVisitIds(id)
+
+        visitIds.forEach(visitId =>{
+            
+        })
+    }
+
     static async deleteVisit(visitId){
-        await db.collection('visitDetails').doc(visitId).delete()
-            .then(function(docRef) {
-                Message.display(1, "Visit Deleted")
-            }).catch(error => {
-                Message.display(2, "Error Adding Visit!")
-            })
+        let doc = await db.collection('visitDetails').doc(visitId).get()
+
+        let visit = doc.data()
+
+        await Promise.all([
+            this._deleteVisit(visit.userId, visit.clientId),
+            this._deleteVisit(visit.clientId, visit.userId)
+        ]).then(() => {
+            db.collection('visitDetails').doc(visitId).delete()
+        })
+    }
+
+    // Deletes id from connections/{fromId}/ids.
+    static async _deleteVisit(fromId, toId) {
+        let doc = await db.collection('visits').doc(fromId).get()
+
+        let visits = doc.data().ids
+
+        // Removes selected id from array.
+        visits.splice(visits.indexOf(toId), 1)
+
+        console.log(visits)
+
+        await this.updateVisit(fromId, visits)
     }
 }
 

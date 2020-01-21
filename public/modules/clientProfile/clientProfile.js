@@ -14,9 +14,8 @@ class ClientProfile{
         $('#client-profile-mobile').text(` ${client.mobile}`)
         $('#client-profile-address').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
 
-        this.loadConns(this.clientId)
-        this.loadVisits(this.clientId)
-
+        this.loadConns()
+        this.loadVisits()
         this.listeners()
     }
     
@@ -29,11 +28,26 @@ class ClientProfile{
         // Clears list. 
         $('#select-add-conn').empty()
 
-        UsersDB.getUsers().then(users => {
-            $("#select-add-conn").prepend("<option value='' selected disabled hidden>Select User</option>").val('');
-            users.forEach(user => {
-                $("#select-add-conn").append(new Option(`${user.role} : ${user.name}`, user.id))
-            })
+        let conns, allUsers
+
+        await Promise.all([
+            conns = await ConnsDB.getConns(this.clientId),
+            allUsers = await UsersDB.getActiveUsers()
+        ])
+
+        // Users which are not connected to this client. 
+        let users = [] 
+        allUsers.forEach(user => {
+            if(!conns.includes(user.id)){
+                users.push(user)
+            }
+        })
+
+        await UsersDB.getActiveUsers()
+        
+        $("#select-add-conn").prepend("<option value='' selected disabled hidden>Select User</option>").val('');
+        users.forEach(user => {
+            $("#select-add-conn").append(new Option(`${user.role} : ${user.name}`, user.id))
         })
 
         $('#modal-add-connection').modal('hide')
@@ -62,7 +76,9 @@ class ClientProfile{
 
         let connections = await ConnsDB.getConns(this.clientId)
 
-        if(connections != null){
+        if(connections.length < 1){
+            $("#client-connections").append("No Connections")
+        }else{
             connections.forEach(userId => {
                 UsersDB.getUser(userId).then(user => {
                     $("#client-connections").append(`${user.role}: <a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${user.id}')" style="color:red;">[X]</a><br>`)
@@ -77,7 +93,7 @@ class ClientProfile{
 
         $('#select-visit-user').empty()
 
-        UsersDB.getUsers().then(users => {
+        UsersDB.getActiveUsers().then(users => {
             $("#select-visit-user").prepend("<option value='' selected disabled hidden>Select User</option>").val('');
             users.forEach(user => {
                 $("#select-visit-user").append(new Option(`${user.role} : ${user.name}`, user.id))
@@ -97,6 +113,9 @@ class ClientProfile{
         let endTime = $('#visit-add-end-time').val()
 
         await VisitsDB.addVisit(userId, this.clientId, startDate, startTime, endDate, endTime)
+            .catch(error => {
+                Message.display(error.message)
+            })
 
         this.loadVisits() 
 
@@ -107,12 +126,17 @@ class ClientProfile{
         $('#client-visits').empty()
 
         let visits = await VisitsDB.getVisits(this.clientId)
+            .catch(error => {
+                Message.display(2, "Unable to get visits")
+            })
 
-        visits.forEach(visit => {
-           $("#client-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
-        })
-
-        console.log(visits)
+        if(visits.length < 1){
+            $("#client-visits").append("No Visits!")
+        }else{
+            visits.forEach(visit => {
+                $("#client-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
+            })
+        }
 
         //READ THIS!
         //(await visits).forEach

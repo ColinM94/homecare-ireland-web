@@ -1,19 +1,4 @@
 class ClientsDB{
-    // Returns array of Client objects from all docs in clients.
-    static async getClients() {
-        let clients = new Array()
-
-        let result = await db.collection('clients').where('active' ,'==', true).get()
-
-        result.forEach(doc => {
-            let client = new Client()   
-            client.docToClient(doc)
-            clients.push(client)
-        })
-
-        return clients
-    }
-
     // Returns Client object from clients/{clientId}.
     static async getClient(clientId) {
         let result 
@@ -31,8 +16,26 @@ class ClientsDB{
         return client
     }
 
+    // Returns array of Client objects from all docs in clients.
+    static async getActiveClients() {
+        let clients = new Array()
+
+        let result = await db.collection('clients').where('active' ,'==', true).get()
+            .catch(error => {
+                Message.display(2, "Error Getting Deactive Client!")
+            })
+
+        result.forEach(doc => {
+            let client = new Client()   
+            client.docToClient(doc)
+            clients.push(client)
+        })
+
+        return clients
+    }
+
     // Returns array of Clients objects from clients where active = true. 
-    static async getClientsDeactive() {
+    static async getDeactiveClients() {
         let clients = new Array()
 
         let result 
@@ -96,11 +99,14 @@ class ClientsDB{
         await db.collection('clients').doc(clientId).update({
             "active": false
         }).then(() => {
-            Message.display(1, "Client Deactivated")
+            Message.display(1, "Client deactivated")
         }).catch(error => {
             console.log(error.message())
-            Message.display(2, "Error De-activating Client")
+            Message.display(2, "Unable to de-activate client")
         })
+
+        ConnsDB.deleteConns(clientId)
+        VisitsDB.deleteVisits(clientId)
     }
 
     // Sets clients/{clientId}/active field to true.

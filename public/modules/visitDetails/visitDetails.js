@@ -3,9 +3,6 @@ class VisitDetails{
     static visitId = null
 
     static async load(visitId){
-        console.log("Visit loaded")
-        console.log(visitId)
-
         this.visitId = visitId
 
         let visit = await VisitsDB.getVisitDetails(visitId)
@@ -16,5 +13,19 @@ class VisitDetails{
         $('#visit-clockin').text(` ${visit.clockInTime}`)
         $('#visit-clockout').text(` ${visit.clockOutTime}`)
 
+        let user = await UsersDB.getUser(visit.userId)
+        let client = await ClientsDB.getClient(visit.clientId)
+
+        $('#visit-user').append(`<a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${user.id}')" style="color:red;">[X]</a><br>`)
+        $('#visit-client').append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:UserProfile.deleteConn('${client.id}')" style="color:red;"> [X]</a><br>`)
+
+        this.listeners()
+    }
+
+    // Instantiate listeners. 
+    static async listeners() {
+        $('#btn-close-visit-details').click(function(){
+            Module.closeOverlay()
+        })
     }
 }

@@ -2,7 +2,7 @@ class Users{
     overlay = false
     
     static async load(arg){
-        let users = await UsersDB.getUsers()
+        let users = await UsersDB.getActiveUsers()
 
         $('#datatable').DataTable({
             data: users,
@@ -64,7 +64,7 @@ class Users{
 
     // Resets and reloads datatable. 
     static async refreshTable(){
-        let users = await UsersDB.getUsers()
+        let users = await UsersDB.getActiveUsers()
         let table = $('#datatable').DataTable()
 
         table.clear() 

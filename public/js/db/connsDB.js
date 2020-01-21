@@ -3,6 +3,7 @@ class ConnsDB{
     // Returns array of user ids from connections/{id}/ids.
     static async getConns(id) {
         let doc = await db.collection('connections').doc(id).get()
+
         if(doc.data().ids !== null) return doc.data().ids
     }
 
@@ -16,35 +17,31 @@ class ConnsDB{
 
     // Adds id to array at connections/{fromId}/ids.
     static async _addConn(fromId, toId){
-        await db.collection('connections').doc(fromId).get().then(doc => {
-            if(doc != null){
-                
-                // Array to store connection ids. 
-                let newConns = []
-                
-                if(doc.data().ids != undefined) newConns = doc.data().ids
+        let doc = await db.collection('connections').doc(fromId).get()
+        
+        if(doc == null) return
 
-                // If connection does not exist then add it. 
-                if(!newConns.includes(toId)){
-                    newConns.push(toId)
+        // Array to store connection ids. 
+        let newConns = []
+        
+        if(doc.data().ids != undefined) newConns = doc.data().ids
 
-                    let data = {
-                        ids : newConns
-                    }
+        // If connection does not exist then add it. 
+        if(!newConns.includes(toId)){
+            newConns.push(toId)
 
-                    db.collection('connections').doc(fromId).set(data)
-                    .then(() => {
-                        Message.display(1, "Connection Added")
-                    }).catch(error => {
-                        console.log(error.message)
-                        Message.display(2, "Unable to Add Connection")
-                    })
-                }
+            let data = {
+                ids : newConns
             }
-            else{
-                console.log("doc does not exist")
-            }
-        })
+
+            await db.collection('connections').doc(fromId).set(data)
+            .then(() => {
+                Message.display(1, "Connection Added")
+            }).catch(error => {
+                console.log(error.message)
+                Message.display(2, "Unable to Add Connection")
+            })
+        }
     }
 
     // Deletes connection between users and clients. 
