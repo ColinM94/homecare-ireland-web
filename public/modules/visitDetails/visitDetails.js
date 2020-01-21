@@ -11,10 +11,10 @@ class VisitDetails{
         let visit = await VisitsDB.getVisitDetails(visitId)
 
         $('#visit-id').text(` ${visit.id}`)
-        $('#visit-starttime').text(` ${visit.startTime}`)
-        $('#visit-endtime').text(` ${visit.endTime}`)
-        $('#visit-clockintime').text(` ${visit.clockInTime}`)
-        $('#visit-clockouttime').text(` ${visit.clockOutTime}`)
+        $('#visit-start').text(` ${visit.startDate} @ ${visit.startTime}`)
+        $('#visit-end').text(` ${visit.endDate} @ ${visit.endTime}`)
+        $('#visit-clockin').text(` ${visit.clockInTime}`)
+        $('#visit-clockout').text(` ${visit.clockOutTime}`)
 
     }
 }

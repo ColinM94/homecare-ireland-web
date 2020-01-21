@@ -108,9 +108,9 @@ class Clients{
         this.refreshTable()
     }
 
-    static async deactivateClient(){
-        if(await Prompts.confirm()){
-            var clientId = $('#idHolder').text()
+    static async deactivateClient(clientId){
+        console.log("hello")
+        if(await Prompt.confirm()){
             ClientsDB.deactivateClient(clientId)
             this.refreshTable()
         }

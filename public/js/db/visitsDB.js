@@ -4,7 +4,7 @@ class VisitsDB{
         return doc.data()
     }
 
-    static async getVisitsIds(id) {
+    static async getVisits(id) {
      
         let doc = await db.collection('visits').doc(id).get()
 
@@ -14,18 +14,11 @@ class VisitsDB{
 
         let visits = new Array()
 
-        visitIds.forEach(visitId => {
-            let visit = this.getVisitDetails(visitId)
+        for(const visitId of visitIds){
+            let visit = await this.getVisitDetails(visitId)
             visits.push(visit)
-        })
-
-        console.log(visits)
+        }
         return visits
-     
-    }
-
-    static async getVisits(id){
-        let doc = await db.collection('visits').doc()
     }
 
     static async getAllVisits(){
@@ -60,8 +53,8 @@ class VisitsDB{
     }
 
     // Creates new doc in visitDetails. 
-    static async addVisit(userId, clientId, startTime, endTime){
-        let visitDetails = new Visit(null, clientId, userId, null, null, startTime, endTime)
+    static async addVisit(userId, clientId, startDate, startTime, endDate, endTime){
+        let visitDetails = new Visit(null, clientId, userId, null, null, startDate, startTime, endDate, endTime)
 
         await db.collection("visitDetails").add(visitDetails.toFirestore())
             .then(function(docRef) {

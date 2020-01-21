@@ -14,8 +14,8 @@ class ClientProfile{
         $('#client-profile-mobile').text(` ${client.mobile}`)
         $('#client-profile-address').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
 
-        this.loadConns(clientId)
-        this.loadVisits(clientId)
+        this.loadConns(this.clientId)
+        this.loadVisits(this.clientId)
 
         this.listeners()
     }
@@ -89,11 +89,14 @@ class ClientProfile{
 
     static async addVisit(){
         let userId = $('#select-visit-user').val()
-        let clientId = $('#client-profile-id').text().replace(/\s/g, '')
-        let startTime = $('#visit-add-startime').val()
-        let endTime = $('#visit-add-endtime').val()
 
-        await VisitsDB.addVisit(userId, clientId, startTime, endTime)
+        var startDate = $('#visit-add-start-date').val()
+        var startTime = $('#visit-add-start-time').val()
+
+        var endDate = $('#visit-add-end-date').val()
+        let endTime = $('#visit-add-end-time').val()
+
+        await VisitsDB.addVisit(userId, this.clientId, startDate, startTime, endDate, endTime)
 
         this.loadVisits() 
 
@@ -103,10 +106,10 @@ class ClientProfile{
     static async loadVisits(){
         $('#client-visits').empty()
 
-        let visits = await VisitsDB.getAllVisits()
+        let visits = await VisitsDB.getVisits(this.clientId)
 
         visits.forEach(visit => {
-           $("#client-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
+           $("#client-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
         })
 
         console.log(visits)
