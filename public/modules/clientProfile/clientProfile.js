@@ -18,15 +18,15 @@ class ClientProfile{
         this.loadVisits()
         this.listeners()
     }
-    
+
     // <-- CONNECTIONS --> //
 
     // Opens add connection modal form. 
-    static async viewAddConnForm(){
-        $('#modal-add-connection').modal('show')
-
+    static async viewAddConnForm(){ 
         // Clears list. 
-        $('#select-add-conn').empty()
+        $('#select-client-add-conn').empty()
+
+        $('#modal-client-add-conn').modal('show')
 
         let conns, allUsers
 
@@ -47,26 +47,23 @@ class ClientProfile{
         
         $("#select-add-conn").prepend("<option value='' selected disabled hidden>Select User</option>").val('');
         users.forEach(user => {
-            $("#select-add-conn").append(new Option(`${user.role} : ${user.name}`, user.id))
+            $("#select-client-add-conn").append(new Option(`${user.role} : ${user.name}`, user.id))
         })
 
-        $('#modal-add-connection').modal('hide')
+        $('#modal-client-add-conn').modal('hide')
     }
 
     static async addConn(){
-        let userId = $('#select-add-conn').val()
-
+        let userId = $('#select-client-add-conn').val()
         await ConnsDB.addConn(userId, this.clientId)
+        $('#modal-client-add-conn').modal('hide')
         this.loadConns()
-        $('#modal-add-connection').modal('hide')
     }
 
-    static async deleteConn(userId){
-        if(await Prompt.confirm()){ 
-            $('#modal-client-delete-conn').modal('hide')
-            await ConnsDB.deleteConn(this.clientId, userId) 
-            this.loadConns(this.clientId)
-        }
+    static async deleteConn(connId){
+            await Profile.deleteConn(connId)
+            console.log(connId)
+            this.loadConns(this.userId)
     }
 
     // Gets and displays connections. 
@@ -75,12 +72,13 @@ class ClientProfile{
         $("#client-connections").html("")
 
         let conns = await ConnsDB.getConns(this.clientId)
+
         if(conns.length < 1){
             $("#client-connections").append("No Connections")
         }else{
-            conns.forEach(userId => {
-                UsersDB.getUser(userId).then(user => {
-                    $("#client-connections").append(`${user.role}: <a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${user.id}')" style="color:red;">[X]</a><br>`)
+            conns.forEach(conn => {
+                UsersDB.getUser(conn.userId).then(user => {
+                    $("#client-connections").append(`${user.role}: <a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${conn.id}')" style="color:red;">[X]</a><br>`)
                 })
             })
         }
@@ -88,7 +86,7 @@ class ClientProfile{
 
     // <-- VISITS --> //
     static async viewAddVisitForm(){
-        $('#modal-visit-add').modal('show')
+        $('#modal-client-add-visit').modal('show')
 
         $('#select-visit-user').empty()
 
@@ -117,7 +115,12 @@ class ClientProfile{
 
         this.loadVisits() 
 
-        $('#modal-visit-add').modal('hide')
+        $('#modal-client-add-visit').modal('hide')
+    }
+
+    static async deleteVisit(visitId){
+        await Profile.deleteVisit(visitId)
+        this.loadVisits()
     }
 
     static async loadVisits(){
@@ -138,20 +141,26 @@ class ClientProfile{
             })
     }
 
-    static async deleteVisit(visitId){
-        if(await Prompt.confirm()) {
-            await VisitsDB.deleteVisit(visitId)
-            this.loadVisits()
-        }
-    }
-
     // Instantiate listeners. 
-    static async listeners() {
+    static listeners() {
         $('#btn-close-client-profile').click(function(){
             Module.closeOverlay()
         })
 
-        $("#form-add-conn").submit(function(event) {
+        $('#btn-client-delete-conn').click(function(){
+            ClientProfile.deleteConn()
+        })
+
+        $('#btn-client-add-visit').click(function(){
+            ClientProfile.viewAddVisitForm()
+        })
+
+        $('#form-add-visit').submit(function(event){
+            event.preventDefault()
+            ClientProfile.addVisit()
+        })
+
+        $('#form-client-add-conn').submit(function(event){
             event.preventDefault()
             ClientProfile.addConn()
         })
@@ -160,17 +169,9 @@ class ClientProfile{
             ClientProfile.viewAddConnForm()
         })
 
-        $('#btn-client-delete-conn').click(function(){
-            ClientProfile.deleteConn()
-        })
-
-        $('#btn-add-visit').click(function(){
-            ClientProfile.viewAddVisitForm()
-        })
-
-        $('#form-add-visit').submit(function(event){
+        $('#form-add-conn').submit(function(){
             event.preventDefault()
-            ClientProfile.addVisit()
+            ClientProfile.addConn()
         })
     }
 }

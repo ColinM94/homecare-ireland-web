@@ -15,7 +15,7 @@ class UserProfile{
 
         this.loadConns()
         this.loadVisits()
-        this.listeners()
+        this.listeners()      
     }
 
     static async loadConns(){
@@ -48,7 +48,7 @@ class UserProfile{
                     $("#user-visits").append("No Visits!")
                 }else{
                     visits.forEach(visit => {
-                        $("#user-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
+                        $("#user-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:Profile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
                     })
                 }
             }).catch(error => {
@@ -57,25 +57,11 @@ class UserProfile{
             })
     }
 
-    static async deleteConn(connId){
-        if(await Prompt.confirm()){
-            await ConnsDB.deleteConn(connId)
-                .then(() => {
-                    Message.display(1, "Connection deleted")
-                }).catch(error => {
-                    Message.display(2, "Unable to delete connection")
-                })
-            
-            $('#modal-user-delete-conn').modal('hide')
-            this.loadConns(this.userId)
-        }
-    }
-
     static async viewAddConnForm(){
-        $('#modal-add-connection').modal('show')
+        $('#modal-user-add-conn').modal('show')
 
         // Clears list. 
-        $('#select-add-conn').empty()
+        $('#select-user-add-conn').empty()
 
         let conns, allClients
 
@@ -83,9 +69,6 @@ class UserProfile{
             conns = await ConnsDB.getConns(this.userId),
             allClients = await ClientsDB.getActiveClients()
         ])
-
-        console.log(conns)
-        console.log(allClients)
 
         // Clients which are not connected to this user. 
         let clients = []
@@ -104,23 +87,20 @@ class UserProfile{
         })
 
         clients.forEach(client => {
-            $("#select-add-conn").append(new Option(`${client.name} : ${client.address1}, ${client.address2}, ${client.county}`, client.id))
+            $("#select-user-add-conn").append(new Option(`${client.name} : ${client.address1}, ${client.address2}, ${client.county}`, client.id))
         })
     }
 
     static async addConn(){
-        let clientId = $('#select-add-conn').val()
-
+        let clientId = $('#select-user-add-conn').val()
         await ConnsDB.addConn(this.userId, clientId)
-            .then(() => {
-                this.loadConns()
-                Message.display(1, "Connection added")
-            }).catch(error => {
-                Message.display(2, "Failed to add connection")
-                console.log(error.message)
-            })
+        $('#modal-user-add-conn').modal('hide')
+        this.loadConns()
+    }
 
-        $('#modal-add-connection').modal('hide')
+    static async deleteConn(connId){
+        await Profile.deleteConn(connId)
+        this.loadConns()
     }
 
     // Instantiate listeners.
@@ -129,17 +109,17 @@ class UserProfile{
             UserProfile.viewAddConnForm()
         })
 
-        $('#form-add-conn').submit(function(){
+        $('#form-user-add-conn').submit(function(){
             event.preventDefault()
             UserProfile.addConn()
         })
 
-        $('#btn-user-delete-conn').click(function(){
-            UserProfile.deleteConn()
-        })
-
         $('#btn-close-user-profile').click(function(){
             Module.closeOverlay()
+        })
+
+        $('#btn-user-delete-conn').click(function(){
+            UserProfile.deleteConn()
         })
     }
 }

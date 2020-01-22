@@ -5,8 +5,9 @@ class VisitDetails{
     static async load(visitId){
         this.visitId = visitId
 
-        let visit = await VisitsDB.getVisitDetails(visitId)
+        let visit = await VisitsDB.getVisit(visitId)
 
+    console.log(visit)
         $('#visit-id').text(` ${visit.id}`)
         $('#visit-start').text(` ${visit.startDate} @ ${visit.startTime}`)
         $('#visit-end').text(` ${visit.endDate} @ ${visit.endTime}`)

@@ -195,59 +195,6 @@
     </div>
   </div>
 
-  <!-- ADD CONNECTION MODAL -->
-  <div class="modal fade" id="modal-add-connection" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Connection</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form class="user" id="form-add-conn">
-            <select id="select-add-conn" class="form-control form-select">
-            </select>
-            <input type="hidden" id="id">
-            <br>
-            <button class="btn btn-primary btn-user btn-block">
-              Add Connection
-            </button>
-            <p class="form-error" id="client-error"></p>
-            <hr>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- USER PROFILE MODAL -->
-  <div class="modal fade" id="modal-user-profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="user-profile-title"></h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h6 style="font-weight: bold;">Personal Details</h6>
-          ID:<span id="user-profile-id"></span><br>
-          Name:<span id="user-profile-name"></span><br>
-          Mobile:<span id="user-profile-mobile"></span><br>
-          Address:<span id="user-profile-address"></span> 
-          <hr>
-          <h6 style="font-weight: bold;">Clients</h6>
-          <div id="user-connections"></div>
-          <br>
-          <a href="#" id="btn-user-add-conn">Add Connection</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
     <div id="alert-box" class="alert">
       <span id="alert-box-text"></span>
       <a id="btn-close-msg" class="closebtn">&times;</a>
@@ -266,7 +213,6 @@
 
     <!-- CUSTOM JS -->
     <script src="js/firebase.js"></script>
-    <script src="js/auth.js"></script>
     <script src="js/dashboard.js"></script>
     <script src="js/prompt.js"></script>
     <script src="js/message.js"></script>
@@ -297,6 +243,7 @@
     <script src="modules/clientProfile/clientProfile.js"></script>
     <script src="modules/userProfile/userProfile.js"></script>
     <script src="modules/visitDetails/visitDetails.js"></script>
+    <script src="modules/profile/profile.js"></script>
   </body>
 </html>
 

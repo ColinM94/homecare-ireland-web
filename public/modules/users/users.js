@@ -56,6 +56,9 @@ class Users{
             UsersDB.deactivateUser(userId)
             VisitsDB.deleteVisits(userId)
             ConnsDB.deleteConns(userId)
+
+            //TODO: Don't hardcode. 
+            Message.display(1, "User deactivated")
             this.refreshTable()
         }
     }

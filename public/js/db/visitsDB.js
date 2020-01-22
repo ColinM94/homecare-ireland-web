@@ -37,5 +37,19 @@ class VisitsDB{
             db.collection('visits').doc(visit.id).delete()
         })
     }
+
+    static async deleteVisit(visitId){
+        db.collection('visits').doc(visitId).delete()
+    }
+
+    static async getVisit(visitId){
+        let doc = await db.collection('visits').doc(visitId).get()
+        
+        let visit = new Visit()
+
+        visit.docToVisit(doc)
+
+        return visit
+    }
 }
 

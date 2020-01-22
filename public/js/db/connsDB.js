@@ -1,6 +1,6 @@
 // Interactions with connections collection in DB.
 class ConnsDB{
-    // Returns array of user ids from connections/{id}/ids.
+    // Returns array of Conn objects where doc contains user/client id.
     static async getConns(id) {
         let docs 
 
@@ -29,7 +29,16 @@ class ConnsDB{
         await db.collection("conns").add(conn.toFirestore())
     }
 
-        // Deletes connection between users and clients. 
+    // Deletes connections containing user/client id.
+    static async deleteConns(id){
+        let conns = await this.getConns(id)
+
+        conns.forEach(conn => {
+            this.deleteConn(conn.id)
+        })
+    }
+
+    // Deletes doc with id of {connId} from conns collection. 
     static async deleteConn(connId){
         await db.collection('conns').doc(connId).delete()
     }
