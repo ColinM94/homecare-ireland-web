@@ -16,8 +16,8 @@ class VisitDetails{
         let user = await UsersDB.getUser(visit.userId)
         let client = await ClientsDB.getClient(visit.clientId)
 
-        $('#visit-user').append(`<a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${user.id}')" style="color:red;">[X]</a><br>`)
-        $('#visit-client').append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:UserProfile.deleteConn('${client.id}')" style="color:red;"> [X]</a><br>`)
+        $('#visit-user').append(`<a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a><br>`)
+        $('#visit-client').append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><br>`)
 
         this.listeners()
     }

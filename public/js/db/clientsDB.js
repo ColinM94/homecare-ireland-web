@@ -86,12 +86,7 @@ class ClientsDB{
 
     // Deletes doc at clients/{clientId}.
     static async deleteClient(clientId) {
-        await ConnsDB.deleteConns(clientId)
-
-        await Promise.all([
-            db.collection('clients').doc(clientId).delete(),
-            db.collection('connections').doc(clientId).delete()
-        ])
+        db.collection('clients').doc(clientId).delete()
     }
 
     // Sets clients/{clientId}/active field to false. 
@@ -104,9 +99,6 @@ class ClientsDB{
             console.log(error.message())
             Message.display(2, "Unable to de-activate client")
         })
-
-        ConnsDB.deleteConns(clientId)
-        VisitsDB.deleteVisits(clientId)
     }
 
     // Sets clients/{clientId}/active field to true.

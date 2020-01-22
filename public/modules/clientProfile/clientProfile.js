@@ -105,16 +105,15 @@ class ClientProfile{
 
     static async addVisit(){
         let userId = $('#select-visit-user').val()
-
         var startDate = $('#visit-add-start-date').val()
         var startTime = $('#visit-add-start-time').val()
-
         var endDate = $('#visit-add-end-date').val()
         let endTime = $('#visit-add-end-time').val()
 
         await VisitsDB.addVisit(userId, this.clientId, startDate, startTime, endDate, endTime)
             .catch(error => {
                 Message.display(error.message)
+                console.log("Failed to add visit")
             })
 
         this.loadVisits() 
@@ -125,21 +124,19 @@ class ClientProfile{
     static async loadVisits(){
         $('#client-visits').empty()
 
-        let visits = await VisitsDB.getVisits(this.clientId)
-            .catch(error => {
-                Message.display(2, "Unable to get visits")
+        VisitsDB.getVisits(this.clientId)
+            .then(visits => {
+                if(visits.length < 1){
+                    $("#client-visits").append("No Visits!")
+                }else{
+                    visits.forEach(visit => {
+                        $("#client-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
+                    })
+                }
+            }).catch(error => {
+                console.log(error.message)
+                Message.display(2, "Unable to load visits")
             })
-
-        if(visits.length < 1){
-            $("#client-visits").append("No Visits!")
-        }else{
-            visits.forEach(visit => {
-                $("#client-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
-            })
-        }
-
-        //READ THIS!
-        //(await visits).forEach
     }
 
     static async deleteVisit(visitId){

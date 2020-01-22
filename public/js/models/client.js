@@ -31,7 +31,6 @@ class Client {
     // Returns object that can be used with Firestore. 
     toFirestore() {
         let client = {
-            id : this.id,
             name : this.name,
             dob : this.dob,
             mobile : this.mobile,

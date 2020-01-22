@@ -4,27 +4,30 @@ class ConnsDB{
     static async getConns(id) {
         let doc = await db.collection('connections').doc(id).get()
 
-        if(doc.data().ids !== null) return doc.data().ids
+        let conns = []
+
+        if(doc.data() != undefined) conns = doc.data().ids
+
+        return conns
     }
 
     // Sets up connection between user and client. 
-    static async addConn(id1, id2) {
-        await Promise.all([
-            await this._addConn(id1, id2),
-            await this._addConn(id2, id1)
-        ])
+    static async addConn(userId, clientId) {
+        let conn = new Conn(null, userId, clientId) 
+        console.log(conn)
+        console.log(conn.toFirestore())
+        
+        await db.collection("conns").add(conn.toFirestore())
     }
 
     // Adds id to array at connections/{fromId}/ids.
     static async _addConn(fromId, toId){
         let doc = await db.collection('connections').doc(fromId).get()
-        
-        if(doc == null) return
 
         // Array to store connection ids. 
         let newConns = []
         
-        if(doc.data().ids != undefined) newConns = doc.data().ids
+        if(doc.data() !== undefined) newConns = doc.data().ids
 
         // If connection does not exist then add it. 
         if(!newConns.includes(toId)){
@@ -49,12 +52,7 @@ class ConnsDB{
         await Promise.all([
             this._deleteConn(id1, id2),
             this._deleteConn(id2, id1)
-        ]).then(() => {
-            Message.display(1, "Connection Deleted")
-        }).catch(error => {
-            console.log(error.message)
-            Message.display(2, "Unable to Delete Connection")
-        })
+        ])
     }
 
     // Deletes id from connections/{fromId}/ids.

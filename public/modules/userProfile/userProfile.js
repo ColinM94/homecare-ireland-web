@@ -22,37 +22,52 @@ class UserProfile{
         // Clears connections. 
         $("#user-connections").html("")
 
-        let connections = await ConnsDB.getConns(this.userId)
-
-        if(connections.length < 1){
-            $("#user-connections").append("No Connections!")
-        }else{
-            connections.forEach(clientId => {
-                ClientsDB.getClient(clientId).then(client => {
-                    $("#user-connections").append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:UserProfile.deleteConn('${client.id}')" style="color:red;"> [X]</a><br>`)
-                })
+        ConnsDB.getConns(this.userId)
+            .then(conns => {
+                if(conns.length < 1){
+                    $("#user-connections").append("No Connections!")
+                }else{
+                    conns.forEach(clientId => {
+                        ClientsDB.getClient(clientId).then(client => {
+                            $("#user-connections").append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:UserProfile.deleteConn('${client.id}')" style="color:red;"> [X]</a><br>`)
+                        })
+                    })
+                }           
+            }).catch(error => {
+                Message.display(2, "Failed to load connections")
+                console.log(error.message)
             })
-        }
     }
 
     static async loadVisits(){
         $('#user-visits').empty()
 
-        let visits = await VisitsDB.getVisits(this.userId)
-
-        if(visits.length < 1){
-            $("#user-visits").append("No Visits!")
-        }else{
-            visits.forEach(visit => {
-                $("#user-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
+        VisitsDB.getVisits(this.userId)
+            .then(visits => {
+                console.log(visits)
+                if(visits.length < 1){
+                    $("#user-visits").append("No Visits!")
+                }else{
+                    visits.forEach(visit => {
+                        $("#user-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
+                    })
+                }
+            }).catch(error => {
+                Message.display("Failed to load visits")
+                Console.log(error.message)    
             })
-        }
     }
 
     static async deleteConn(clientId){
         if(await Prompt.confirm()){
+            await ConnsDB.deleteConn(clientId, this.userId)
+                .then(() => {
+                    Message.display(1, "Connection deleted")
+                }).catch(error => {
+                    Message.display(2, "Unable to delete connection")
+                })
+            
             $('#modal-user-delete-conn').modal('hide')
-            await ConnsDB.deleteConn(clientId, this.userId) 
             this.loadConns(this.userId)
         }
     }
@@ -87,7 +102,14 @@ class UserProfile{
         let clientId = $('#select-add-conn').val()
 
         await ConnsDB.addConn(this.userId, clientId)
-        this.loadConns(this.userId)
+            .then(() => {
+                Message.display(1, "Connection added")
+            }).catch(error => {
+                Message.display(2, "Failed to add connection")
+                console.log(error.message)
+            })
+
+        //this.loadConns(this.userId)
         $('#modal-user-add-connection').modal('hide')
 
         $('#modal-add-connection').modal('hide')

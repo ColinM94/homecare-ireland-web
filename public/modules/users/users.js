@@ -53,15 +53,13 @@ class Users{
 
     static async deactivateUser(userId){
         if(await Prompt.confirm()){
-            await UsersDB.deactivateUser(userId)
+            UsersDB.deactivateUser(userId)
+            VisitsDB.deleteVisits(userId)
+            ConnsDB.deleteConns(userId)
             this.refreshTable()
         }
     }
-    // Instantiate listeners.
-    static async listeners(){
-
-    }
-
+    
     // Resets and reloads datatable. 
     static async refreshTable(){
         let users = await UsersDB.getActiveUsers()
@@ -70,5 +68,10 @@ class Users{
         table.clear() 
         table.rows.add(users)
         table.draw()
+    }
+
+    // Instantiate listeners.
+    static async listeners(){
+
     }
 }

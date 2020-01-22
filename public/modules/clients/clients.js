@@ -101,7 +101,7 @@ class Clients{
         let eircode = $("#editClientEircode").val()
         let marital = $("#editClientMarital").val()
 
-        ClientsDB.updateClient(id, name, dob, mobile, address1, address2, town, county, eircode, marital, true)
+        await ClientsDB.updateClient(id, name, dob, mobile, address1, address2, town, county, eircode, marital, true)
 
         $('#modalEditClient').modal('hide')
 
@@ -111,6 +111,8 @@ class Clients{
     static async deactivateClient(clientId){
         if(await Prompt.confirm()){
             ClientsDB.deactivateClient(clientId)
+            VisitsDB.deleteVisits(clientId)
+            ConnsDB.deleteConns(clientId)
             this.refreshTable()
         }
     }

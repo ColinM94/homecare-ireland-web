@@ -32,6 +32,13 @@ class UsersDeactive{
 
     static async activateUser(userId) {
         await UsersDB.activateUser(userId)
+            .then(() => {
+                Message.display(1, "User activated")
+            }).catch(error => {
+                Message.display(2, "Unable to activate user")
+                console.log(error.message)
+            })
+            
         this.refreshTable()
     }
 

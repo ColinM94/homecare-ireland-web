@@ -30,7 +30,7 @@ class ClientsDeactive{
                     return `<a href="javascript:ClientsDeactive.activateClient('${row.id}')">Activate</a>`
                 }},
                 {mRender: function (data, type, row) {
-                    return `<a href="javascript:ClientsDeactive.confirmDeleteClient('${row.id}')">Delete</a>`
+                    return `<a href="javascript:ClientsDeactive.deleteClient('${row.id}')">Delete</a>`
                 }},
             ]
         })
@@ -43,15 +43,15 @@ class ClientsDeactive{
         this.refreshTable()
     }
 
-    static confirmDeleteClient(clientId) {
-        $('#modal-client-delete').modal('show')
-        $('#client-deactive-idholder').text(clientId)
-    }
+    static async deleteClient(clientId){
+        if(await Prompt.confirm()){
+            ClientsDB.deleteClient(clientId)
+            ConnsDB.deleteConns(clientId)
+            VisitsDB.deleteVisits(clientId)
+        }
 
-    static async deleteClient(){
-        let clientId = $('#client-deactive-idholder').text()
-        await ClientsDB.deleteClient(clientId)
         $('#modal-client-delete').modal('hide')
+
         this.refreshTable()
     }
 
