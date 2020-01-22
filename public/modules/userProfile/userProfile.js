@@ -27,9 +27,9 @@ class UserProfile{
                 if(conns.length < 1){
                     $("#user-connections").append("No Connections!")
                 }else{
-                    conns.forEach(clientId => {
-                        ClientsDB.getClient(clientId).then(client => {
-                            $("#user-connections").append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:UserProfile.deleteConn('${client.id}')" style="color:red;"> [X]</a><br>`)
+                    conns.forEach(conn => {
+                        ClientsDB.getClient(conn.clientId).then(client => {
+                            $("#user-connections").append(`<a href="javascript:Module.load('ClientProfile', '${client.id}')">${client.name}</a><a href="javascript:UserProfile.deleteConn('${conn.id}')" style="color:red;"> [X]</a><br>`)
                         })
                     })
                 }           
@@ -44,7 +44,6 @@ class UserProfile{
 
         VisitsDB.getVisits(this.userId)
             .then(visits => {
-                console.log(visits)
                 if(visits.length < 1){
                     $("#user-visits").append("No Visits!")
                 }else{
@@ -58,9 +57,9 @@ class UserProfile{
             })
     }
 
-    static async deleteConn(clientId){
+    static async deleteConn(connId){
         if(await Prompt.confirm()){
-            await ConnsDB.deleteConn(clientId, this.userId)
+            await ConnsDB.deleteConn(connId)
                 .then(() => {
                     Message.display(1, "Connection deleted")
                 }).catch(error => {
@@ -85,12 +84,23 @@ class UserProfile{
             allClients = await ClientsDB.getActiveClients()
         ])
 
+        console.log(conns)
+        console.log(allClients)
+
         // Clients which are not connected to this user. 
         let clients = []
+
         allClients.forEach(client => {
-            if(!conns.includes(client.id)){
-                clients.push(client)
-            }
+            // True if connection is found. 
+            let found = false
+
+            conns.forEach(conn => {
+                // If connection is already exists.
+                if(conn.clientId == client.id) found = true
+            })
+
+            // If connection doesn't exist add it.
+            if(found == false) clients.push(client)
         })
 
         clients.forEach(client => {
@@ -103,14 +113,12 @@ class UserProfile{
 
         await ConnsDB.addConn(this.userId, clientId)
             .then(() => {
+                this.loadConns()
                 Message.display(1, "Connection added")
             }).catch(error => {
                 Message.display(2, "Failed to add connection")
                 console.log(error.message)
             })
-
-        //this.loadConns(this.userId)
-        $('#modal-user-add-connection').modal('hide')
 
         $('#modal-add-connection').modal('hide')
     }

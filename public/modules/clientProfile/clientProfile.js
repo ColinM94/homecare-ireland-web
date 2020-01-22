@@ -74,12 +74,11 @@ class ClientProfile{
         // Clears client connections. 
         $("#client-connections").html("")
 
-        let connections = await ConnsDB.getConns(this.clientId)
-
-        if(connections.length < 1){
+        let conns = await ConnsDB.getConns(this.clientId)
+        if(conns.length < 1){
             $("#client-connections").append("No Connections")
         }else{
-            connections.forEach(userId => {
+            conns.forEach(userId => {
                 UsersDB.getUser(userId).then(user => {
                     $("#client-connections").append(`${user.role}: <a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${user.id}')" style="color:red;">[X]</a><br>`)
                 })

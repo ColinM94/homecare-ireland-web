@@ -5,7 +5,7 @@ class Conn {
         this.clientId = clientId
     }
 
-    toConn(doc){
+    docToConn(doc){
         this.id = doc.id
         this.userId = doc.data().userId
         this.clientId = doc.data().clientId
