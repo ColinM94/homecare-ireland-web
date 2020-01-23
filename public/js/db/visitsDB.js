@@ -1,7 +1,9 @@
 class VisitsDB{
     // Creates new doc in visitDetails. 
-    static async addVisit(userId, clientId, startDate, startTime, endDate, endTime){
-        let visit = new Visit(null, clientId, userId, "", "", startDate, startTime, endDate, endTime)
+    static async addVisit(userId, clientId, startDate, startTime, endDate, endTime, note){
+
+        let notes = [note]
+        let visit = new Visit(null, clientId, userId, "", "", startDate, startTime, endDate, endTime, notes)
 
         await db.collection("visits").add(visit.toFirestore())
     }

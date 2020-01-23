@@ -1,5 +1,5 @@
 class Visit{
-    constructor(id, clientId, userId, clockInTime, clockOutTime, startDate, startTime, endDate, endTime) {
+    constructor(id, clientId, userId, clockInTime, clockOutTime, startDate, startTime, endDate, endTime, notes) {
         this.id = id
         this.clientId = clientId
         this.userId = userId
@@ -9,6 +9,7 @@ class Visit{
         this.startTime = startTime
         this.endDate = endDate
         this.endTime = endTime
+        this.notes = notes
     }
 
     // Instantiates class with values from firestore document. 
@@ -22,6 +23,7 @@ class Visit{
         this.startTime = doc.data().startTime
         this.endDate = doc.data().endDate
         this.endTime = doc.data().endTime
+        this.notes = doc.data().notes
     }
 
     // Returns object that can be used with Firestore. 
@@ -34,7 +36,8 @@ class Visit{
             startDate : this.startDate, 
             startTime : this.startTime,
             endDate : this.endDate,
-            endTime : this.endTime
+            endTime : this.endTime,
+            notes : this.notes
         }
 
         return visit

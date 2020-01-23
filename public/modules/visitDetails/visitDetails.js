@@ -7,12 +7,15 @@ class VisitDetails{
 
         let visit = await VisitsDB.getVisit(visitId)
 
-    console.log(visit)
         $('#visit-id').text(` ${visit.id}`)
         $('#visit-start').text(` ${visit.startDate} @ ${visit.startTime}`)
         $('#visit-end').text(` ${visit.endDate} @ ${visit.endTime}`)
         $('#visit-clockin').text(` ${visit.clockInTime}`)
         $('#visit-clockout').text(` ${visit.clockOutTime}`)
+
+        visit.notes.forEach(note => {
+            $('#visit-notes').append(` ${note}<br>`)
+        })
 
         let user = await UsersDB.getUser(visit.userId)
         let client = await ClientsDB.getClient(visit.clientId)

@@ -53,9 +53,12 @@ class Users{
 
     static async deactivateUser(userId){
         if(await Prompt.confirm()){
-            UsersDB.deactivateUser(userId)
-            VisitsDB.deleteVisits(userId)
-            ConnsDB.deleteConns(userId)
+
+            await Promise.all([
+                await UsersDB.deactivateUser(userId),
+                await VisitsDB.deleteVisits(userId),
+                await ConnsDB.deleteConns(userId)
+            ])
 
             //TODO: Don't hardcode. 
             Message.display(1, "User deactivated")
