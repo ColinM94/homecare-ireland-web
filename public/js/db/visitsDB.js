@@ -1,7 +1,6 @@
 class VisitsDB{
     // Creates new doc in visitDetails. 
     static async addVisit(userId, clientId, startDate, startTime, endDate, endTime, note){
-
         let notes = [note]
         let visit = new Visit(null, clientId, userId, "", "", startDate, startTime, endDate, endTime, notes)
 
@@ -28,6 +27,31 @@ class VisitsDB{
         })
 
         return visits
+    }
+
+    static async addNote(visit, note){
+        let notes = visit.notes
+        notes.push(note)
+        
+
+        await db.collection("visits").doc(visit.id).set({"notes": notes}, {merge:true})
+    }
+
+    static async deleteNote(visit, index){
+        let notes = visit.notes
+
+        // Splice won't work on single element array, so add empty array to DB. 
+        if(notes.length <= 1){
+            notes = []
+        }else{
+            notes.splice(index, 1)
+        }
+
+        await db.collection("visits").doc(visit.id).set({"notes": notes}, {merge:true})
+    }
+
+    static async updateVisit(visit){
+        db.collection("visits").doc(visit.id).set(visit, SetOptions.merge())
     }
 
     static async deleteVisits(id){

@@ -106,11 +106,12 @@ class ClientProfile{
         var startTime = $('#visit-add-start-time').val()
         var endDate = $('#visit-add-end-date').val()
         let endTime = $('#visit-add-end-time').val()
+        let note = $('#visit-add-note').val()
 
-        await VisitsDB.addVisit(userId, this.clientId, startDate, startTime, endDate, endTime)
+        await VisitsDB.addVisit(userId, this.clientId, startDate, startTime, endDate, endTime, note)
             .catch(error => {
-                Message.display(error.message)
-                console.log("Failed to add visit")
+                Message.display(2, "Failed to add visit")
+                console.log(error.message)
             })
 
         this.loadVisits() 
