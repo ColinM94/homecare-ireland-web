@@ -35,22 +35,24 @@ class ClientProfile{
             allUsers = await UsersDB.getActiveUsers()
         ])
 
-        // Users which are not connected to this client. 
-        let users = [] 
+        let users = []
+
         allUsers.forEach(user => {
-            if(!conns.includes(user.id)){
-                users.push(user)
-            }
-        })
+            // True if connection is found. 
+            let found = false
 
-        await UsersDB.getActiveUsers()
-        
-        $("#select-add-conn").prepend("<option value='' selected disabled hidden>Select User</option>").val('');
+            conns.forEach(conn => {
+                // If connection is already exists.
+                if(conn.userId == user.id) found = true
+            })
+
+            // If connection doesn't exist add it.
+            if(found == false) users.push(user)
+        })
+        console.log(users)
         users.forEach(user => {
-            $("#select-client-add-conn").append(new Option(`${user.role} : ${user.name}`, user.id))
+            $("#select-client-add-conn").append(new Option(`${user.name}`, user.id))
         })
-
-        $('#modal-client-add-conn').modal('hide')
     }
 
     static async addConn(){
@@ -61,9 +63,9 @@ class ClientProfile{
     }
 
     static async deleteConn(connId){
-            await Profile.deleteConn(connId)
-            console.log(connId)
-            this.loadConns(this.userId)
+        await Profile.deleteConn(connId)
+        console.log(connId)
+        this.loadConns(this.userId)
     }
 
     // Gets and displays connections. 

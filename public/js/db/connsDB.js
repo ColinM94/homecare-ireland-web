@@ -22,11 +22,25 @@ class ConnsDB{
         return conns
     }
 
+    // Gets conn from conns where doc contains {userId} and {clientId}
+    static async getConn(userId, clientId){
+        let result = await db.collection('conns')
+            .where('userId', '==', userId)
+            .where('clientId', '==', clientId)
+            .get()
+
+        if(result.docs.length > 0) return result.docs[0]
+        else return null
+    }
+    
     // Sets up connection between user and client. 
     static async addConn(userId, clientId) {
         let conn = new Conn(null, userId, clientId) 
 
-        await db.collection("conns").add(conn.toFirestore())
+        // Add connection if it doesn't exist. 
+        if(await this.getConn(userId, clientId) == null){
+            await db.collection("conns").add(conn.toFirestore())
+        }
     }
 
     // Deletes connections containing user/client id.

@@ -87,6 +87,12 @@ class ClientsDB{
     // Deletes doc at clients/{clientId}.
     static async deleteClient(clientId) {
         db.collection('clients').doc(clientId).delete()
+            .then(() => {
+                Message.display(1, "Client deleted")
+            }).catch(error => {
+                console.log(error.message())
+                Message.display(2, "Unable to delete client")
+            })
     }
 
     // Sets clients/{clientId}/active field to false. 
@@ -106,7 +112,7 @@ class ClientsDB{
         db.collection('clients').doc(clientId).update({
             "active": true
         }).then(() => {
-            Message.display(1, "Client Activated!")
+            Message.display(1, "Client Activated")
         }).catch(error => {
             Message.display(2, "Error Activating Client")
         })

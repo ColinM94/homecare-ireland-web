@@ -46,6 +46,11 @@ class UsersDB{
         await db.collection("users").add(user.toFirestore())
     }
 
+    // Deletes doc at users/{userId}.
+    static async deleteUser(userId) {
+        db.collection('users').doc(userId).delete()
+    }
+
     // Sets users/{userId}/active field to false. 
     static async deactivateUser (userId) {
         await db.collection('users').doc(userId).update({

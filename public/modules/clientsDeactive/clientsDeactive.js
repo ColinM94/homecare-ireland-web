@@ -50,8 +50,6 @@ class ClientsDeactive{
             VisitsDB.deleteVisits(clientId)
         }
 
-        $('#modal-client-delete').modal('hide')
-
         this.refreshTable()
     }
 

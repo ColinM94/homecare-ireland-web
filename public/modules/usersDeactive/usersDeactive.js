@@ -26,6 +26,9 @@ class UsersDeactive{
                 {mRender: function (data, type, row) {
                     return `<a href="javascript:UsersDeactive.activateUser('${row.id}')">Activate</a>`
                 }},
+                {mRender: function (data, type, row) {
+                    return `<a href="javascript:UsersDeactive.deleteUser('${row.id}')">Delete</a>`
+                }},
             ]
         })
     }
@@ -39,6 +42,14 @@ class UsersDeactive{
                 console.log(error.message)
             })
             
+        this.refreshTable()
+    }
+
+    static async deleteUser(userId){
+        if(await Prompt.confirm()){
+            await UsersDB.deleteUser(userId)
+        }
+
         this.refreshTable()
     }
 
