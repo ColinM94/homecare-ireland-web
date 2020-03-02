@@ -27,10 +27,11 @@
       <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" id="nav-brand" href="#">
-          <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-          </div>
-          <div class="sidebar-brand-text mx-3">Carers App</div>
+                
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-home"></i>
+        </div>
+          <div class="sidebar-brand-text mx-3">Homecare Ireland</div>
         </a>
 
         <!-- Divider -->
@@ -40,7 +41,7 @@
         <hr class="sidebar-divider">
 
         <!-- Heading -->
-        <div class="sidebar-heading">
+        <div class="sidebar-heading ">
           Administration
         </div>
 
@@ -48,7 +49,7 @@
         <li class="nav-item" id="nav-users">
           <a class="nav-link" href="#">
             <i class="fas fa-fw fa-user-md"></i>
-            <span>Users</span></a>
+            <span>Carers</span></a>
         </li>
 
         <!-- Nav Item - Client List -->
@@ -56,6 +57,13 @@
           <a class="nav-link" href="#">
             <i class="fas fa-fw fa-user"></i>
             <span>Clients</span></a>
+        </li>
+
+        <!-- Nav Item - Admins -->
+        <li class="nav-item" id="nav-admins"> 
+          <a class="nav-link" href="#">
+            <i class="fas fa-fw fa-user-cog"></i>
+            <span>Admins</span></a>
         </li>
 
         <!-- Nav Item - Deactive Users List -->
@@ -70,6 +78,13 @@
           <a class="nav-link" href="#">
             <i class="fas fa-fw fa-user-slash"></i>
             <span>De-active Clients</span></a>
+        </li>
+
+        <!-- Nav Item - Deactive Clients List -->
+        <li class="nav-item" id="nav-meds"> 
+          <a class="nav-link" href="#">
+            <i class="fas fa-fw fa-tablets"></i>
+            <span>Medication</span></a>
         </li>
 
         <!-- Divider -->
@@ -172,28 +187,69 @@
       </div>
     </div>
 
-  <!-- DELETE CONFIRMATION MODAL -->
-  <div class="modal fade" id="modal-confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <span id="confirm-delete-info1" style="display: none;"></span>
-        <span id="confirm-delete-info2" style="display: none;"></span>
-        <span id="confirm-delete-info3" style="display: none;"></span>
-        <span id="confirm-delete-info4" style="display: none;"></span>
-        <span id="confirm-delete-info5" style="display: none;"></span>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" id="btn-modal-confirm-yes" href="#">Yes</a>
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div class="modal fade" id="modal-confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <span id="confirm-delete-info1" style="display: none;"></span>
+          <span id="confirm-delete-info2" style="display: none;"></span>
+          <span id="confirm-delete-info3" style="display: none;"></span>
+          <span id="confirm-delete-info4" style="display: none;"></span>
+          <span id="confirm-delete-info5" style="display: none;"></span>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" id="btn-modal-confirm-yes" href="#">Yes</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- ADD VISIT MODAL -->
+    <div class="modal fade" id="modal-add-visit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Visit</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="user" id="form-add-visit">
+              User
+              <select id="select-visit-user" class="form-control form-select">
+                <option value="" selected disabled hidden>Select User</option>
+              </select>
+              <input type="hidden" id="clientId">
+
+              Start Date
+              <input type="date" class="form-control" id="visit-add-start-date">
+              Start Time
+              <input type="time" class="form-control" id="visit-add-start-time">
+
+              End Date
+              <input type="date" class="form-control" id="visit-add-end-date">
+              End Time
+              <input type="time" class="form-control" id="visit-add-end-time">
+              Note
+              <input type="text" class="form-control" id="visit-add-note">
+              <br>
+              <button class="btn btn-primary btn-user btn-block">
+                Add Visit
+              </button>
+              <p class="form-error" id="client-error"></p>
+              <hr>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div id="alert-box" class="alert">
       <span id="alert-box-text"></span>
@@ -226,12 +282,14 @@
     <script src="js/models/user.js"></script>
     <script src="js/models/visit.js"></script>
     <script src="js/models/conn.js"></script>
+    <script src="js/models/med.js"></script>
 
     <!-- DB JS -->
     <script src="js/db/clientsDB.js"></script>
     <script src="js/db/usersDB.js"></script>
     <script src="js/db/connsDB.js"></script>
     <script src="js/db/visitsDB.js"></script>
+    <script src="js/db/medsDB.js"></script>
 
     <!-- MODULES JS -->
     <script src="js/module.js"></script>
@@ -243,7 +301,9 @@
     <script src="modules/clientProfile/clientProfile.js"></script>
     <script src="modules/userProfile/userProfile.js"></script>
     <script src="modules/visitDetails/visitDetails.js"></script>
-    <script src="modules/profile/profile.js"></script>
+    <script src="modules/admins/admins.js"></script>
+    <script src="modules/shared/profile.js"></script>
+    <script src="modules/meds/meds.js"></script>
   </body>
 </html>
 

@@ -15,10 +15,10 @@
       Mobile:<span id="client-profile-mobile"></span><br>
       Address:<span id="client-profile-address"></span>
       <hr>
-      <h6 style="font-weight: bold;">Connections</h6>
+      <h6 style="font-weight: bold;">Carers</h6>
       <div id="client-connections"></div>
       <br>
-      <a href="#" id="btn-client-add-conn">Add Connection</a>
+      <a href="#" id="btn-client-add-conn">Add Carer</a>
       <hr>
       <h6 style="font-weight: bold;">Visits</h6>
       <div id="client-visits"></div>
@@ -27,70 +27,32 @@
     </div>
   </div>
 
-    <!-- ADD CONNECTION MODAL -->
-    <div class="modal fade" id="modal-client-add-conn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add Connection</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
+  <!-- ADD CARER MODAL -->
+  <div class="modal fade" id="modal-add-carer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Carer</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="user" id="form-client-add-carer">
+            <select id="select-carer" class="form-control form-select">
+            </select>
+            <input type="hidden" id="id">
+            <br>
+            <button id="btn-modal-add-carer" class="btn btn-primary btn-user btn-block">
+              Add Carer
             </button>
-          </div>
-          <div class="modal-body">
-            <form class="user" id="form-client-add-conn">
-              <select id="select-client-add-conn" class="form-control form-select">
-              </select>
-              <input type="hidden" id="id">
-              <br>
-              <button class="btn btn-primary btn-user btn-block">
-                Add Connection
-              </button>
-              <p class="form-error" id="client-error"></p>
-              <hr>
-            </form>
-          </div>
+            <p class="form-error" id="client-error"></p>
+            <hr>
+          </form>
         </div>
       </div>
     </div>
-
-  <!-- ADD VISIT MODAL -->
-<div class="modal fade" id="modal-client-add-visit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Visit</h5>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form class="user" id="form-add-visit">
-          User
-          <select id="select-visit-user" class="form-control form-select">
-            <option value="" selected disabled hidden>Select User</option>
-          </select>
-          <input type="hidden" id="clientId">
-
-          Start Date
-          <input type="date" class="form-control" id="visit-add-start-date">
-          Start Time
-          <input type="time" class="form-control" id="visit-add-start-time">
-
-          End Date
-          <input type="date" class="form-control" id="visit-add-end-date">
-          End Time
-          <input type="time" class="form-control" id="visit-add-end-time">
-          Note
-          <input type="text" class="form-control" id="visit-add-note">
-          <br>
-          <button class="btn btn-primary btn-user btn-block">
-            Add Visit
-          </button>
-          <p class="form-error" id="client-error"></p>
-          <hr>
-        </form>
-      </div>
-    </div>
   </div>
-</div>
+
+
+  

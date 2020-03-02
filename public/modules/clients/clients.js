@@ -4,6 +4,7 @@ class Clients{
     // Populates clients datatable and sets up listeners. 
     static async load() {
         let clients = await ClientsDB.getActiveClients()
+        console.log(clients)
 
         $('#datatable').DataTable( {
             data: clients,

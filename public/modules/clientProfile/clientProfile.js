@@ -23,10 +23,12 @@ class ClientProfile{
 
     // Opens add connection modal form. 
     static async viewAddConnForm(){ 
-        // Clears list. 
-        $('#select-client-add-conn').empty()
+        $('#modal-add-carer').modal('show')
 
-        $('#modal-client-add-conn').modal('show')
+        // Resets modal.  
+        $('#select-carer').empty()
+        $('#select-carer').removeAttr('disabled')
+        $('#btn-modal-add-carer').removeAttr('disabled')
 
         let conns, allUsers
 
@@ -35,31 +37,41 @@ class ClientProfile{
             allUsers = await UsersDB.getActiveUsers()
         ])
 
-        let users = []
-
         allUsers.forEach(user => {
             // True if connection is found. 
             let found = false
 
             conns.forEach(conn => {
-                // If connection is already exists.
+                // If connection already exists.
                 if(conn.userId == user.id) found = true
             })
 
             // If connection doesn't exist add it.
-            if(found == false) users.push(user)
+            if(found == false){
+                $("#select-carer").append(new Option(`${user.name} : ${user.address1}, ${user.address2}, ${user.county}`, user.id))
+            }
         })
-        console.log(users)
-        users.forEach(user => {
-            $("#select-client-add-conn").append(new Option(`${user.name}`, user.id))
-        })
+
+        if(!$('#select-carer').has('option').length > 0){
+            $("#select-carer").append(new Option('No Carers Found!'))
+            $('#select-carer').attr('disabled', true)
+            $('#btn-modal-add-carer').attr('disabled', true)
+        }
     }
 
     static async addConn(){
-        let userId = $('#select-client-add-conn').val()
-        await ConnsDB.addConn(userId, this.clientId)
-        $('#modal-client-add-conn').modal('hide')
-        this.loadConns()
+        let userId = $('#select-carer').val()
+        if(userId != "null"){
+            await ConnsDB.addConn(userId, this.clientId)
+                .then(() => {
+                    Message.display(1, "Connection created")
+                }).catch(error => {
+                    Message.display(2, "Unable to create connection")
+                })
+
+            $('#modal-add-carer').modal('hide')
+            this.loadConns()
+        }
     }
 
     static async deleteConn(connId){
@@ -76,7 +88,7 @@ class ClientProfile{
         let conns = await ConnsDB.getConns(this.clientId)
 
         if(conns.length < 1){
-            $("#client-connections").append("No Connections")
+            $("#client-connections").append("No Connections!")
         }else{
             conns.forEach(conn => {
                 UsersDB.getUser(conn.userId).then(user => {
@@ -88,7 +100,7 @@ class ClientProfile{
 
     // <-- VISITS --> //
     static async viewAddVisitForm(){
-        $('#modal-client-add-visit').modal('show')
+        $('#modal-add-visit').modal('show')
 
         $('#select-visit-user').empty()
 
@@ -163,7 +175,7 @@ class ClientProfile{
             ClientProfile.addVisit()
         })
 
-        $('#form-client-add-conn').submit(function(event){
+        $('#form-client-add-carer').submit(function(event){
             event.preventDefault()
             ClientProfile.addConn()
         })

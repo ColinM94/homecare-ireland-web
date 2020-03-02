@@ -58,10 +58,12 @@ class UserProfile{
     }
 
     static async viewAddConnForm(){
-        $('#modal-user-add-conn').modal('show')
+        $('#modal-add-client').modal('show')
 
-        // Clears list. 
-        $('#select-user-add-conn').empty()
+        // Resets modal.  
+        $('#select-client').empty()
+        $('#select-client').removeAttr('disabled')
+        $('#btn-modal-add-client').removeAttr('disabled')
 
         let conns, allClients
 
@@ -70,31 +72,32 @@ class UserProfile{
             allClients = await ClientsDB.getActiveClients()
         ])
 
-        // Clients which are not connected to this user. 
-        let clients = []
-
         allClients.forEach(client => {
             // True if connection is found. 
             let found = false
 
             conns.forEach(conn => {
-                // If connection is already exists.
+                // If connection already exists.
                 if(conn.clientId == client.id) found = true
             })
 
             // If connection doesn't exist add it.
-            if(found == false) clients.push(client)
+            if(found == false){
+                $("#select-client").append(new Option(`${client.name} : ${client.address1}, ${client.address2}, ${client.county}`, client.id))
+            }
         })
 
-        clients.forEach(client => {
-            $("#select-user-add-conn").append(new Option(`${client.name} : ${client.address1}, ${client.address2}, ${client.county}`, client.id))
-        })
+        if(!$('#select-client').has('option').length > 0){
+            $("#select-client").append(new Option('No Clients Found!'))
+            $('#select-client').attr('disabled', true)
+            $('#btn-modal-add-client').attr('disabled', true)
+        }
     }
 
     static async addConn(){
-        let clientId = $('#select-user-add-conn').val()
+        let clientId = $('#select-client').val()
         await ConnsDB.addConn(this.userId, clientId)
-        $('#modal-user-add-conn').modal('hide')
+        $('#modal-add-client').modal('hide')
         this.loadConns()
     }
 
@@ -105,11 +108,11 @@ class UserProfile{
 
     // Instantiate listeners.
     static async listeners(){
-        $('#btn-user-add-conn').click(function(){
+        $('#btn-user-add-client').click(function(){
             UserProfile.viewAddConnForm()
         })
 
-        $('#form-user-add-conn').submit(function(){
+        $('#form-user-add-client').submit(function(){
             event.preventDefault()
             UserProfile.addConn()
         })

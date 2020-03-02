@@ -59,3 +59,15 @@ input[type=date]::-webkit-inner-spin-button {
   .closebtn:hover {
     color: black;
   }
+
+.fas{
+    font-size: 1.5em !important;
+}
+
+.sidebar-brand-text{
+    font-size: 1.1em;
+}
+
+.sidebar-brand-icon{
+    font-size: 1.2em;
+}

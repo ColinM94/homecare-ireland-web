@@ -8,6 +8,10 @@ auth.onAuthStateChanged(user => {
     }   
 })
 
+$(function() {
+    setActive("users")
+})
+
 var currentUser = {}
 
 function getUserInfo(user){
@@ -36,7 +40,6 @@ function loadModule(module){
 
 // Sets active nav item in sidebar. 
 function setActive(module){
-    // Default
     $("#nav-"+module).addClass("active")
 
     if(module != "users"){
@@ -45,33 +48,54 @@ function setActive(module){
     if(module != "clients"){
         $("#nav-clients").removeClass("active")
     }
+    if(module != "admins"){
+        $("#nav-admins").removeClass("active")
+    }
     if(module != "clients-deactive") {
         $("#nav-clients-deactive").removeClass("active")
     } 
     if(module != "users-deactive"){
         $("#nav-users-deactive").removeClass("active")
     }
+    if(module != "meds"){
+        $("#nav-meds").removeClass("active")
+    }
 }
 
 // Sidebar buttons.
 $("#nav-brand").click(function (){
     Module.load("Users")
+    setActive("users")
 })
 
 $("#nav-users").click(function (){
     Module.load("Users")
+    setActive("users")
 })
 
 $("#nav-clients").click(function (){
     Module.load("Clients")
+    setActive("clients")
+})
+
+$("#nav-admins").click(function (){
+    Module.load("Admins")
+    setActive("admins")
 })
 
 $("#nav-clients-deactive").click(function (){
     Module.load("ClientsDeactive")
+    setActive("clients-deactive")
 })
 
 $("#nav-users-deactive").click(function (){
     Module.load("UsersDeactive")
+    setActive("users-deactive")
+})
+
+$("#nav-meds").click(function (){
+    Module.load("Meds")
+    setActive("meds")
 })
 
 // Topbar buttons. 

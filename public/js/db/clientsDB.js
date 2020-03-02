@@ -19,8 +19,9 @@ class ClientsDB{
     // Returns array of Client objects from all docs in clients.
     static async getActiveClients() {
         let clients = new Array()
-
-        let result = await db.collection('clients').where('active' ,'==', true).get()
+        let result = await db.collection('clients')
+            .where('active' ,'==', true)
+            .get()
             .catch(error => {
                 Message.display(2, "Error Getting Deactive Client!")
             })
