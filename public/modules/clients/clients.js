@@ -91,7 +91,29 @@ class Clients{
     }
 
     static async editClient(){
-        let id = $("#editClientId").val()
+
+
+
+
+
+        // jQuery 
+        $("#client-form").submit(function(event) {
+            let name = $("#client-name").val()
+        })
+
+        // JavaScript
+        document.getElementById("client-form").addEventListener("submit", function() {
+            let name = document.getElementById("client-name").value
+        })
+
+
+
+
+
+
+
+
+
         let name = $("#editClientName").val()
         let dob = $("#editClientDob").val()
         let mobile = $("#editClientMobile").val()

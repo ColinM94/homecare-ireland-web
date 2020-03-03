@@ -18,13 +18,16 @@ class Meds{
                 $("#datatable_filter").detach().appendTo('#datatableSearch');
             },
             columns: [
-                { title: "ID", data: "id"},
+                { title: "ID", data: "id", visible: false},
                 { title: "Name", data: "name" },
+                // {mRender: function (data, type, row) {
+                //     return `<a href="javascript:Meds.viewEditMedForm('${row.id}')">Edit</a>`
+                // }},
+                // {mRender: function (data, type, row) {
+                //     return `<a href="javascript:Meds.deleteMed('${row.id}')">Delete</a>`
+                // }},
                 {mRender: function (data, type, row) {
-                    return `<a href="javascript:Meds.viewEditMedForm('${row.id}')">Edit</a>`
-                }},
-                {mRender: function (data, type, row) {
-                    return `<a href="javascript:Meds.deleteMed('${row.id}')">Delete</a>`
+                    return `<a href="javascript:Meds.viewDetails('${row.id}')">View Details</a>`
                 }},
             ]
         })
@@ -45,12 +48,8 @@ class Meds{
     static async viewEditMedForm(id){
         $('#modal-edit-med').modal('show')
 
-        console.log(id)
-
         MedsDB.getMed(id)
             .then(result => {
-                console.log(result)
-                console.log(result.name)
                 $('#edit-med-name').val(result.name)
             })
     }
@@ -60,6 +59,15 @@ class Meds{
             await MedsDB.deleteMed(id)
             this.refreshTable()
         }
+    }
+
+    static async viewDetails(id){
+        MedsDB.getMed(id)
+            .then(med => {
+                $('#med-details-name').text(med.name)
+            })
+
+        $('#modal-view-med').modal('show')
     }
 
     // Resets and reloads datatable. 
