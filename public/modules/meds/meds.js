@@ -20,12 +20,12 @@ class Meds{
             columns: [
                 { title: "ID", data: "id", visible: false},
                 { title: "Name", data: "name" },
-                // {mRender: function (data, type, row) {
-                //     return `<a href="javascript:Meds.viewEditMedForm('${row.id}')">Edit</a>`
-                // }},
-                // {mRender: function (data, type, row) {
-                //     return `<a href="javascript:Meds.deleteMed('${row.id}')">Delete</a>`
-                // }},
+                {mRender: function (data, type, row) {
+                    return `<a href="javascript:Meds.viewEditMedForm('${row.id}')">Edit</a>`
+                }},
+                {mRender: function (data, type, row) {
+                    return `<a href="javascript:Meds.deleteMed('${row.id}')">Delete</a>`
+                }},
                 {mRender: function (data, type, row) {
                     return `<a href="javascript:Meds.viewDetails('${row.id}')">View Details</a>`
                 }},
@@ -36,9 +36,15 @@ class Meds{
     }
 
     static async addMed(){
-        let name = $("#med-name").val()
+        let name = $("#add-med-name").val()
+        let description = $('#add-med-desc').val().split(/\n/)
+        let sideEffects = $('#add-med-sides').val().split(/\n/)
 
-        MedsDB.addMed(name)
+        // Removes empty lines from arrays. 
+        description = description.filter(item => item)
+        sideEffects = sideEffects.filter(item => item)
+
+        await MedsDB.addMed(name, description, sideEffects)
 
         $('#modal-add-med').modal('hide')
 
@@ -57,17 +63,40 @@ class Meds{
     static async deleteMed(id){
         if(await Prompt.confirm()){
             await MedsDB.deleteMed(id)
+                .then(() => {
+                    Notification.display(1, "Medication deleted")
+                }).catch(error => {
+                    console.log(error.message())
+                    Notification.display(2, "Unable to delete medication")
+                })
             this.refreshTable()
         }
     }
 
     static async viewDetails(id){
+        $('#med-details-desc').empty()
+        $('#med-details-sides').empty()
+
+
+		// $('html').find('*').not('.lds-facebook').addClass('blur');
+
         MedsDB.getMed(id)
             .then(med => {
-                $('#med-details-name').text(med.name)
-            })
+                $('#med-details-title').text(med.name)
+      
+                for(let i=0; i<med.description.length; i++){
+                    $('#med-details-desc').append(med.description[i] + "</br>")
+                }
 
-        $('#modal-view-med').modal('show')
+                for(let i=0; i<med.sideEffects.length; i++){
+                    $('#med-details-sides').append(med.sideEffects[i] + "</br>")
+                }
+
+                $('#modal-med-details').modal('show')
+            }).catch(error => {
+                Notification.display(2, "Unable to load medication details")
+                console.log(error.message)
+            })
     }
 
     // Resets and reloads datatable. 

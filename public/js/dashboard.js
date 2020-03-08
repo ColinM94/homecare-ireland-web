@@ -1,32 +1,43 @@
-// Listen for auth state change.
+// Holds information about currently signed in user. 
+var currentUser = {}
+
+// Listen for change in signed in state. 
 auth.onAuthStateChanged(user => {
     if(user){
         getUserInfo(user)
+
+        /*
+        // If doctor show medication option. 
+        if(user.role == "doctor"){
+            $('#nav-meds').removeClass("d-none")
+        }
+        */
     } else{
         signOut()
         window.location = "index.html"
     }   
 })
 
+// Sets default active item in nav bar. 
 $(function() {
     setActive("users")
 })
-
-var currentUser = {}
 
 function getUserInfo(user){
     db.collection('users').doc(user.uid).get().then(doc =>{
         currentUser = {
             id : user.uid,
             email : user.email,
-            name :  doc.data().name
+            name :  doc.data().name,
+            role : doc.data().role
         }
         setupUI()
     })
 }
 
 function setupUI(){
-    $('#topbar-name').html(currentUser.name) 
+    $('#topbar-name').html(currentUser.name)
+ 
     Module.load("Users")
 }
 
@@ -60,6 +71,22 @@ function setActive(module){
     if(module != "meds"){
         $("#nav-meds").removeClass("active")
     }
+}
+
+function startLoad(){
+    //$('#wrapper').css('filter', 'blur(3px)')
+    $('.lds-facebook').show()
+
+    // Prevents user interaction with page. 
+    $('*').css('pointer-events', 'none')
+}
+
+function endLoad(){
+    //$('#wrapper').css('filter', '')
+    $('.lds-facebook').hide()
+
+    // Restores default functionality. 
+    $('*').css('pointer-events', 'auto')
 }
 
 // Sidebar buttons.
@@ -103,3 +130,4 @@ $("#btn-signout").click(function (){
     signOut()
     window.location = "index.html"
 })
+

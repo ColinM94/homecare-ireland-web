@@ -42,14 +42,14 @@
 
         <!-- Heading -->
         <div class="sidebar-heading ">
-          Administration
+          Admin
         </div>
 
         <!-- Nav Item - User List -->
         <li class="nav-item" id="nav-users">
           <a class="nav-link" href="#">
             <i class="fas fa-fw fa-user-md"></i>
-            <span>Carers</span></a>
+            <span>Staff</span></a>
         </li>
 
         <!-- Nav Item - Client List -->
@@ -70,7 +70,7 @@
         <li class="nav-item" id="nav-users-deactive"> 
           <a class="nav-link" href="#">
             <i class="fas fa-fw fa-user-slash"></i>
-            <span>De-active Users</span></a>
+            <span>De-active Staff</span></a>
         </li>
 
         <!-- Nav Item - Deactive Clients List -->
@@ -81,7 +81,7 @@
         </li>
 
         <!-- Nav Item - Deactive Clients List -->
-        <li class="nav-item" id="nav-meds"> 
+        <li class="nav-item d-none" id="nav-meds"> 
           <a class="nav-link" href="#">
             <i class="fas fa-fw fa-tablets"></i>
             <span>Medication</span></a>
@@ -164,8 +164,11 @@
           <div id="module-overlay"></div>
           <!-- End of Page Content-->
         <!-- End of Main Content -->
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
       <!-- End of Content Wrapper -->
     </div>
+  </div>
     <!-- End of Page Wrapper -->
 
     <!-- SIGNOUT MODAL -->
@@ -251,6 +254,29 @@
       </div>
     </div>
 
+    <!-- MEDICATION DETAILS MODAL -->
+    <div class="modal fade" id="modal-med-details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="med-details-title">Medication Details</h5>
+                  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <h6 class="font-weight-bold">Description</h6>
+                <span id="med-details-desc"></span>
+                <hr>
+                <h6 class="font-weight-bold">Side Effects</h6>
+                <span id="med-details-sides"></span>
+                <hr>
+                <span class="font-weight-lighter">Source: Drugs.com</span>
+              </div>
+          </div>
+      </div>
+    </div>
+
     <div id="alert-box" class="alert">
       <span id="alert-box-text"></span>
       <a id="btn-close-msg" class="closebtn">&times;</a>
@@ -271,7 +297,7 @@
     <script src="js/firebase.js"></script>
     <script src="js/dashboard.js"></script>
     <script src="js/prompt.js"></script>
-    <script src="js/message.js"></script>
+    <script src="js/Notification.js"></script>
 
     <!-- THEME -->
     <script src="js/sb-admin-2.min.js"></script>
@@ -304,6 +330,7 @@
     <script src="modules/admins/admins.js"></script>
     <script src="modules/shared/profile.js"></script>
     <script src="modules/meds/meds.js"></script>
+
   </body>
 </html>
 

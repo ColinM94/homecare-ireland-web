@@ -1,6 +1,9 @@
-// Displays messages to the user. 
-class Message{
+// Notify user with a message.  
+class Notification{
     static display(type, message){  
+        $('#alert-box').hide()
+        $('#alert-box').stop()
+
         switch(type){
             case 1:
                 $('#alert-box-text').html("Success: " + message + "!")
@@ -19,23 +22,19 @@ class Message{
                 $('#alert-box').css('background-color', '#FFAA2C')
             break
         }
+        $("#alert-box").fadeIn().delay(5000).fadeOut()
 
-        $('#alert-box').css('display', 'block')
-
-        $('#btn-close-msg').click(function(){
-            $('#alert-box').css('display', 'none')
-        })
-
-        this.fadeOut()
         this.listeners()
     }
 
-    // Message box fades out after timer. 
+    // Notification box fades out after timer. 
     static fadeOut(){
         $("#alert-box").delay(5000).fadeOut()
     }
 
     static listeners(){
-
+        $('#btn-close-msg').click(function(){
+            $('#alert-box').css('display', 'none')
+        })
     }
 }

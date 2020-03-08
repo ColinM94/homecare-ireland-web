@@ -30,9 +30,12 @@ class Module{
             $("#module").load("modules/" + moduleName)
         }
 
+        startLoad()
+
         // Load module js. 
         module.load(arg).then(()=>{
             this.listeners()
+            endLoad()
         })
     }
 

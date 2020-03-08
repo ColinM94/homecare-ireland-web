@@ -13,25 +13,6 @@
     </div>
 </div>
 
-<!-- VIEW MEDICATION MODAL -->
-<div class="modal fade" id="modal-view-med" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Medication Details</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Name: <span id="med-details-name"></span>
-                <p class="form-error" id="client-error"></p>
-                <hr>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- ADD MEDICATION MODAL -->
 <div class="modal fade" id="modal-add-med" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -44,40 +25,20 @@
             </div>
             <div class="modal-body">
                 <form class="user" id="form-add-med">
-                <div class="form-group">
-                    <input type="text" class="form-control form-control-user" id="med-name" placeholder="Name">
-                </div>
-                <button class="btn btn-primary btn-user btn-block">
-                    Add Medication
-                </button>
-                <p class="form-error" id="client-error"></p>
-                <hr>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ADD MEDICATION MODAL -->
-<div class="modal fade" id="modal-edit-med" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Update Medication</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="user" id="form-edit-med">
-                <div class="form-group">
-                    <input type="text" class="form-control form-control-user" id="edit-med-name" >
-                </div>
-                <button class="btn btn-primary btn-user btn-block">
-                    Add Medication
-                </button>
-                <p class="form-error" id="client-error"></p>
-                <hr>
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" id="add-med-name" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control form-control-user" id="add-med-desc" placeholder="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control form-control-user" id="add-med-sides" placeholder="Side Effects"></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-user btn-block">
+                        Add Medication
+                    </button>
+                    <p class="form-error" id="client-error"></p>
+                    <hr>
                 </form>
             </div>
         </div>

@@ -64,9 +64,9 @@ class ClientProfile{
         if(userId != "null"){
             await ConnsDB.addConn(userId, this.clientId)
                 .then(() => {
-                    Message.display(1, "Connection created")
+                    Notification.display(1, "Connection created")
                 }).catch(error => {
-                    Message.display(2, "Unable to create connection")
+                    Notification.display(2, "Unable to create connection")
                 })
 
             $('#modal-add-carer').modal('hide')
@@ -124,7 +124,7 @@ class ClientProfile{
 
         await VisitsDB.addVisit(userId, this.clientId, startDate, startTime, endDate, endTime, note)
             .catch(error => {
-                Message.display(2, "Failed to add visit")
+                Notification.display(2, "Failed to add visit")
                 console.log(error.message)
             })
 
@@ -144,7 +144,7 @@ class ClientProfile{
         VisitsDB.getVisits(this.clientId)
             .then(visits => {
                 if(visits.length < 1){
-                    $("#client-visits").append("No Visits!")
+                    $("#client-visits").append("No visits!")
                 }else{
                     visits.forEach(visit => {
                         $("#client-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
@@ -152,8 +152,15 @@ class ClientProfile{
                 }
             }).catch(error => {
                 console.log(error.message)
-                Message.display(2, "Unable to load visits")
+                Notification.display(2, "Unable to load visits")
             })
+    }
+
+    // <!-- Medication --> //
+    static async viewAddMedForm(){
+        $('#modal-add-med').modal('show')
+
+        
     }
 
     // Instantiate listeners. 

@@ -6,7 +6,7 @@ class ClientsDB{
             .then(doc => {
                 result = doc
             }).catch(error => {
-                Message.display(2, "Error Getting Client!")
+                Notification.display(2, "Error Getting Client!")
             })
 
         let client = new Client()
@@ -23,7 +23,7 @@ class ClientsDB{
             .where('active' ,'==', true)
             .get()
             .catch(error => {
-                Message.display(2, "Error Getting Deactive Client!")
+                Notification.display(2, "Error Getting Deactive Client!")
             })
 
         result.forEach(doc => {
@@ -45,7 +45,7 @@ class ClientsDB{
             .then(docs => {
                 result = docs
             }).catch(error => {
-                Message.display(2, "Error Getting Deactive Client!")
+                Notification.display(2, "Error Getting Deactive Client!")
             })
 
         result.forEach(doc => {
@@ -67,9 +67,9 @@ class ClientsDB{
 
             db.collection('connections').doc(ref.id).set(connections)
         }).then(() => {
-            Message.display(1, "Client Added")
+            Notification.display(1, "Client Added")
         }).catch(error => {
-            Message.display(2, "Error Adding Client")
+            Notification.display(2, "Error Adding Client")
         })
     }
 
@@ -79,9 +79,9 @@ class ClientsDB{
 
         db.collection("clients").doc(clientId).set(client.toFirestore())
             .then(() => {
-                Message.display(1, "Client Updated")
+                Notification.display(1, "Client Updated")
             }).catch(error => {
-                Message.display(2, "Error Updating Client")
+                Notification.display(2, "Error Updating Client")
             })
     }
 
@@ -89,10 +89,10 @@ class ClientsDB{
     static async deleteClient(clientId) {
         db.collection('clients').doc(clientId).delete()
             .then(() => {
-                Message.display(1, "Client deleted")
+                Notification.display(1, "Client deleted")
             }).catch(error => {
                 console.log(error.message())
-                Message.display(2, "Unable to delete client")
+                Notification.display(2, "Unable to delete client")
             })
     }
 
@@ -101,10 +101,10 @@ class ClientsDB{
         await db.collection('clients').doc(clientId).update({
             "active": false
         }).then(() => {
-            Message.display(1, "Client deactivated")
+            Notification.display(1, "Client deactivated")
         }).catch(error => {
             console.log(error.message())
-            Message.display(2, "Unable to de-activate client")
+            Notification.display(2, "Unable to de-activate client")
         })
     }
 
@@ -113,9 +113,9 @@ class ClientsDB{
         db.collection('clients').doc(clientId).update({
             "active": true
         }).then(() => {
-            Message.display(1, "Client Activated")
+            Notification.display(1, "Client Activated")
         }).catch(error => {
-            Message.display(2, "Error Activating Client")
+            Notification.display(2, "Error Activating Client")
         })
     }
 }

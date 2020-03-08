@@ -61,7 +61,7 @@ class Users{
             ])
 
             //TODO: Don't hardcode. 
-            Message.display(1, "User deactivated")
+            Notification.display(1, "User deactivated")
             this.refreshTable()
         }
     }

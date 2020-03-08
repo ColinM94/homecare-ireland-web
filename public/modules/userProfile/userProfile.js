@@ -34,7 +34,7 @@ class UserProfile{
                     })
                 }           
             }).catch(error => {
-                Message.display(2, "Failed to load connections")
+                Notification.display(2, "Failed to load connections")
                 console.log(error.message)
             })
     }
@@ -52,7 +52,7 @@ class UserProfile{
                     })
                 }
             }).catch(error => {
-                Message.display("Failed to load visits")
+                Notification.display("Failed to load visits")
                 Console.log(error.message)    
             })
     }

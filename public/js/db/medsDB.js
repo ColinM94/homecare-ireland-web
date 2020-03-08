@@ -7,7 +7,7 @@ class MedsDB{
             .then(doc => {
                 result = doc
             }).catch(error => {
-                Message.display(2, "Error getting med")
+                Notification.display(2, "Error getting med")
             })
 
             let med = new Med()
@@ -31,21 +31,14 @@ class MedsDB{
         return meds
     }
 
-    static async addMed(name){
-        let med = new Med(null, name)
+    static async addMed(name, description, sideEffects){
+        let med = new Med(null, name, description, sideEffects)
 
         await db.collection('meds').add(med.toFirestore())
     }
 
     static async deleteMed(id){
-                    console.log(id)
-        db.collection('meds').doc(id).delete()
-            .then(() => {
-                Message.display(1, "Medication deleted")
-            }).catch(error => {
-                console.log(error.message())
-                Message.display(2, "Unable to delete medication")
-            })
+        await db.collection('meds').doc(id).delete()
     }
 }
 

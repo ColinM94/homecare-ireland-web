@@ -1,31 +1,38 @@
 <div id="clientProfile" class="card shadow mb-4">
-    <div class="card-header row">
-      <h6 id="client-profile-title" class="col-md m-0 font-weight-bold my-auto"></h6>
-      <div class="col-md text-right">
-        <button id="btn-close-client-profile" class="close" type="button" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-    </div>
-    <div class="card-body">
-      <h6 style="font-weight: bold;">Personal Details</h6>
-      ID:<span id="client-profile-id"></span><br>
-      Name:<span id="client-profile-name"></span><br>
-      DOB:<span id="client-profile-dob"></span><br>
-      Mobile:<span id="client-profile-mobile"></span><br>
-      Address:<span id="client-profile-address"></span>
-      <hr>
-      <h6 style="font-weight: bold;">Carers</h6>
-      <div id="client-connections"></div>
-      <br>
-      <a href="#" id="btn-client-add-conn">Add Carer</a>
-      <hr>
-      <h6 style="font-weight: bold;">Visits</h6>
-      <div id="client-visits"></div>
-      <br>
-      <a href="#" id="btn-client-add-visit">Add Visit</a>
+  <div class="card-header row">
+    <h6 id="client-profile-title" class="col-md m-0 font-weight-bold my-auto"></h6>
+    <div class="col-md text-right">
+      <button id="btn-close-client-profile" class="close" type="button" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
     </div>
   </div>
+  <div class="card-body">
+    <h6 style="font-weight: bold;">Personal Details</h6>
+    ID:<span id="client-profile-id"></span><br>
+    Name:<span id="client-profile-name"></span><br>
+    DOB:<span id="client-profile-dob"></span><br>
+    Mobile:<span id="client-profile-mobile"></span><br>
+    Address:<span id="client-profile-address"></span>
+    <hr>
+    <h6 style="font-weight: bold;">Carers</h6>
+    <div id="client-connections">No carers!</div>
+    <br>
+    <a href="#" id="btn-client-add-conn">Add Carer</a>
+    <hr>
+    <h6 style="font-weight: bold;">Visits</h6>
+    <div id="client-visits">No visits!</div>
+    <br>
+    <a href="#" id="btn-client-add-visit">Add Visit</a>
+    <hr>
+    <h6 style="font-weight: bold;">Medication</h6>
+    <div id="client-meds">No medication prescribed!</div>
+    <br>
+    <a href="#" id="btn-client-add-meds">Add Medication</a>
+  </div>
+</div>
+
+
 
   <!-- ADD CARER MODAL -->
   <div class="modal fade" id="modal-add-carer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
