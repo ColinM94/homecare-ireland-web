@@ -1,6 +1,6 @@
 <div id="clientProfile" class="card shadow mb-4">
   <div class="card-header row">
-    <h6 id="client-profile-title" class="col-md m-0 font-weight-bold my-auto"></h6>
+    <h5 id="client-profile-title" class="col-md m-0 font-weight-bold my-auto"></h5>
     <div class="col-md text-right">
       <button id="btn-close-client-profile" class="close" type="button" aria-label="Close">
         <span aria-hidden="true">×</span>
@@ -25,41 +25,66 @@
     <br>
     <a href="#" id="btn-client-add-visit">Add Visit</a>
     <hr>
-    <h6 style="font-weight: bold;">Medication</h6>
-    <div id="client-meds">No medication prescribed!</div>
+    <h6 style="font-weight: bold;">Prescriptions</h6>
+    <div id="client-meds">No prescriptions!</div>
     <br>
-    <a href="#" id="btn-client-add-meds">Add Medication</a>
+    <a href="#" id="btn-add-presc">Add Prescription</a>
   </div>
 </div>
 
-
-
-  <!-- ADD CARER MODAL -->
-  <div class="modal fade" id="modal-add-carer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Carer</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
+<!-- ADD CARER MODAL -->
+<div class="modal fade" id="modal-add-carer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Carer</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="user" id="form-client-add-carer">
+          <select id="select-carer" class="form-control form-select">
+          </select>
+          <input type="hidden" id="id">
+          <br>
+          <button id="btn-modal-add-carer" class="btn btn-primary btn-user btn-block">
+            Add Carer
           </button>
-        </div>
-        <div class="modal-body">
-          <form class="user" id="form-client-add-carer">
-            <select id="select-carer" class="form-control form-select">
-            </select>
-            <input type="hidden" id="id">
-            <br>
-            <button id="btn-modal-add-carer" class="btn btn-primary btn-user btn-block">
-              Add Carer
-            </button>
-            <p class="form-error" id="client-error"></p>
-            <hr>
-          </form>
-        </div>
+          <p class="form-error" id="client-error"></p>
+          <hr>
+        </form>
       </div>
     </div>
   </div>
+</div>
+
+<!-- ADD PRESCRIPTION MODAL -->
+<div class="modal fade" id="modal-add-presc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Prescription</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="user" id="form-add-presc">
+          <select id="select-med" class="form-control form-select">
+          </select>
+          <input type="hidden" id="id">
+          <br>
+          <button id="btn-modal-add-presc" class="btn btn-primary btn-user btn-block">
+            Add Prescription
+          </button>
+          <p class="form-error" id="client-error"></p>
+          <hr>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
   

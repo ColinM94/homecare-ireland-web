@@ -11,12 +11,27 @@ class UsersDB{
     }
 
     // Returns array of User objects from users. 
+    static async getUsers() {
+        let users = new Array()
+
+        let result = await db.collection('users').get()
+
+        result.forEach(doc => {
+            let user = new User()   
+            user.docToUser(doc)
+            users.push(user)
+        })
+
+        return users
+    }
+
+    // Returns array of User objects from users. 
     static async getActiveUsers() {
         let users = new Array()
 
         let result = await db.collection('users')
             .where('active' ,'==', true)
-            .where('role', '==', 'Carer')
+            // .where('role', '==', 'Carer')
             .get()
 
         result.forEach(doc => {

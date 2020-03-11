@@ -1,0 +1,458 @@
+
+body{
+  color: #858796 !important;
+}
+
+select{
+  color: #858796 !important;
+}
+
+.form-error{
+    color: red !important;
+    padding-top: 15px;
+}
+
+.form-select{
+    font-size: 0.8rem;
+    border-radius: 0.5rem;
+    height: 3.2rem;
+}
+
+#datatable_filter label{
+    width: 100%;
+    margin-bottom: 0;
+}
+
+#datatable_filter *{
+    height: 100%;
+}
+
+#module {
+    height: 100%
+}
+
+/* Removes arrows from date inputs */
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+}
+
+/* The alert message box */
+.alert {
+    display: none;
+    position:absolute;
+    bottom:0;
+    right:0;
+    margin: 0px 50px 50px 0px;
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    font-size: 1.7em;
+  }
+  
+/* The close button */
+.closebtn {
+  margin-left: 15px;
+  margin-top: 8px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 35px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+  color: black;
+}
+
+.nounderline {
+  text-decoration: none !important
+}
+
+.btn{
+  background: "#E44B4B" !important;
+}
+
+.btn:focus{
+  border-color: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  outline: none !important;
+}
+
+*:focus {
+  outline: none !important;
+}
+
+.btn-add:active{
+  transform: scale(1.15);
+}
+
+/* #module #module-overlay, h1, h2, h3, h4, h5, h6, select, #modal, form, #dataTables {
+  color: #858796 !important;
+} */
+
+body{
+  color: 
+  .form-error{
+      color: red !important;
+      padding-top: 15px;
+  }
+  
+  .form-select{
+      font-size: 0.8rem;
+      border-radius: 0.5rem;
+      height: 3.2rem;
+  }
+  
+  #datatable_filter label{
+      width: 100%;
+      margin-bottom: 0;
+  }
+  
+  #datatable_filter *{
+      height: 100%;
+  }
+  
+  #module {
+      height: 100%
+  }
+  
+  /* Removes arrows from date inputs */
+  input[type=date]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      display: none;
+  }
+  
+  /* The alert message box */
+  .alert {
+      display: none;
+      position:absolute;
+      bottom:0;
+      right:0;
+      margin: 0px 50px 50px 0px;
+      padding: 20px;
+      background-color: #f44336; /* Red */
+      color: white;
+      font-size: 1.7em;
+    }
+    
+  /* The close button */
+  .closebtn {
+    margin-left: 15px;
+    margin-top: 8px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 35px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  /* When moving the mouse over the close button */
+  .closebtn:hover {
+    color: black;
+  }
+  
+  .nounderline {
+    text-decoration: none !important
+  }
+  
+  .btn{
+    background: "#E44B4B" !important;
+  }
+  
+  .btn-add:active{
+    transform: scale(1.15);
+  }
+  
+  /* #module #module-overlay, h1, h2, h3, h4, h5, h6, select, #modal, form, #dataTables {
+    color: #858796 !important;
+  } */
+  
+  
+  
+  /* Loading Animations */
+  .fas{
+      font-size: 1.5em !important;
+  }
+  
+  .sidebar-brand-text{
+      font-size: 1.1em;
+  }
+  
+  .sidebar-brand-icon{
+      font-size: 1.2em;
+  }
+  
+  .lds-facebook {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      width: 80px;
+      height: 80px;
+    }
+    .lds-facebook div {
+      display: inline-block;
+      position: absolute;
+      left: 8px;
+      width: 16px;
+      background: #E44B4B;
+      animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+    }
+    .lds-facebook div:nth-child(1) {
+      left: 8px;
+      animation-delay: -0.24s;
+    }
+    .lds-facebook div:nth-child(2) {
+      left: 32px;
+      animation-delay: -0.12s;
+    }
+    .lds-facebook div:nth-child(3) {
+      left: 56px;
+      animation-delay: 0;
+    }
+    @keyframes lds-facebook {
+      0% {
+        top: 8px;
+        height: 64px;
+      }
+      50%, 100% {
+        top: 24px;
+        height: 32
+      }
+    }
+  
+    .lds-roller {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      width: 80px;
+      height: 80px;
+    }
+    .lds-roller div {
+      animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      transform-origin: 40px 40px;
+    }
+    .lds-roller div:after {
+      content: " ";
+      display: block;
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #E44B4B;
+      margin: -4px 0 0 -4px;
+    }
+    .lds-roller div:nth-child(1) {
+      animation-delay: -0.036s;
+    }
+    .lds-roller div:nth-child(1):after {
+      top: 63px;
+      left: 63px;
+    }
+    .lds-roller div:nth-child(2) {
+      animation-delay: -0.072s;
+    }
+    .lds-roller div:nth-child(2):after {
+      top: 68px;
+      left: 56px;
+    }
+    .lds-roller div:nth-child(3) {
+      animation-delay: -0.108s;
+    }
+    .lds-roller div:nth-child(3):after {
+      top: 71px;
+      left: 48px;
+    }
+    .lds-roller div:nth-child(4) {
+      animation-delay: -0.144s;
+    }
+    .lds-roller div:nth-child(4):after {
+      top: 72px;
+      left: 40px;
+    }
+    .lds-roller div:nth-child(5) {
+      animation-delay: -0.18s;
+    }
+    .lds-roller div:nth-child(5):after {
+      top: 71px;
+      left: 32px;
+    }
+    .lds-roller div:nth-child(6) {
+      animation-delay: -0.216s;
+    }
+    .lds-roller div:nth-child(6):after {
+      top: 68px;
+      left: 24px;
+    }
+    .lds-roller div:nth-child(7) {
+      animation-delay: -0.252s;
+    }
+    .lds-roller div:nth-child(7):after {
+      top: 63px;
+      left: 17px;
+    }
+    .lds-roller div:nth-child(8) {
+      animation-delay: -0.288s;
+    }
+    .lds-roller div:nth-child(8):after {
+      top: 56px;
+      left: 12px;
+    }
+    @keyframes lds-roller {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  
+}
+
+
+/* Loading Animations */
+.fas{
+    font-size: 1.5em !important;
+}
+
+.sidebar-brand-text{
+    font-size: 1.1em;
+}
+
+.sidebar-brand-icon{
+    font-size: 1.2em;
+}
+
+.lds-facebook {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 8px;
+    width: 16px;
+    background: #E44B4B;
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  }
+  .lds-facebook div:nth-child(1) {
+    left: 8px;
+    animation-delay: -0.24s;
+  }
+  .lds-facebook div:nth-child(2) {
+    left: 32px;
+    animation-delay: -0.12s;
+  }
+  .lds-facebook div:nth-child(3) {
+    left: 56px;
+    animation-delay: 0;
+  }
+  @keyframes lds-facebook {
+    0% {
+      top: 8px;
+      height: 64px;
+    }
+    50%, 100% {
+      top: 24px;
+      height: 32
+    }
+  }
+
+  .lds-roller {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-roller div {
+    animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    transform-origin: 40px 40px;
+  }
+  .lds-roller div:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #E44B4B;
+    margin: -4px 0 0 -4px;
+  }
+  .lds-roller div:nth-child(1) {
+    animation-delay: -0.036s;
+  }
+  .lds-roller div:nth-child(1):after {
+    top: 63px;
+    left: 63px;
+  }
+  .lds-roller div:nth-child(2) {
+    animation-delay: -0.072s;
+  }
+  .lds-roller div:nth-child(2):after {
+    top: 68px;
+    left: 56px;
+  }
+  .lds-roller div:nth-child(3) {
+    animation-delay: -0.108s;
+  }
+  .lds-roller div:nth-child(3):after {
+    top: 71px;
+    left: 48px;
+  }
+  .lds-roller div:nth-child(4) {
+    animation-delay: -0.144s;
+  }
+  .lds-roller div:nth-child(4):after {
+    top: 72px;
+    left: 40px;
+  }
+  .lds-roller div:nth-child(5) {
+    animation-delay: -0.18s;
+  }
+  .lds-roller div:nth-child(5):after {
+    top: 71px;
+    left: 32px;
+  }
+  .lds-roller div:nth-child(6) {
+    animation-delay: -0.216s;
+  }
+  .lds-roller div:nth-child(6):after {
+    top: 68px;
+    left: 24px;
+  }
+  .lds-roller div:nth-child(7) {
+    animation-delay: -0.252s;
+  }
+  .lds-roller div:nth-child(7):after {
+    top: 63px;
+    left: 17px;
+  }
+  .lds-roller div:nth-child(8) {
+    animation-delay: -0.288s;
+  }
+  .lds-roller div:nth-child(8):after {
+    top: 56px;
+    left: 12px;
+  }
+  @keyframes lds-roller {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }

@@ -5,18 +5,24 @@ class ClientProfile{
     static async load(clientId){  
         this.clientId = clientId
 
-        let client = await ClientsDB.getClient(clientId)
-        
-        $('#client-profile-id').text(` ${client.id}`)
-        $('#client-profile-title').html(` Client: ${client.name}'s Profile`)
-        $('#client-profile-name').text(` ${client.name}`)
-        $('#client-profile-dob').text(` ${client.dob}`)
-        $('#client-profile-mobile').text(` ${client.mobile}`)
-        $('#client-profile-address').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
+        await ClientsDB.getClient(clientId)
+            .then(client => {
+                $('#client-profile-id').text(` ${client.id}`)
+                $('#client-profile-title').html(` Client: ${client.name}'s Profile`)
+                $('#client-profile-name').text(` ${client.name}`)
+                $('#client-profile-dob').text(` ${client.dob}`)
+                $('#client-profile-mobile').text(` ${client.mobile}`)
+                $('#client-profile-address').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
 
-        this.loadConns()
-        this.loadVisits()
-        this.listeners()
+                this.loadConns()
+                this.loadVisits()
+                this.listeners()
+            }).catch(error => {
+                console.log(error.message)
+                Notification.display(2, "Unable to load client details")
+                closeOverlay()
+            })
+    
     }
 
     // <-- CONNECTIONS --> //
@@ -156,11 +162,18 @@ class ClientProfile{
             })
     }
 
-    // <!-- Medication --> //
-    static async viewAddMedForm(){
-        $('#modal-add-med').modal('show')
+    // <!-- Prescription --> //
+    static async viewAddPrescForm(){
+        $('#modal-add-presc').modal('show')
 
-        
+        MedsDB.getMeds()
+            .then(meds => {
+                console.log(meds)
+                $("#select-med").prepend("<option value='' selected disabled hidden>Select Medication</option>").val('');
+                meds.forEach(med => {
+                    $("#select-med").append(new Option(`${med.name}`, med.id))
+                })
+        })
     }
 
     // Instantiate listeners. 
@@ -189,6 +202,10 @@ class ClientProfile{
 
         $('#btn-client-add-conn').click(function(){
             ClientProfile.viewAddConnForm()
+        })
+
+        $('#btn-add-presc').click(function(){
+            ClientProfile.viewAddPrescForm()
         })
 
         $('#form-add-conn').submit(function(){

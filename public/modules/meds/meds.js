@@ -4,7 +4,6 @@ class Meds{
     // Populates clients datatable and sets up listeners. 
     static async load() {
         let meds = await MedsDB.getMeds()
-                console.log(meds)
 
         $('#datatable').DataTable( {
             data: meds,
@@ -52,33 +51,74 @@ class Meds{
     }
 
     static async viewEditMedForm(id){
-        $('#modal-edit-med').modal('show')
+        $('#edit-med-desc').empty()
+        $('#edit-med-sides').empty()
 
+        startLoad()
         MedsDB.getMed(id)
-            .then(result => {
-                $('#edit-med-name').val(result.name)
+            .then(med => {
+                $('#edit-med-id').val(id)
+
+                if($('#edit-med-name').val() != null)
+                    $('#edit-med-name').val(med.name)
+
+                for(let i=0; i<med.description.length; i++){
+                    $('#edit-med-desc').append(med.description[i] + "\n")
+                }
+
+                for(let i=0; i<med.sideEffects.length; i++){
+                    $('#edit-med-sides').append(med.sideEffects[i] + "\n")
+                }
+
+                $('#modal-edit-med').modal('show')
+                endLoad()
+            }).catch(error => {
+                Notification.display(2, "Unable to retrieve medication details")
+                console.log(error.message)
+                endLoad()
             })
+    }
+
+    static async editMed(){
+        startLoad()
+
+        let id = $('#edit-med-id').val()
+        let name = $("#edit-med-name").val()
+        let description = $('#edit-med-desc').val().split(/\n/)
+        let sideEffects = $('#edit-med-sides').val().split(/\n/)
+
+        MedsDB.updateMed(id, name, description, sideEffects)
+                .then(() => {
+                    this.refreshTable()
+                    Notification.display(1, "Medication updated")
+                    $('#modal-edit-med').modal('hide')
+                    endLoad()
+                }).catch(error => {
+                    console.log(error.message())
+                    Notification.display(2, "Unable to update medication")
+                    $('#modal-edit-med').modal('hide')
+                    endLoad()
+                })
     }
 
     static async deleteMed(id){
         if(await Prompt.confirm()){
-            await MedsDB.deleteMed(id)
+            MedsDB.deleteMed(id)
                 .then(() => {
+                    this.refreshTable()
                     Notification.display(1, "Medication deleted")
                 }).catch(error => {
                     console.log(error.message())
                     Notification.display(2, "Unable to delete medication")
                 })
-            this.refreshTable()
         }
     }
 
     static async viewDetails(id){
+        startLoad()
+
         $('#med-details-desc').empty()
         $('#med-details-sides').empty()
-
-
-		// $('html').find('*').not('.lds-facebook').addClass('blur');
 
         MedsDB.getMed(id)
             .then(med => {
@@ -92,22 +132,34 @@ class Meds{
                     $('#med-details-sides').append(med.sideEffects[i] + "</br>")
                 }
 
+                endLoad()
                 $('#modal-med-details').modal('show')
             }).catch(error => {
                 Notification.display(2, "Unable to load medication details")
                 console.log(error.message)
+                endLoad()
             })
     }
 
     // Resets and reloads datatable. 
     static async refreshTable(){
-        let meds = await MedsDB.getMeds()
+        startLoad()
+        await MedsDB.getMeds()
+            .then(meds => {
+                let table = $('#datatable').DataTable()
 
-        let table = $('#datatable').DataTable()
+                table.clear() 
+                table.rows.add(meds)
+                table.draw()
+                endLoad()
 
-        table.clear() 
-        table.rows.add(meds)
-        table.draw()
+            }).catch(error => {
+                Notification.display(2, "Unable to load medications")
+                console.log(error.message)
+                endLoad()
+            })
+
+
     }
 
     // Instantiates listeners. 
@@ -115,6 +167,16 @@ class Meds{
         $("#form-add-med").submit(function(event) {
             event.preventDefault()
             Meds.addMed()
+        })
+
+        $("#form-edit-med").submit(function(event) {
+            event.preventDefault()
+            Meds.editMed()
+        })
+
+        $('.btn-refresh').click(function(){
+            Animate.rotate(360, '.btn-refresh-icon')
+            Meds.refreshTable()
         })
     }
 }

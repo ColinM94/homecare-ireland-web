@@ -1,9 +1,10 @@
 <div id="medicationList" class="card shadow mb-4" >
     <div class="card-header row">
-        <h6 class="col-md m-0 font-weight-bold my-auto">Medication</h6>
+        <h5 class="col-md m-0 font-weight-bold my-auto">Medication</h5>
         <div id="datatableSearch" class="col-md my-auto"></div>
         <div class="col-md text-right">
-        <a href="#" data-toggle="modal" data-target="#modal-add-med">Add Medication</a>
+            <button class="btn btn-refresh"><i class="fa fa-redo fa-lg btn-refresh-icon"></i></button>
+            <button class="btn" data-toggle="modal" data-target="#modal-add-med"><i class="fa fa-plus fa-lg"></i></button>
         </div>
     </div>
     <div class="card-body">
@@ -36,6 +37,41 @@
                     </div>
                     <button class="btn btn-primary btn-user btn-block">
                         Add Medication
+                    </button>
+                    <p class="form-error" id="client-error"></p>
+                    <hr>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT MEDICATION MODAL -->
+<div class="modal fade" id="modal-edit-med" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update Medication</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="user" id="form-edit-med">
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" id="edit-med-id" hidden>
+                      </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-user" id="edit-med-name" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <textarea rows="6" class="form-control form-control-user" id="edit-med-desc" placeholder="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea rows="6" class="form-control form-control-user" id="edit-med-sides" placeholder="Side Effects"></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-user btn-block">
+                        Update Medication
                     </button>
                     <p class="form-error" id="client-error"></p>
                     <hr>

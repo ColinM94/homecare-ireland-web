@@ -2,19 +2,13 @@
 class MedsDB{
     // Returns array of Conn objects where doc contains user/client id.
     static async getMed(id) {
-        let result 
-        await db.collection('meds').doc(id).get()
-            .then(doc => {
-                result = doc
-            }).catch(error => {
-                Notification.display(2, "Error getting med")
-            })
+        let result = await db.collection('meds').doc(id).get()
 
-            let med = new Med()
+        let med = new Med()
 
-            med.docToClient(result)
+        med.docToClient(result)
 
-            return med
+        return med
     }
 
     static async getMeds(){
@@ -37,8 +31,17 @@ class MedsDB{
         await db.collection('meds').add(med.toFirestore())
     }
 
+    static async addPresc(){
+        
+    }
+
     static async deleteMed(id){
         await db.collection('meds').doc(id).delete()
+    }
+
+    static async updateMed(id, name, description, sideEffects){
+        let med = new Med(id, name, description, sideEffects)
+        await db.collection("meds").doc(id).set(med.toFirestore())
     }
 }
 

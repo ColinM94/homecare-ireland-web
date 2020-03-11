@@ -27,6 +27,10 @@ class Notification{
         this.listeners()
     }
 
+    static formError(message){
+        $('.modal-form-error').text(message)
+    }
+
     // Notification box fades out after timer. 
     static fadeOut(){
         $("#alert-box").delay(5000).fadeOut()

@@ -75,7 +75,7 @@ function setActive(module){
 
 function startLoad(){
     //$('#wrapper').css('filter', 'blur(3px)')
-    $('.lds-facebook').show()
+    $('.lds-roller').show()
 
     // Prevents user interaction with page. 
     $('*').css('pointer-events', 'none')
@@ -83,7 +83,7 @@ function startLoad(){
 
 function endLoad(){
     //$('#wrapper').css('filter', '')
-    $('.lds-facebook').hide()
+    $('.lds-roller').hide()
 
     // Restores default functionality. 
     $('*').css('pointer-events', 'auto')
@@ -130,4 +130,6 @@ $("#btn-signout").click(function (){
     signOut()
     window.location = "index.html"
 })
+
+
 

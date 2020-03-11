@@ -6,10 +6,11 @@ class Prompt{
         return new Promise(resolve => setTimeout(resolve, msec));
     }
 
-    static async confirm(){
+    static async confirm(message){
         this.userInput = false
         let result = null
-
+        $('#confirm-message').text("")
+        $('#confirm-message').text(message)
         $('#modal-confirm').modal('show')
     
         this.listeners()

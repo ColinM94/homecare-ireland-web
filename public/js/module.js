@@ -5,10 +5,7 @@ class Module{
         const moduleRefs = {
             "Users": Users,
             "Clients" : Clients,
-            "Admins" : Admins,
             "ClientProfile" : ClientProfile,
-            "ClientsDeactive" : ClientsDeactive,
-            "UsersDeactive" : UsersDeactive,
             "UserProfile" : UserProfile,
             "VisitDetails" : VisitDetails,
             "Meds" : Meds

@@ -1,7 +1,8 @@
 class Client {
-    constructor(id, name, dob, mobile, address1, address2, town, county, eircode, marital, active){
+    constructor(id, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active){
         this.id = id
         this.name = name
+        this.gender = gender
         this.dob = dob
         this.mobile = mobile
         this.address1 = address1
@@ -17,6 +18,7 @@ class Client {
     docToClient(doc) {
         this.id = doc.id
         this.name = doc.data().name
+        this.gender = doc.data().gender
         this.dob = doc.data().dob
         this.mobile = doc.data().mobile
         this.address1 = doc.data().address1
@@ -32,6 +34,7 @@ class Client {
     toFirestore() {
         let client = {
             name : this.name,
+            gender : this.gender,
             dob : this.dob,
             mobile : this.mobile,
             address1 : this.address1,
