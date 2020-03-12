@@ -1,7 +1,6 @@
 class Validate{
     // Src: https://www.autoaddress.ie/support/developer-centre/faqs/do-you-have-a-regex-for-eircode
     static eircode(eircode) {
-        console.log("hello")
             var pattern = 
                     '\\b(?:(' +
                     'a(4[125s]|6[37]|7[5s]|[8b][1-6s]|9[12468b])|' +
@@ -29,7 +28,12 @@ class Validate{
               //return(String(eircode).substring(i,i+8).toUpperCase().replace(' ', '').replace(/O/g, 0).replace(/S/g, 5).replace(/B/g, 8));
             }else{
                 return false
-            }              
-                
-        }
+            }                             
+    }
+
+    static mobile(mobile){
+        if(!$.isNumeric(mobile)) return false
+        else if(mobile.length > 10 || mobile.length < 10) return false
+        else return true
+    }
 }

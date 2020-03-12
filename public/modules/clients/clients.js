@@ -7,26 +7,63 @@ class Clients{
 
         $('#datatable').DataTable( {
             data: clients,
-            "lengthChange": false,
-            "paging": false,
-            "bFilter": true,
+            lengthChange: false,
+            paging: false,
+            bFilter: true,
             oLanguage: {
                 sLengthMenu: "_MENU_",
                 sSearch: '', searchPlaceholder: "Search..." 
             },
             columnDefs: [
-                { "orderable": false, "targets": [11,12,13] }
+                { 
+                    targets: 0, 
+                    data: "active",
+                    title: "Active",
+                    render: function(data, type, row, meta){
+                        return data ? `<a href="javascript:Clients.deactivateClient('${row.id}')" title="Deactivate Client"><i class="far fa-check-square fa-lg"><span class="d-none">true</span></i></a>` : `<a href="javascript:Clients.activateClient('${row.id}')" title="Activate Client"><i class="far fa-square fa-lg"><span class="d-none">false</span></i></a>`
+                    }
+                },
+                { targets: 1, title: "Name", data: "name"},
+                { targets: 2, title: "DOB", data: "dob"},
+                { targets: 3, title: "Town", data: "town"},
+                { targets: 4, title: "Marital", data: "marital"},
+                { targets: 5, title: "County", data: "county"},
+                {
+                    targets: 6, 
+                    title: "Profile",
+                    orderable: false,
+                    render: function(data, type, row, meta){
+                        return `<a href="javascript:Module.load('ClientProfile', '${row.id}')" title="View Client Profile"><i class="fa fa-user fa-lg"></a>`
+                    }           
+                },
+                {
+                    targets: 7, 
+                    title: "Edit", 
+                    orderable: false,
+                    render: function(data, type, row, meta){
+                        return `<a href="javascript:Clients.viewEditClientForm('${row.id}')" title="Edit Client Details"><i class="fa fa-user-edit fa-lg"></a>`
+                    }   
+                },
+                {
+                    targets: 8,
+                    title: "Delete",
+                    orderable: false,
+                    render: function(data, type, row, meta){
+                        return `<a href="javascript:Clients.deleteClient('${row.id}')" title="Delete Client"><i class="fa fa-times fa-lg"></i></a>`
+                    }   
+                }            
             ],
             initComplete : function() {
                 $("#datatable_filter").detach().appendTo('#datatable-search')
 
-                this.api().columns([10,6,7,9]).every(function() {
+                this.api().columns([0,3,5,4]).every(function() {
                     var column = this
 
                     var select = $('<select class="form-select text-secondary mr-2 col"><option value="">No Filter</option></select>')
                         .appendTo($("#clients-filters-dropdown"))
                         .on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val())                                 
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val())   
+                        
                             column.search(val ? '^' + val + '$' : '', true, false).draw()
                         })
 
@@ -35,43 +72,13 @@ class Clients{
                     })    
                 })
             },
-            columns: [
-                { title: "ID", data: "id", visible: false},
-                { title: "Name", data: "name" },
-                { title: "DOB", data: "dob"},
-                { title: "Mobile", data: "mobile"},
-                { title: "Address 1", data: "address1"},
-                { title: "Address 2",data: "address2"},
-                { title: "Town",data: "town"},
-                { title: "County", data: "county"},
-                { title: "Eircode", data: "eircode"},
-                { title: "Marital Status", data: "marital"},
-                { title: "Active", data: "active"},
-                {mRender: function (data, type, row) {
-                    if(row.active == true)
-                        return `<a href="javascript:Clients.viewEditClientForm('${row.id}')">Edit</a>`
-                    else
-                        return `<a href="javascript:Clients.deleteClient('${row.id}')">Delete</a>`
-                }},
-                {mRender: function (data, type, row) {
-                    if(row.active == true)
-                        return `<a href="javascript:Clients.deactivateClient('${row.id}')">Deactivate</a>`
-                    else
-                        return `<a href="javascript:Clients.activateClient('${row.id}')">Activate</a>`
-                }},
-                {mRender: function (data, type, row) {
-
-                        return `<a href="javascript:Module.load('ClientProfile', '${row.id}')"> View Profile</a>`
-
-                }},
-            ]
         })
 
         this.listeners()
     }
 
     // Opens modal and inserts values into edit client form. 
-    static viewEditClientForm(clientId) {
+    static viewEditClientForm(clientId) {            
         $('#modal-edit-client').modal('show')
 
         ClientsDB.getClient(clientId).then(client => {
@@ -89,10 +96,14 @@ class Clients{
         })
     }
 
+    static viewAddClientForm(){
+        $('#modal-add-client').modal("show")
+    }
+
     static async addClient(){
         let name = $("#add-client-name").val()
         let gender = $("#add-client-gender").val()
-        let dob = $("#add-client-dob").val()
+        let dob = new Date($("#add-client-dob").val())
         let mobile = $("#add-client-mobile").val()
         let address1 = $("#add-client-address1").val()
         let address2 = $("#add-client-address2").val()
@@ -100,50 +111,26 @@ class Clients{
         let county = $("#add-client-county").val()
         let eircode = $("#add-client-eircode").val()
         let marital = $("#add-client-marital").val()
-          
-        if(!name){
-            Notification.formError("Please enter a name!")
-        }else if(!gender){
-            Notification.formError("Please select a gender!")
-        }else if(!dob){
-            Notification.formError("Please select a date of birth!")
-        }else if(!mobile){
-            Notification.formError("Please enter a mobile number!")
-        }else if(!address1){
-            Notification.formError("Please enter an address!")
-        }else if(!town){
-            Notification.formError("Please enter a town!")
-        }else if(!county){
-            Notification.formError("Please enter a county!")
-        }else if(!Validate.eircode(eircode)){
-            Notification.formError("Invalid Eircode format!")
-        }else if(!marital){
-            Notification.formError("Please enter a marital status!")
-        }else{
-            Notification.formError("")
+
+        if(this.validateForm(name, gender, dob, mobile, address1, address2, town, county, eircode, mobile, marital)){
+            ClientsDB.addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, true)
+                .then(() => {
+
+                }).catch(error => {
+                    console.log(error.message)
+                    Notification.display(2, "Unable to add client")
+                })
+
+            $('#modal-add-client').modal('hide')
+            this.refreshTable()
         }
-
-
-        //ClientsDB.addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, true)
-
-        //$('#modal-add-client').modal('hide')
-
-        //this.refreshTable()
     }
 
     static async updateClient(){
-        // jQuery 
-        $("#client-form").submit(function(event) {
-            let name = $("#client-name").val()
-        })
-
-        // JavaScript
-        document.getElementById("client-form").addEventListener("submit", function() {
-            let name = document.getElementById("client-name").value
-        })
-
+        let id = $("#edit-client-id").val()
         let name = $("#edit-client-name").val()
-        let dob = $("#edit-client-dob").val()
+        let gender = $("#edit-client-gender").val()
+        let dob = new Date($("#edit-client-dob").val())
         let mobile = $("#edit-client-mobile").val()
         let address1 = $("#edit-client-address1").val()
         let address2 = $("#edit-client-address2").val()
@@ -152,16 +139,86 @@ class Clients{
         let eircode = $("#edit-client-eircode").val()
         let marital = $("#edit-client-marital").val()
 
-        await ClientsDB.updateClient(id, name, dob, mobile, address1, address2, town, county, eircode, marital, true)
+        if(this.validateForm(name, gender, dob, mobile, address1, address2, town, county, eircode, mobile, marital)){
+            startLoad()
+            ClientsDB.updateClient(id, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, true)
+                .then(() => {
+                    Notification.display(1, "Client Updated")
+                    this.refreshTable()
+                    endLoad()
+                }).catch(error => {
+                    startLoad()
+                    console.log(error.message)
+                    Notification.display(2, "Error Updating Client")
+                })
+        }
 
-        $('#modalEditClient').modal('hide')
+        $('#modal-edit-client').modal('hide')
+    }
 
-        this.refreshTable()
+    // Validate add/edit client forms. 
+    static validateForm(name, gender, dob, mobile, address1, address2, town, county, eircode, marital){
+        // Form validation.
+        if(!name){
+            Notification.formError("Please enter a name!")
+        }else if(name.length > 30){
+            Notification.formError("Name must be 50 characters or less!")
+        }
+ 
+        else if(!gender){
+            Notification.formError("Please select a gender!")
+        }
+        
+        else if(!Date.parse(dob)){
+            Notification.formError("Please select a date of birth!")
+        }else if(dob.getFullYear() < 1900){
+            Notification.formError("Invalid Year!")
+        }
+        
+        else if(!Validate.mobile(mobile)){
+            Notification.formError("Invalid mobile format!")
+        }
+        
+        else if(!address1){
+            Notification.formError("Please enter an address!")
+        }else if(address1.length > 30){
+            Notification.formError("Address 1 must be 30 characters or less!")
+        }
+
+        else if(address2.length > 30){
+            Notification.formError("Address 2 must be 30 characters or less!")
+        }
+        
+        else if(!town){
+            Notification.formError("Please enter a town!")
+        }else if(town.length > 30){
+            Notification.formError("Town must be 30 characters or less!")
+        }
+        
+        else if(!county){
+            Notification.formError("Please enter a county!")
+        }else if(county.length > 30){
+            Notification.formError("County must be 30 characters or less!")
+        }
+        
+        else if(!Validate.eircode(eircode)){
+            Notification.formError("Invalid Eircode format!")
+        }
+        
+        else if(!marital){
+            Notification.formError("Please enter a marital status!")
+        }
+
+        else{
+            Notification.formError("")
+            console.log("passed")
+            return true
+        }
     }
 
     static async activateClient(clientId) {
         startLoad()
-        ClientsDB.activateClient(clientId)
+        await ClientsDB.activateClient(clientId)
             .then(() => {
                 Notification.display(1, "Client activated")
                 this.refreshTable()
@@ -170,6 +227,8 @@ class Clients{
                 Notification.display(2, "Unable to activate client")
                 endLoad()
             })
+
+        return false;
     }
 
     static async deactivateClient(clientId){
@@ -233,23 +292,33 @@ class Clients{
         startLoad()
         ClientsDB.getClients()
             .then(clients => {
-                // Reset filter dropdowns.
-                $("select").each( function(){
-                    $(this).val( $("#" + $(this).attr("id") + " option:first").val() );
-                })
-                
-                Clients.closeFilters()
-                
                 let table = $('#datatable').DataTable()
-
-                // Reset table filtering and data, then redraw with new data.  
                 table
-                .search( '' )
-                .columns().search( '' )
-                .draw()
-                .clear() 
-                .rows.add(clients)
-                .draw()
+                    .clear()
+                    .rows.add(clients)
+                    .draw()
+
+
+                //Reload Data
+
+
+                //Reload everything
+                // Reset filter dropdowns.
+                // $("select").each( function(){
+                //     $(this).val( $("#" + $(this).attr("id") + " option:first").val() );
+                // })
+                
+                // Clients.closeFilters()
+                
+                // 
+
+                // // Reset table filtering and data, then redraw with new data.  
+                // table
+                // .search( '' )
+                // .columns().search( '' )
+                // .clear() 
+                // .rows.add(clients)
+                // .draw()
 
                 endLoad()
             }).catch(error => {
@@ -268,11 +337,8 @@ class Clients{
 
         $("#form-edit-client").submit(function(event) {
             event.preventDefault()
-            Clients.editClient()
-        })
-
-        $('#btn-client-deactivate').click(function(){
-            Clients.deactivateClient()
+            console.log("Update client")
+            Clients.updateClient()
         })
 
         $('.btn-refresh').click(function(){
@@ -280,8 +346,11 @@ class Clients{
             Clients.refreshTable()
         })
 
-        $('#btn-clients-filter').click(function(){
+        $('#btn-add-client').click(function(){
+            Clients.viewAddClientForm()
+        })
 
+        $('#btn-clients-filter').click(function(){
             // Show filters else hide filters.  
             if($('#clients-filters').hasClass("d-none")){
                 Clients.openFilters()
@@ -290,14 +359,10 @@ class Clients{
             }
         })
 
-        // $('#clients-active-filter').on('change', function () {
-        //     let table = $('#datatable').DataTable()
-        //     table.columns(1).search( this.value ).draw();
-        // } )
-        // $('#clients-county-filter').on('change', function () {
-        //     let table = $('#datatable').DataTable()
-        //     table.columns(7).search( this.value ).draw();
-        // } )
+        $('input[type="checkbox"]').click(function(e){
+            e.preventDefault();
+        })
+
     }
 }
 

@@ -37,6 +37,14 @@ label{
   margin: auto !important;
 }
 
+#datatable{
+  text-align: center;
+}
+.checkbox-datatable{
+  width: 25px;
+  height: 25px;
+}
+
 /* Removes arrows from date inputs */
 input[type=date]::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -53,6 +61,16 @@ input[type=date]::-webkit-inner-spin-button {
   height: 40px;
   padding-top: 20px;
 }
+
+.btn-modal-form{
+  height: 50px;
+}
+
+#modal .btn:active{
+  background: #E54B4B!important;
+}
+
+
 
 /* NOTIFICATION BOX */
 .alert {

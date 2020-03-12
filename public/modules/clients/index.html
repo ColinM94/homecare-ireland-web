@@ -1,11 +1,11 @@
-<div id="clientsList" class="card shadow mb-4" >
+<div id="client-list" class="card shadow mb-4" >
   <div class="card-header row my-auto">
     <h5 class="col sm-3 font-weight-bold my-auto">Clients</h5>
     <div id="datatable-search" class="col-sm-7 my-auto" title="Filter Table"></div>
     <div class="col-sm-3">
       <button class="btn" id="btn-clients-filter" title="Filters"><i class="fa fa-chevron-down fa-lg" id="icon-clients-filter"></i></button>
       <button class="btn btn-refresh float-right" title="Refresh"><i class="fa fa-redo fa-lg btn-refresh-icon"></i></button>
-      <button class="btn btn-add float-right" title="Add Client" data-toggle="modal" data-target="#modal-add-client"><i class="fa fa-plus fa-lg btn-add-icon"></i></button>
+      <button class="btn btn-add float-right" title="Add Client" id="btn-add-client"><i class="fa fa-plus fa-lg btn-add-icon"></i></button>
     </div>
   </div>
   <div class="card-header row d-none pl-5" id="clients-filters">
@@ -29,9 +29,9 @@
 <!-- ADD CLIENT MODAL -->
 <div class="modal fade" id="modal-add-client" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content p-2">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+        <h5 class="modal-title" id="modal-client-title">Add Client</h5>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
@@ -119,9 +119,7 @@
             </select>
           </div>
           <hr>
-          <button class="btn btn-primary btn-block">
-            Add Client
-          </button>
+          <button class="btn btn-primary btn-block">Add Client</button>
           <div class="modal-form-error text-danger"></div>
         </form>
         <hr>
@@ -133,72 +131,90 @@
 <!-- EDIT CLIENT MODAL -->
 <div class="modal fade" id="modal-edit-client" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content p-2">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Update Client</h5>
+        <h5 class="modal-title" id="modal-edit-client-title">Update Client</h5>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
       </div>
       <div class="modal-body">
-        <form class="user" id="form-edit-client">
+        <form class="form-horizontal p-1 mr-2" id="form-edit-client">
           <div class="form-group">
             <input type="text" class="form-control form-control-user" id="edit-client-id" hidden>
           </div>
-          <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="edit-client-name" placeholder="Name">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-name">Name</label>
+            <input type="text" class="form-control col-sm-9" id="edit-client-name" title="Name">
           </div>
-          <div class="form-group">
-            <input type="date" class="form-control form-control-user" id="edit-client-dob" placeholder="Name">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-gender">Gender</label>
+            <select class="form-control form-select col-sm-9" id="edit-client-gender">
+              <option value="" selected disabled hidden>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
-          <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="edit-client-mobile" placeholder="Mobile">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-dob">Date of Birth</label>
+            <input type="date" class="form-control col-sm-9" id="edit-client-dob">
           </div>
-          <div class="form-group">
-              <input type="text" class="form-control form-control-user" id="edit-client-address1" placeholder="Address Line 1">
-            </div>
-          <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="edit-client-address2" placeholder="Address Line 2">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-mobile">Mobile</label>
+            <input type="text" class="form-control col-sm-9" id="edit-client-mobile">
           </div>
-          <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="edit-client-town" placeholder="Town">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-address1">Address 1</label>
+            <input type="text" class="form-control col-sm-9" id="edit-client-address1">
           </div>
-          <div class="form-group">
-              <select class="form-control form-select" id="edit-client-county">
-                <option value="" selected disabled hidden>Select County</option>
-                <option value="Carlow">Carlow</option>
-                <option value="Cavan">Cavan</option>
-                <option value="Clare">Clare</option>
-                <option value="Cork">Cork</option>
-                <option value="Donegal">Donegal</option>
-                <option value="Dublin">Dublin</option>
-                <option value="Galway">Galway</option>
-                <option value="Kerry">Kerry</option>
-                <option value="Kildare">Kildare</option>
-                <option value="Kilkenny">Kilkenny</option>
-                <option value="Laois">Laois</option>
-                <option value="Leitrim">Leitrim</option>
-                <option value="Limerick">Limerick</option>
-                <option value="Longford">Longford</option>
-                <option value="Louth">Louth</option>
-                <option value="Mayo">Mayo</option>
-                <option value="Meath">Meath</option>
-                <option value="Monaghan">Monaghan</option>
-                <option value="Offaly">Offaly</option>
-                <option value="Roscommon">Roscommon</option>
-                <option value="Sligo">Sligo</option>
-                <option value="Tipperary">Tipperary</option>
-                <option value="Waterford">Waterford</option>
-                <option value="Westmeath">Westmeath</option>
-                <option value="Wexford">Wexford</option>
-                <option value="Wicklow">Wicklow</option>
-              </select>
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-address2">Address 2</label>
+            <input type="text" class="form-control col-sm-9" id="edit-client-address2">
           </div>
-          <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="edit-client-eircode" placeholder="Eircode">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-town">Town</label>
+            <input type="text" class="form-control col-sm-9" id="edit-client-town">
           </div>
-          <div class="form-group">
-            <select class="form-control form-select" id="edit-client-marital">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-county">County</label>
+            <select class="form-control form-select col-sm-9" id="edit-client-county">
+              <option value="" selected disabled hidden>Select County</option>
+              <option value="Carlow">Carlow</option>
+              <option value="Cavan">Cavan</option>
+              <option value="Clare">Clare</option>
+              <option value="Cork">Cork</option>
+              <option value="Donegal">Donegal</option>
+              <option value="Dublin">Dublin</option>
+              <option value="Galway">Galway</option>
+              <option value="Kerry">Kerry</option>
+              <option value="Kildare">Kildare</option>
+              <option value="Kilkenny">Kilkenny</option>
+              <option value="Laois">Laois</option>
+              <option value="Leitrim">Leitrim</option>
+              <option value="Limerick">Limerick</option>
+              <option value="Longford">Longford</option>
+              <option value="Louth">Louth</option>
+              <option value="Mayo">Mayo</option>
+              <option value="Meath">Meath</option>
+              <option value="Monaghan">Monaghan</option>
+              <option value="Offaly">Offaly</option>
+              <option value="Roscommon">Roscommon</option>
+              <option value="Sligo">Sligo</option>
+              <option value="Tipperary">Tipperary</option>
+              <option value="Waterford">Waterford</option>
+              <option value="Westmeath">Westmeath</option>
+              <option value="Wexford">Wexford</option>
+              <option value="Wicklow">Wicklow</option>
+            </select>
+          </div>
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-eircode">Eircode</label>
+            <input type="text" class="form-control col-sm-9" id="edit-client-eircode">
+          </div>
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="edit-client-marital">Marital Status</label>
+            <select class="form-control form-select col-sm-9" id="edit-client-marital">
               <option value="" selected disabled hidden>Select Marital Status</option>
               <option value="Single">Single</option>
               <option value="Married">Married</option>
@@ -207,13 +223,12 @@
               <option value="Relationship">Relationship</option>
             </select>
           </div>
-          <button class="btn btn-primary btn-user btn-block">
-            Update
-          </button>
-          <p class="form-error" id="client-error"></p>
           <hr>
+          <button class="btn btn-primary btn-block">Update Client</button>
+          <div class="modal-form-error text-danger"></div>
         </form>
+        <hr>
       </div>
     </div>
   </div>
-</div>
+</div> 

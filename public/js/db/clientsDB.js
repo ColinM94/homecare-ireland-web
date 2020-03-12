@@ -52,8 +52,8 @@ class ClientsDB{
     }
 
     // Adds a new doc to clients. 
-    static async addClient(name, dob, mobile, address1, address2, town, county, eircode, marital, active) {  
-        let client = new Client(null, name, dob, mobile, address1, address2, town, county, eircode, marital, active)
+    static async addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active) {  
+        let client = new Client(null, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active)
 
         db.collection("clients").add(client.toFirestore())
             // .then(function(ref){
@@ -66,15 +66,10 @@ class ClientsDB{
     }
 
     // Updates existing client doc at clients/{clientId}.
-    static async updateClient(clientId, name, dob, mobile, address1, address2, town, county, eircode, marital, active) {
-        let client = new Client(clientId, name, dob, mobile, address1, address2, town, county, eircode, marital, active)
+    static async updateClient(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active) {
+        let client = new Client(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active)
 
         db.collection("clients").doc(clientId).set(client.toFirestore())
-            .then(() => {
-                Notification.display(1, "Client Updated")
-            }).catch(error => {
-                Notification.display(2, "Error Updating Client")
-            })
     }
 
     // Deletes doc at clients/{clientId}.

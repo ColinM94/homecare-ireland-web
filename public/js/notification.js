@@ -6,7 +6,7 @@ class Notification{
 
         switch(type){
             case 1:
-                $('#alert-box-text').html("Success: " + message + "!")
+                $('#alert-box-text').html(message + "!")
                 $('#alert-box').css('background-color', '#6BBD6E')
                 break
             case 2:
