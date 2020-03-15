@@ -100,10 +100,17 @@ class Users{
 
     static async deleteUser(userId){
         if(await Prompt.confirm("This action will permanently remove this user!")){
-            await UsersDB.deleteUser(userId)
+            UsersDB.deleteUser(userId)
+                .then(() => {
+                Notification.display(1, "User Deleted")
+                endLoad()
+            }).catch(error => {
+                console.log(error.message())
+                Notification.display(2, "Unable to delete user")
+                endLoad()
+            })
+            this.refreshTable()
         }
-
-        this.refreshTable()
     }
     
     // Resets and reloads datatable. 
