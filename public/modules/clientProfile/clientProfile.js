@@ -1,6 +1,7 @@
 class ClientProfile{
     static overlay = true
     static clientId = null
+    static active 
 
     static async load(clientId){  
         this.clientId = clientId
@@ -8,11 +9,16 @@ class ClientProfile{
         await ClientsDB.getClient(clientId)
             .then(client => {
                 $('#client-profile-id').text(` ${client.id}`)
-                $('#client-profile-title').html(` Client: ${client.name}'s Profile`)
+                if(client.active)
+                    $('#client-profile-title').html(` Client : ${client.name}'s Profile`)
+                else
+                    $('#client-profile-title').html(` Client : ${client.name}'s Profile <span style="color:red">(Deactive)</span>`)
+
                 $('#client-profile-name').text(` ${client.name}`)
                 $('#client-profile-dob').text(` ${client.dob}`)
                 $('#client-profile-mobile').text(` ${client.mobile}`)
                 $('#client-profile-address').text(` ${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
+                this.active = client.active
 
                 this.loadConns()
                 this.loadVisits()
@@ -22,7 +28,6 @@ class ClientProfile{
                 Notification.display(2, "Unable to load client details")
                 closeOverlay()
             })
-    
     }
 
     // <-- CONNECTIONS --> //
@@ -36,11 +41,13 @@ class ClientProfile{
         $('#select-carer').removeAttr('disabled')
         $('#btn-modal-add-carer').removeAttr('disabled')
 
+        $("#select-carer").prepend("<option value='' selected disabled hidden>Select Carer</option>").val('')
+
         let conns, allUsers
 
         await Promise.all([
             conns = await ConnsDB.getConns(this.clientId),
-            allUsers = await UsersDB.getActiveUsers()
+            allUsers = await UsersDB.getActiveCarers()
         ])
 
         allUsers.forEach(user => {
@@ -67,7 +74,12 @@ class ClientProfile{
 
     static async addConn(){
         let userId = $('#select-carer').val()
-        if(userId != "null"){
+
+        if(!userId){
+            Notification.formError("Please select a carer!")
+        }else{
+            Notification.formError("")
+
             await ConnsDB.addConn(userId, this.clientId)
                 .then(() => {
                     Notification.display(1, "Connection created")
@@ -82,7 +94,6 @@ class ClientProfile{
 
     static async deleteConn(connId){
         await Profile.deleteConn(connId)
-        console.log(connId)
         this.loadConns(this.userId)
     }
 
@@ -91,17 +102,21 @@ class ClientProfile{
         // Clears client connections. 
         $("#client-connections").html("")
 
-        let conns = await ConnsDB.getConns(this.clientId)
-
-        if(conns.length < 1){
-            $("#client-connections").append("No Connections!")
-        }else{
-            conns.forEach(conn => {
-                UsersDB.getUser(conn.userId).then(user => {
-                    $("#client-connections").append(`${user.role}: <a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${conn.id}')" style="color:red;">[X]</a><br>`)
-                })
-            })
-        }
+        await ConnsDB.getConns(this.clientId)
+            .then(conns => {
+                if(conns.length < 1){
+                    $("#client-connections").append("No Connections!")
+                }else{
+                    conns.forEach(conn => {
+                        UsersDB.getUser(conn.userId).then(user => {
+                            $("#client-connections").append(`<a href="javascript:Module.load('UserProfile', '${user.id}')">${user.name}</a> <a href="javascript:ClientProfile.deleteConn('${conn.id}')" style="color:red;">[X]</a><br>`)
+                        })
+                    })
+                }
+            }).catch(error => {
+                console.log(error.message)
+                Notification.display("Unable to load connections!")
+            })  
     }
 
     // <-- VISITS --> //
@@ -110,10 +125,18 @@ class ClientProfile{
 
         $('#select-visit-user').empty()
 
-        UsersDB.getActiveUsers().then(users => {
-            $("#select-visit-user").prepend("<option value='' selected disabled hidden>Select User</option>").val('');
+        let conns = await ConnsDB.getConns(this.clientId)
+
+        UsersDB.getActiveCarers().then(users => {
+            $("#visit-select-user").prepend("<option value='' selected disabled hidden>Select Carer</option>").val('')
+
+            // Add carers connected to this client to dropdown list.
             users.forEach(user => {
-                $("#select-visit-user").append(new Option(`${user.role} : ${user.name}`, user.id))
+                conns.forEach(conn => {
+                    if((conn.userId) == user.id){
+                        $("#visit-select-user").append(new Option(`${user.role} : ${user.name}`, user.id))
+                    }
+                })
             })
         })
 
@@ -121,22 +144,36 @@ class ClientProfile{
     }
 
     static async addVisit(){
-        let userId = $('#select-visit-user').val()
-        var startDate = $('#visit-add-start-date').val()
-        var startTime = $('#visit-add-start-time').val()
-        var endDate = $('#visit-add-end-date').val()
-        let endTime = $('#visit-add-end-time').val()
+        let userId = $('#visit-select-user').val()
+        let start = new Date($('#visit-add-start').val()).getTime()
+        let end = new Date($('#visit-add-end').val()).getTime()
         let note = $('#visit-add-note').val()
 
-        await VisitsDB.addVisit(userId, this.clientId, startDate, startTime, endDate, endTime, note)
-            .catch(error => {
-                Notification.display(2, "Failed to add visit")
-                console.log(error.message)
-            })
+        if(!userId){
+            Notification.formError("Please select a carer!")
+        }else if(!userId){
+            Notification.formError("Please select a carer!")
+        }else if(!start){
+            Notification.formError("Please select a start date!")
+        }else if(!end){
+            Notification.formError("Please select a start time!")
+        }else if(Date.now() > start){
+            Notification.formError("New visits cannot take place in the past!")
+        }else if(start > end){
+            Notification.formError("The visit cannot end before it starts!")
+        }else{
+            Notification.formError("")
 
-        this.loadVisits() 
+            await VisitsDB.addVisit(userId, this.clientId, start, end, note)
+                .then(() => {
+                    this.loadVisits() 
+                    $('#modal-add-visit').modal('hide')
 
-        $('#modal-client-add-visit').modal('hide')
+                }).catch(error => {
+                    Notification.display(2, "Failed to add visit")
+                    console.log(error.message)
+                })
+        }     
     }
 
     static async deleteVisit(visitId){
@@ -145,21 +182,26 @@ class ClientProfile{
     }
 
     static async loadVisits(){
-        $('#client-visits').empty()
+        let visits = await VisitsDB.getVisits(this.clientId)
 
-        VisitsDB.getVisits(this.clientId)
-            .then(visits => {
-                if(visits.length < 1){
-                    $("#client-visits").append("No visits!")
-                }else{
-                    visits.forEach(visit => {
-                        $("#client-visits").append(`<a href="javascript:Module.load('VisitDetails', '${visit.id}')">${visit.startDate} : ${visit.startTime} - ${visit.endTime}</a> <a href="javascript:ClientProfile.deleteVisit('${visit.id}')" style="color:red;"> [X]</a><br>`)
-                    })
-                }
-            }).catch(error => {
-                console.log(error.message)
-                Notification.display(2, "Unable to load visits")
-            })
+        $('#datatable-profile').DataTable( {
+            data: visits,
+            lengthChange: false,
+            paging: false,
+            bFilter: true,
+            oLanguage: {
+                sLengthMenu: "_MENU_",
+                sSearch: '', searchPlaceholder: "Search..." 
+            },
+            columnDefs: [
+                { targets: 0, title: "User ID", data: "userId"},
+                { targets: 1, title: "Client ID", data: "clientId"},           
+            ],
+            initComplete : function() {
+                $('#datatable-profile_filter').detach().appendTo('#datatable-search-profile')
+ 
+            },
+        })
     }
 
     // <!-- Prescription --> //
@@ -168,8 +210,7 @@ class ClientProfile{
 
         MedsDB.getMeds()
             .then(meds => {
-                console.log(meds)
-                $("#select-med").prepend("<option value='' selected disabled hidden>Select Medication</option>").val('');
+                $("#presc-select-med").prepend("<option value='' selected disabled hidden>Select Medication</option>").val('');
                 meds.forEach(med => {
                     $("#select-med").append(new Option(`${med.name}`, med.id))
                 })

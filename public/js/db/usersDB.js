@@ -43,6 +43,23 @@ class UsersDB{
         return users
     }
 
+    static async getActiveCarers(){
+        let users = new Array()
+
+        let result = await db.collection('users')
+            .where('active' ,'==', true)
+            .where('role', '==', 'Carer')
+            .get()
+
+        result.forEach(doc => {
+            let user = new User()   
+            user.docToUser(doc)
+            users.push(user)
+        })
+
+        return users
+    }
+
     static async getAdmins(){
         let users = new Array()
 

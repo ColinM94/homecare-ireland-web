@@ -1,6 +1,6 @@
 // Modal prompts for user. 
 class Prompt{
-    static userInput = false
+    static userInput
 
     static async sleep(msec) {
         return new Promise(resolve => setTimeout(resolve, msec));
@@ -16,9 +16,9 @@ class Prompt{
         this.listeners()
 
         while(result == null){ 
-            await this.sleep(300)      
-
-            if(this.userInput == "yes"){
+            await this.sleep(200)      
+            console.log(this.userInput)
+            if(this.userInput == "yes" || this.userInput == "enter"){
                 result = true
             }else if(this.userInput == "cancel"){
                 result = false
@@ -38,6 +38,13 @@ class Prompt{
 
         $('#btn-modal-confirm-cancel').click(function(){
             Prompt.userInput = "cancel"
+        })
+
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                console.log("changing user input")
+                Prompt.userInput = "enter"
+            }
         })
     }
 }

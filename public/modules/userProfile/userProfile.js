@@ -7,8 +7,11 @@ class UserProfile{
 
         let user = await UsersDB.getUser(userId)
 
-        $('#user-profile-title').html(` User Profile: ${user.name}`)
+        $('#user-profile-title-role').text(` ${user.role}`)
+        $('#user-profile-title-name').text(` ${user.name}`)
+
         $('#user-profile-id').text(` ${user.id}`)
+        $('#user-profile-role').text(` ${user.role}`)
         $('#user-profile-name').text(` ${user.name}`)
         $('#user-profile-mobile').text(` ${user.mobile}`)
         $('#user-profile-address').text(` ${user.address1}, ${user.address2}, ${user.town}, ${user.county}, ${user.eircode}`)

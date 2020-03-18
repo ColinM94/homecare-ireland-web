@@ -211,7 +211,6 @@ class Clients{
 
         else{
             Notification.formError("")
-            console.log("passed")
             return true
         }
     }
@@ -228,7 +227,7 @@ class Clients{
                 endLoad()
             })
 
-        return false;
+        return false
     }
 
     static async deactivateClient(clientId){

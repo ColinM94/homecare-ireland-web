@@ -32,7 +32,7 @@ class Users{
                     title: "Profile", 
                     orderable: false,
                     render: function(data, type, row, meta){
-                        return `<a href="javascript:Module.load('UserProfile', '${row.id}')" title="View User Profile"><i class="fa fa-user fa-lg"></a>`
+                        return `<a href="javascript:Module.load('UserProfile', '${row.id}')" title="View User Profile"><i class="fa fa-user fa-lg"></i></a>`
                     }  
                 },
                 { 

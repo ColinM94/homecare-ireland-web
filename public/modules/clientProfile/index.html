@@ -8,27 +8,64 @@
     </div>
   </div>
   <div class="card-body">
-    <h6 style="font-weight: bold;">Personal Details</h6>
-    ID:<span id="client-profile-id"></span><br>
-    Name:<span id="client-profile-name"></span><br>
-    DOB:<span id="client-profile-dob"></span><br>
-    Mobile:<span id="client-profile-mobile"></span><br>
-    Address:<span id="client-profile-address"></span>
-    <hr>
-    <h6 style="font-weight: bold;">Carers</h6>
-    <div id="client-connections">No carers!</div>
-    <br>
-    <a href="#" id="btn-client-add-conn">Add Carer</a>
-    <hr>
-    <h6 style="font-weight: bold;">Visits</h6>
-    <div id="client-visits">No visits!</div>
-    <br>
-    <a href="#" id="btn-client-add-visit">Add Visit</a>
-    <hr>
-    <h6 style="font-weight: bold;">Prescriptions</h6>
-    <div id="client-meds">No prescriptions!</div>
-    <br>
-    <a href="#" id="btn-add-presc">Add Prescription</a>
+    <div class="row">
+      <div class="col-xl-4 col-lg-3">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h5 class="m-0 font-weight-bold text-primary">Personal Details</h5>
+          </div>
+          <div class="card-body">
+            <div class="text-center">
+              ID:<span id="client-profile-id"></span><br>
+              Name:<span id="client-profile-name"></span><br>
+              DOB:<span id="client-profile-dob"></span><br>
+              Mobile:<span id="client-profile-mobile"></span><br>
+              Address:<span id="client-profile-address"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h5 class="m-0 font-weight-bold text-primary">Carers</h5>
+            <button class="btn btn-primary" id="btn-add-visit">Add Carer</button>
+          </div>
+          <div class="card-body">
+            <div class="text-center">
+              <div id="client-connections">No carers!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      </div>
+      <div class="col">
+        <br>
+      </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h5 style="font-weight: bold;">Prescriptions</h5>
+          <div id="client-meds">No prescriptions!</div>
+          <button class="btn btn-primary" id="btn-add-presc">Add Prescription</button>
+        </div>
+        <div class="col">
+          <h5 class="col-sm-2" style="font-weight: bold;">Visits</h5>
+          <div class="col-sm-6" id="datatable-search-profile" title="Filter Table"></div>
+          <div class="col-sm-3"></div>
+        </div>
+        <button class="btn btn-add float-right col-sm-1" title="Add Visit" id="btn-client-add-visit"><i class="fa fa-plus fa-lg btn-add-icon"></i></button>
+      </div>
+      <div class="row">
+        <div class="row">
+         
+        </div>
+        <br>
+        <table class="table table-bordered" id="datatable-profile" width="100%" cellspacing="0"></table>  
+      </div>
+    </div> 
   </div>
 </div>
 
@@ -43,15 +80,18 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="user" id="form-client-add-carer">
-          <select id="select-carer" class="form-control form-select">
-          </select>
+        <form class="form-horizontal p-1 mr-2" id="form-client-add-carer">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="select-carer">Carer</label>           
+             <select class="form-control form-select col-sm-9" id="select-carer">
+             </select>          
+          </div>
           <input type="hidden" id="id">
-          <br>
+          <hr>
           <button id="btn-modal-add-carer" class="btn btn-primary btn-user btn-block">
             Add Carer
           </button>
-          <p class="form-error" id="client-error"></p>
+          <div class="modal-form-error text-danger"></div>
           <hr>
         </form>
       </div>
@@ -70,15 +110,21 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="user" id="form-add-presc">
-          <select id="select-med" class="form-control form-select">
-          </select>
+        <form class="form-horizontal p-1 mr-2" id="form-add-presc">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="pres-select-med">Medication</label>
+            <input type="text" class="form-control col-sm-9" id="pres-select-med">
+          </div>
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="pres-dosage">Dosage</label>
+            <input type="text" class="form-control col-sm-9" id="pres-dosage">
+          </div>
           <input type="hidden" id="id">
-          <br>
+          <hr>
           <button id="btn-modal-add-presc" class="btn btn-primary btn-user btn-block">
             Add Prescription
           </button>
-          <p class="form-error" id="client-error"></p>
+          <div class="modal-form-error text-danger"></div>
           <hr>
         </form>
       </div>
@@ -86,5 +132,44 @@
   </div>
 </div>
 
-
+<!-- ADD VISIT MODAL -->
+<div class="modal fade" id="modal-add-visit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Visit</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal p-1 mr-2" id="form-add-visit">
+          <input type="hidden" id="clientId">
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="visit-select-user">Select User</label>
+            <select class="form-control col-sm-9" id="visit-select-user"></select>
+          </div>
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="visit-add-start">Start</label>
+            <input type="datetime-local" class="form-control col-sm-9" id="visit-add-start">
+          </div>
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="visit-add-end">End</label>
+            <input type="datetime-local" class="form-control col-sm-9" id="visit-add-end">
+          </div>
+          <div class="form-group row">
+            <label class="control-label col-sm-3" for="visit-add-note">Note</label>
+            <input type="text" class="form-control col-sm-9" id="visit-add-note">
+          </div>
+          <hr>
+          <button class="btn btn-primary btn-user btn-block">
+            Add Visit
+          </button>
+          <div class="modal-form-error text-danger"></div>
+          <hr>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
   

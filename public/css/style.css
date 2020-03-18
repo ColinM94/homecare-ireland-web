@@ -62,14 +62,35 @@ input[type=date]::-webkit-inner-spin-button {
   padding-top: 20px;
 }
 
-.btn-modal-form{
-  height: 50px;
+.modal .btn{
+  padding: 0.75rem 1rem;
+  padding-top: 0.75rem;
+  padding-right: 1rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem;
 }
 
 #modal .btn:active{
   background: #E54B4B!important;
 }
 
+.vertical-line-right {
+  border-right: thick solid;
+}
+
+#form-edit-med input{
+  resize: vertical !important;
+}
+
+/* Removes arrows from date inputs */
+input[type=date]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
+.dataTables_filter label, input{
+  width: 100%;
+}
 
 
 /* NOTIFICATION BOX */
@@ -109,8 +130,9 @@ input[type=date]::-webkit-inner-spin-button {
   text-decoration: none !important
 }
 
-
-
+.btn-add:active{
+  transform: scale(1.15);
+}
 
 /* Loading Spinner */
 .lds-roller {

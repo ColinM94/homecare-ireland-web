@@ -1,7 +1,7 @@
 // Shared functionality between UserProfile & ClientProfile
 class Profile{
-    static async deleteConn(connId){
-        if(await Prompt.confirm()){
+    static async deleteConn(connId,){
+        if(await Prompt.confirm("This action will delete the connection between carer and client!")){
             await ConnsDB.deleteConn(connId)
                 .then(() => {
                     Notification.display(1, "Connection deleted")

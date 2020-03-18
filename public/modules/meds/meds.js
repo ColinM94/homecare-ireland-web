@@ -20,13 +20,13 @@ class Meds{
                 { title: "ID", data: "id", visible: false},
                 { title: "Name", data: "name" },
                 {mRender: function (data, type, row) {
-                    return `<a href="javascript:Meds.viewEditMedForm('${row.id}')">Edit</a>`
+                    return `<a href="javascript:Meds.viewDetails('${row.id}')" title="Medication Details"><i class="fas fa-info-circle fa-lg"></i></a>`
                 }},
                 {mRender: function (data, type, row) {
-                    return `<a href="javascript:Meds.deleteMed('${row.id}')">Delete</a>`
+                    return `<a href="javascript:Meds.viewEditMedForm('${row.id}')" title="Edit Medication"><i class="fa fa-edit fa-lg"></i></a>`
                 }},
                 {mRender: function (data, type, row) {
-                    return `<a href="javascript:Meds.viewDetails('${row.id}')">View Details</a>`
+                    return `<a href="javascript:Meds.deleteMed('${row.id}')" title="Delete Medication"><i class="fa fa-times fa-lg"></i></a>`
                 }},
             ]
         })
