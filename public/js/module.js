@@ -1,49 +1,51 @@
-// Manages modules loading and unloading. 
-class Module{
-    // Loads new module. 
-    static async load(moduleName, arg){
-        const moduleRefs = {
-            "Users": Users,
-            "Clients" : Clients,
-            "ClientProfile" : ClientProfile,
-            "UserProfile" : UserProfile,
-            "VisitDetails" : VisitDetails,
-            "Meds" : Meds
-        }
+// // Manages modules loading and unloading. 
+// class Module{
+//     // Loads new module. 
+//     static async load(moduleName, arg){
+//         // startLoad()
 
-        var module = moduleRefs[moduleName]
+//         // // Makes first letter of module capital to match module class names. 
+//         // moduleName = moduleName[0].toUpperCase() + moduleName.slice(1);
 
-        // Load module html.
-        if(module.overlay == true){
-            $("#module").hide()
-            $("#module-overlay").show()
-            
-            $("#module-overlay").load("modules/" + moduleName)  
-        }else{
-            $("#module").show()
-            $("#module-overlay").hide()
+//         const moduleRefs = {
+//             // "users": Users,
+//             // "clients" : Clients,
+//             // "medications" : Medications,
+//             "ClientProfile" : ClientProfile,
+//             // "UserProfile" : UserProfile,
+//             // "VisitDetails" : VisitDetails,
+//         }
 
-            // Loads {module}.html into #module.     
-            $("#module").load("modules/" + moduleName)
-        }
+//         var module = moduleRefs[moduleName]
 
-        startLoad()
+//         $(`#${moduleName}-module`).append(`<div id="${moduleName}"></div>`)
+//         $(`#${moduleName}`).load(`modules/${moduleName}.html`)
 
-        // Load module js. 
-        module.load(arg).then(()=>{
-            this.listeners()
-            endLoad()
-        })
-    }
+//         module.load(arg)
 
-    static closeOverlay(){
-        $("#module").show()
-        $("#module-overlay").hide()
-    }
+//         // })
+//         // var module = moduleRefs[moduleName]
 
-    static listeners(){
-        $("#btn-close-module").click(function() {
-            Module.closeOverlay()
-        })
-    }
-}
+//         // $("main").append(`<div id="${moduleName}" class="module container-fluid"></div>`)
+
+//         // // if($(".tabs").find(`#tab-${moduleName}`).length == 0){
+//         // //     $(".tabs").append(`<button class="tablinks" id="tab-${moduleName}" onclick="Module.show('${moduleName}')">${moduleName}<i class="fas fa-times fa-lg"></i></button>`)          
+//         // // }
+//         // console.log(moduleName)
+//         // $(`#${moduleName}`).load("modules/"+moduleName+".html")
+
+//         // module.load(arg).then(()=>{
+//         //     // this.listeners()
+//         //     endLoad()
+//         // })
+//     }
+
+//     // static show(moduleName){
+//     //     // console.log(moduleName)
+//     //     moduleName = moduleName[0].toLowerCase() + moduleName.slice(1)
+
+//     //     $(".module").hide()
+//     //     console.log(`#${moduleName}`)
+//     //     $(`#${moduleName}`).show()
+//     // }
+// }

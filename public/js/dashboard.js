@@ -4,7 +4,10 @@ var currentUser = {}
 // Listen for change in signed in state. 
 auth.onAuthStateChanged(user => {
     if(user){
-        getUserInfo(user)
+        UsersDB.getUser(user.uid)
+            .then(user => {
+                $('.sidenav-footer-title').text(user.name)
+            })
 
         /*
         // If doctor show medication option. 
@@ -13,68 +16,26 @@ auth.onAuthStateChanged(user => {
         }
         */
     } else{
-        signOut()
+        Auth.signOut()
         window.location = "index.html"
     }   
 })
 
-// Sets default active item in nav bar. 
-$(function() {
-    setActive("users")
+$( document ).ready(function() {
+    startLoad()
+
+    Promise.all(
+    [
+        loadClients(), 
+        loadUsers(),
+        loadMedications(),
+    ]).then(() => {
+        showModule("users")
+        endLoad()
+    })
 })
 
-function getUserInfo(user){
-    db.collection('users').doc(user.uid).get().then(doc =>{
-        currentUser = {
-            id : user.uid,
-            email : user.email,
-            name :  doc.data().name,
-            role : doc.data().role
-        }
-        setupUI()
-    })
-}
-
-function setupUI(){
-    $('#topbar-name').html(currentUser.name)
- 
-    Module.load("Users")
-}
-
-function loadModule(module){
-    // Gets the location of the element and inserts the module into it. 
-    $("#"+module).addClass("active")
-
-    // Loads {module}.html into #module.     
-    $("#module").load("modules/" + module)
-}
-
-// Sets active nav item in sidebar. 
-function setActive(module){
-    $("#nav-"+module).addClass("active")
-
-    if(module != "users"){
-        $("#nav-users").removeClass("active")
-    }
-    if(module != "clients"){
-        $("#nav-clients").removeClass("active")
-    }
-    if(module != "admins"){
-        $("#nav-admins").removeClass("active")
-    }
-    if(module != "clients-deactive") {
-        $("#nav-clients-deactive").removeClass("active")
-    } 
-    if(module != "users-deactive"){
-        $("#nav-users-deactive").removeClass("active")
-    }
-    if(module != "meds"){
-        $("#nav-meds").removeClass("active")
-    }
-}
-
 function startLoad(){
-    //$('#wrapper').css('filter', 'blur(3px)')
     $('.lds-roller').show()
 
     // Prevents user interaction with page. 
@@ -82,54 +43,74 @@ function startLoad(){
 }
 
 function endLoad(){
-    //$('#wrapper').css('filter', '')
     $('.lds-roller').hide()
 
     // Restores default functionality. 
     $('*').css('pointer-events', 'auto')
 }
 
-// Sidebar buttons.
-$("#nav-brand").click(function (){
-    Module.load("Users")
-    setActive("users")
-})
+// Sets active nav item in sidebar. 
+function setActive(module){
+    console.log("#btn-sidebar-"+module)
+}
 
-$("#nav-users").click(function (){
-    Module.load("Users")
-    setActive("users")
-})
+function showModule(module){
+    $(".nav-link").removeClass("selected")
+    $("#btn-sidebar-"+module).addClass("selected")
+    $('.module').addClass("d-none")
+    $(`#${module}-module`).removeClass("d-none")
+}
 
-$("#nav-clients").click(function (){
-    Module.load("Clients")
-    setActive("clients")
-})
+function loadUsers(){
+    $(`#users-module`).load("modules/users.html")
+    Users.load()
+}
 
-$("#nav-admins").click(function (){
-    Module.load("Admins")
-    setActive("admins")
-})
+function loadClients(){
+    $(`#clients-module`).load("modules/clients.html")
+    Clients.load()
+}
 
-$("#nav-clients-deactive").click(function (){
-    Module.load("ClientsDeactive")
-    setActive("clients-deactive")
-})
+function loadMedications(){
+    $(`#medications-module`).load("modules/medications.html")
+    Medications.load()
+}
 
-$("#nav-users-deactive").click(function (){
-    Module.load("UsersDeactive")
-    setActive("users-deactive")
-})
+function loadClient(id){
+    console.log(id)
+    $('#clients-module').append(`<div id="client"></div>`)
+    $('#client').load(`modules/clientProfile.html`)
+    ClientProfile.load(id)
+}
 
-$("#nav-meds").click(function (){
-    Module.load("Meds")
-    setActive("meds")
-})
+function loadUser(id){
+    $('#users-module').append(`<div id="user"></div>`)
+    $('#user').load(`modules/userProfile.html`)
+    UserProfile.load(id)
+}
 
-// Topbar buttons. 
+function loadMed(id){
+    $('#medications-module').append(`<div id="medication"></div>`)
+    $('#medication').load('modules/medDetails.html')
+    MedDetails.load(id)
+}
+
 $("#btn-signout").click(function (){
-    signOut()
-    window.location = "index.html"
+    Auth.signOut()
 })
 
+$("#btn-sidebar-users").click(function (){
+    showModule("users")
+})
 
+$("#btn-sidebar-clients").click(function (){
+    showModule("clients")
+})
 
+$("#btn-sidebar-medications").click(function (){
+    showModule("medications")
+})
+
+$("#btn-sidebar-dashboard").click(function (){
+    $('.module').removeClass("d-none")
+})

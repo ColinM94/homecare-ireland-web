@@ -58,8 +58,6 @@ class VisitsDB{
     static async deleteVisits(id){
         let visits = await this.getVisits(id)
 
-        console.log(visits)
-
         visits.forEach(visit => {
             db.collection('visits').doc(visit.id).delete()
         })

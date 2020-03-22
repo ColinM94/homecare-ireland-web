@@ -19,7 +19,7 @@ class Client {
         this.id = doc.id
         this.name = doc.data().name
         this.gender = doc.data().gender
-        this.dob = Format.tsToDate(doc.data().dob)
+        this.dob = Convert.tsToDate(doc.data().dob)
         this.mobile = doc.data().mobile
         this.address1 = doc.data().address1
         this.address2 = doc.data().address2

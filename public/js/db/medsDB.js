@@ -1,12 +1,29 @@
 // Interactions with meds collection in DB.
 class MedsDB{
+    static async observe(){
+        let query = db.collection('meds')
+        
+        query.onSnapshot(querySnapshot => {
+                let meds = new Array()
+
+                querySnapshot.forEach(doc => {
+                    let med = new Medication()
+                    med.docToMed(doc)
+                    meds.push(med)
+                    Medications.refreshTable()
+                })
+            }, err => {
+                console.log(`Encountered error: ${err}`);
+        })
+    }
+
     // Returns array of Conn objects where doc contains user/client id.
     static async getMed(id) {
         let result = await db.collection('meds').doc(id).get()
 
-        let med = new Med()
+        let med = new Medication()
 
-        med.docToClient(result)
+        med.docToMed(result)
 
         return med
     }
@@ -17,8 +34,8 @@ class MedsDB{
         let meds = new Array()
 
         result.forEach(doc => {
-            let med = new Med()   
-            med.docToClient(doc)
+            let med = new Medication()   
+            med.docToMed(doc)
             meds.push(med)
         })
 

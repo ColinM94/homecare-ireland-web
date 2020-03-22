@@ -1,4 +1,21 @@
 class UsersDB{
+    static async observe(){
+        let query = db.collection('users')
+        
+        query.onSnapshot(querySnapshot => {
+                let users = new Array()
+
+                querySnapshot.forEach(doc => {
+                    let user = new User()
+                    user.docToUser(doc)
+                    users.push(user)
+                    Users.refreshTable(users)
+                })
+            }, err => {
+                console.log(`Encountered error: ${err}`);
+        })
+    }
+
     // Returns User object from users/{userId}. 
     static async getUser(userId) {
         let doc = await db.collection('users').doc(userId).get()
@@ -31,7 +48,6 @@ class UsersDB{
 
         let result = await db.collection('users')
             .where('active' ,'==', true)
-            // .where('role', '==', 'Carer')
             .get()
 
         result.forEach(doc => {

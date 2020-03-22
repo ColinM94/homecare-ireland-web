@@ -1,142 +1,74 @@
-*:focus {
-  outline: none !important;
+@media only screen and (max-width: 600px) {
+  .module{
+    padding: 0 !important;
+    margin-top: 0 !important;
+    margin-right: 0 !important
+  }
 }
 
-#module {
-  height: 100%
-}
-
-#datatable-search input{
-  width: 100%;
-}
-
-#datatable_filter label{
-  width: 100%;
-  margin-bottom: 0;
-}
-
-#clients-filters-title{
-  color: #858796;
-}
-
-.modal .form-control{
-  font-size: 1rem !important;
-  height: 3.2rem !important;
-  color: #858796 !important;
-}
-
-.filters-dropdown{
-  color: #858796;
-}
-
-.modal .form-select{
-  height: 100px;
-}
-
-label{
-  margin: auto !important;
-}
-
-#datatable{
-  text-align: center;
-}
-.checkbox-datatable{
-  width: 25px;
-  height: 25px;
-}
-
-/* Removes arrows from date inputs */
-input[type=date]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  display: none;
-}
-
-.form-control{
-  color: #858796;
-}
 
 .modal-form-error{
-  margin: auto;
+  height: 20px;
+  padding: 10px;
   text-align: center;
-  height: 40px;
-  padding-top: 20px;
+  margin-top: 5px;
+  margin-bottom: -5px;
 }
 
-.modal .btn{
-  padding: 0.75rem 1rem;
-  padding-top: 0.75rem;
-  padding-right: 1rem;
-  padding-bottom: 0.75rem;
-  padding-left: 1rem;
-}
-
-#modal .btn:active{
-  background: #E54B4B!important;
-}
-
-.vertical-line-right {
-  border-right: thick solid;
-}
-
-#form-edit-med input{
-  resize: vertical !important;
-}
-
-/* Removes arrows from date inputs */
-input[type=date]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  display: none;
-}
-
-.dataTables_filter label, input{
+/* Datatable Search Box */
+.card-header label{
+  margin: 0 !important;
   width: 100%;
 }
 
-
-/* NOTIFICATION BOX */
-.alert {
-  display: none;
-  position:absolute !important;
-  bottom:0 !important;
-  right:0 !important;
-  margin: 0px 75px 75px 0px !important;
-  padding: 35px 30px 35px 30px !important;
-  background-color: #f44336; /* Red */
-  color: white;
-  font-size: 1.7em;
-  width: fit-content;
-  box-shadow: 1px 2px lightgrey!important;
+.card-header .btn{
+  /* padding: 0; */
 }
 
-/* The close button */
-.closebtn {
-  margin-left: 15px;
-  margin-top: 8px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 35px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
+.modal form{
+  padding: 0px 20px 20px 20px;
+}
+form label{
+  margin-top: auto;
 }
 
-/* When moving the mouse over the close button */
-.closebtn:hover {
-  color: black;
+#users-datatable, #clients-datatable, #medications-datatable{
+  text-align: center;
 }
 
-.nounderline {
-  text-decoration: none !important
+.datatable_filter{
+  width: 0 !important;
 }
 
-.btn-add:active{
-  transform: scale(1.15);
+.selected{
+  color: #fff !important;
+}
+
+.page-header .page-header-content {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+    padding-left: 2rem !important;
+}
+
+/* Notification Alerts */
+#notification {
+  position: absolute;
+  bottom:0;
+  right:0;
+  margin: 0px 15px 0px 0px;
+  width: 300px;
+}
+
+#notification .close{
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  margin: 8px 10px;
 }
 
 /* Loading Spinner */
 .lds-roller {
-    display: none;
+    display: block;
     position: absolute;
     left: 50%;
     top: 40%;

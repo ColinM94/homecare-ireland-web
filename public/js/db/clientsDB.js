@@ -1,4 +1,22 @@
 class ClientsDB{
+    static async observe(){
+        let query = db.collection('clients')
+        
+        query.onSnapshot(querySnapshot => {
+                let clients = new Array()
+
+                querySnapshot.forEach(doc => {
+                    let client = new Client()
+                    client.docToClient(doc)
+                    clients.push(client)
+
+                    Clients.refreshTable(clients)
+                })
+            }, err => {
+                console.log(`Encountered error: ${err}`);
+        })
+    }
+
     // Returns Client object from clients/{clientId}.
     static async getClient(clientId) {
         let doc = await db.collection('clients').doc(clientId).get()
@@ -56,13 +74,6 @@ class ClientsDB{
         let client = new Client(null, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active)
 
         db.collection("clients").add(client.toFirestore())
-            // .then(function(ref){
-            //     let connections = {
-            //         ids : []
-            //     }
-
-            //     db.collection('connections').doc(ref.id).set(connections)
-            // })
     }
 
     // Updates existing client doc at clients/{clientId}.
