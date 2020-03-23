@@ -24,6 +24,9 @@ class Users{
             lengthChange: false,
             paging: false,
             bFilter: true,
+            responsive: {
+                // details: false
+            },
             oLanguage: {
                 sLengthMenu: "_MENU_",
                 sSearch: '', searchPlaceholder: "Search..." 
@@ -33,36 +36,32 @@ class Users{
                     targets: 0, 
                     title: "Active", 
                     data: "active",
+                    responsivePriority: 2,
+                    className: "btn-td",
                     render: function(data, type, row, meta){
                         return data ? 
                             `<a href="javascript:Users.deactivateUser('${row.id}')" title="Deactivate User">
-                                <i class="far fa-check-square fa-lg"><span class="d-none">true</span></i>
+                                <i class="far fa-check-square fa-2x"><span class="d-none">true</span></i>
                             </a>` 
                             : 
                             `<a href="javascript:Users.activateUser('${row.id}')" title="Activate User">
-                                <i class="far fa-square fa-lg"><span class="d-none">false</span></i>
+                                <i class="far fa-square fa-2x"><span class="d-none">false</span></i>
                             </a>`
                     }
                 },
-                { targets: 1, title: "Name", data: "name"},
-                { targets: 2, title: "Role", data: "role"},
-                { targets: 3, title: "Town", data: "town"},
-                { targets: 4, title: "Gender", data: "gender"},
-                { targets: 5, title: "County", data: "county"},
+                { targets: 1, title: "Name", data: "name", responsivePriority: 1},
+                { targets: 2, title: "Role", data: "role", responsivePriority: 3},
+                { targets: 3, title: "Town", data: "town", responsivePriority: 5},
+                { targets: 4, title: "Gender", data: "gender", responsivePriority: 6},
+                { targets: 5, title: "County", data: "county", responsivePriority: 7},
                 { 
                     targets: 6, 
-                    title: "Profile", 
-                    orderable: false,
-                    render: function(data, type, row, meta){
-                        return `<a href="javascript:loadUser('${row.id}')" title="View User Profile"><i class="fa fa-user fa-lg"></i></a>`
-                    }  
-                },
-                { 
-                    targets: 7, 
                     title: "Delete", 
                     orderable: false,
+                    responsivePriority: 4,
+                    className: "btn-td",
                     render: function(data, type, row, meta){
-                        return `<a href="javascript:Users.deleteUser('${row.id}')" title="Delete User"><i class="fa fa-times fa-lg"></i></a>`                    
+                        return `<a href="javascript:Users.deleteUser('${row.id}')" title="Delete User"><i class="fa fa-times fa-2x"></i></a>`                    
                     }  
                 },
             ],
@@ -72,7 +71,7 @@ class Users{
                  this.api().columns([0,2,3,5]).every(function() {
                     var column = this
 
-                    var select = $('<select class="form-control mr-2 col"><option value="">No Filter</option></select>')
+                    var select = $('<select class="form-control mr-2 col"><option value="">-</option></select>')
                         .appendTo($("#users-filters-dropdown"))
                         .on('change', function () {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val())   
@@ -89,6 +88,7 @@ class Users{
 
         this.listeners()
     }
+    
 
     // Resets and reloads datatable. 
     static async refreshTable(users){
@@ -189,6 +189,16 @@ class Users{
             }else{
                 Users.closeFilters()
             }
+        })
+
+        $('#users-datatable').on('click', 'td', function () {
+            var table = $('#users-datatable').DataTable()
+            var data = table.row(this).data()
+            
+            // Prevents load if cell contains a link. E.g. active, delete links. 
+            if(!this.innerHTML.includes("<a"))
+                loadUser(data.id)
+
         })
     }
 }

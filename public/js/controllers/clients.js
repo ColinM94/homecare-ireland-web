@@ -9,6 +9,7 @@ class Clients{
             lengthChange: false,
             paging: false,
             bFilter: true,
+            "responsive": true,
             oLanguage: {
                 sLengthMenu: "_MENU_",
                 sSearch: '', searchPlaceholder: "Search..." 
@@ -57,7 +58,7 @@ class Clients{
 
                 this.api().columns([0,3,5,4]).every(function() {
                     var column = this
-                    var select = $('<select class="form-control mr-2 col"><option value="">No Filter</option></select>')
+                    var select = $('<select class="form-control mr-2 col"><option value="">None</option></select>')
                         .appendTo($("#clients-filters-dropdown"))
                         .on('change', function () {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val())   

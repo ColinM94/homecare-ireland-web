@@ -18,10 +18,13 @@ class UserProfile{
         this.listeners()
     }   
 
+    static close(){
+        $('#userProfile').hide()
+    }
+
     static listeners(){
-        $('#btn-user-profile-close').click(function(){
-            
-            $('#userProfile').hide()
+        $('#btn-user-profile-close').click(function(){   
+            closeProfile()       
         })
     }
 }

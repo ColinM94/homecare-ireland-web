@@ -28,7 +28,7 @@ class Notification{
     }
 
     static formError(message){
-        $('.modal-form-error').text(message)
+        $('.form-error').text(message)
     }
 
     static listeners(){
