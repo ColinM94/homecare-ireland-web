@@ -30,8 +30,9 @@ $(document).ready(function() {
 class Dashboard{
     static load(){
         // Initialises Users module. 
-        new Users("#users-container")
-        $("#user-profile-container").load("views/user.html")
+        // new Users("#staff-container")
+        Staff.load()
+        // $("#user-container").load("views/user.html")
 
     }
 

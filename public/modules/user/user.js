@@ -1,9 +1,21 @@
 class User{
     constructor(id, div){
         this.div = div
-        this.loadData(id)
-        $('#user').removeClass("d-none")
-        this.listeners()
+
+        // Sub module locations. 
+        this.userModule = `${div} #user-module` 
+        this.clientsModule = `${div} #clients-module` 
+        this.visitsModule = `${div} #visits-module` 
+
+        $(`${this.div}`).load("modules/user/user.html", () => {
+            this.loadData(id)
+            this.listeners()
+
+            $(this.div).removeClass("d-none")
+
+            new Clients(`${this.div} #clients-module`, id)        
+            new Visits(`${this.div} #visits-module`, id)
+        })
     }
 
     loadData(id){
@@ -19,7 +31,7 @@ class User{
     }
 
     displayData(user){
-        $('#user-profile-title').text(` ${user.name}`)
+        $(`${this.div} #user-profile-title`).text(` ${user.name}`)
 
         $('#user-profile-id').text(` ${user.id}`)
 
@@ -31,15 +43,12 @@ class User{
         $('#user-profile-gender').text(` ${user.gender}`)
         $('#user-profile-mobile').text(` ${user.mobile}`)
         $('#user-profile-address').text(` ${user.address1}, ${user.address2}, ${user.town}, ${user.county}, ${user.eircode}`)
-
-        new Clients(`${this.div} #user #clients-container`, "Clients", user.id)
     }
 
     listeners(){
         // Opens clicked rows user details. 
-        $(this.div).on('click', '#btn-user-close', (ref) => {
-            console.log("Hi")
-            $('#user').addClass("d-none")
+        $(this.userModule).on('click', '#btn-user-close', (ref) => {
+            $(this.div).addClass("d-none")
         })
     }
 }

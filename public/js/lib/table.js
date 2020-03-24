@@ -53,7 +53,8 @@ class Table{
     static rowClick(table, ref){
         table.rows().deselect()
         table.row(ref.currentTarget).select()
-        return table.row(ref.currentTarget).data().id
+        if(table.row(ref.currentTarget).data() != undefined)
+            return table.row(ref.currentTarget).data().id
     }
 }
 

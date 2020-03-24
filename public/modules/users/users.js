@@ -1,13 +1,11 @@
-class Users{
-    // {div} points to where module is to be loaded. 
+class Users{ 
     constructor(div){
         this.div = div
-        this.archived = false
 
-        $(div).load("views/datatable.html")
-        $("#btn-add").hide()
-        this.loadData()
-        this.listeners()
+        $(`${this.div}`).load('views/datatable.html', () => {
+            this.loadData()
+            this.listeners()
+        })
     }
 
     // Watches for changes in db and auto updates table. 
@@ -79,24 +77,30 @@ class Users{
         })
     }
 
-    listeners(){
+    listeners(div){
         // Toggles display of table filters. 
         $(this.div).on('click', '#btn-filters', (ref) => {
             toggleFilters(this.div)
         })
 
-        // Opens clicked rows user details. 
-        $(this.div).on('click', 'tr', (ref) => {
-            let id = Table.rowClick(this.datatable, ref)
-            Dashboard.loadUser(id)
-        })
-
         // Switches between showing archived and non archived users. 
         $(this.div).on('click', '#checkbox-archived', (ref) => {
+            document.dispatchEvent(ref)
             if(ref.target.checked) this.showArchived = true
             else this.showArchived = false
 
             this.loadData()
+        })
+    }
+
+    externalListeners(callback){
+        return $(this.div).on('click', 'tr', (ref) => {
+            let id = Table.rowClick(this.datatable, ref)
+
+            // Prevents loading module if table header row is clicked. 
+            if(id != undefined){
+                callback(id)
+            }
         })
     }
 }
