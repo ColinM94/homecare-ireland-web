@@ -188,7 +188,7 @@ class Medications{
             Medications.editMed()
         })
 
-        $('.btn-refresh').click(function(){
+        $('.btn-refresh').on('click touchstart', function(){
             Animate.rotate(360, '.btn-refresh-icon')
             Medications.refreshTable()
         })

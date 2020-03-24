@@ -1,15 +1,20 @@
 class UsersDB{
-    static async observe(){
+    contructor(){
+
+    }
+    
+    observe(){
         let query = db.collection('users')
         
         query.onSnapshot(querySnapshot => {
                 let users = new Array()
 
                 querySnapshot.forEach(doc => {
-                    let user = new User()
+                    let user = new UserModel()
                     user.docToUser(doc)
                     users.push(user)
-                    Users.refreshTable(users)
+
+                    // Users.refreshTable(users)
                 })
             }, err => {
                 console.log(`Encountered error: ${err}`);
@@ -20,7 +25,7 @@ class UsersDB{
     static async getUser(userId) {
         let doc = await db.collection('users').doc(userId).get()
 
-        let user = new User()
+        let user = new UserModel()
 
         user.docToUser(doc)
 
@@ -34,7 +39,7 @@ class UsersDB{
         let result = await db.collection('users').get()
 
         result.forEach(doc => {
-            let user = new User()   
+            let user = new UserModel()   
             user.docToUser(doc)
             users.push(user)
         })
@@ -51,7 +56,7 @@ class UsersDB{
             .get()
 
         result.forEach(doc => {
-            let user = new User()   
+            let user = new UserModel()   
             user.docToUser(doc)
             users.push(user)
         })
@@ -68,7 +73,7 @@ class UsersDB{
             .get()
 
         result.forEach(doc => {
-            let user = new User()   
+            let user = new UserModel()   
             user.docToUser(doc)
             users.push(user)
         })
@@ -85,7 +90,7 @@ class UsersDB{
             .get()
 
         result.forEach(doc => {
-            let user = new User()   
+            let user = new UserModel()   
             user.docToUser(doc)
             users.push(user)
         })
@@ -100,7 +105,7 @@ class UsersDB{
         let result = await db.collection('users').where('active' ,'==', false).get()
 
         result.forEach(doc => {
-            let user = new User()   
+            let user = new UserModel()   
             user.docToUser(doc)
             users.push(user)
         })
@@ -110,13 +115,27 @@ class UsersDB{
 
     // Adds a new doc to users. 
     static async addUser(id, role, name, address1, address2, town, county, eircode, active) {
-        let user = new User(id, role, name, address1, address2, town, county, eircode, active)
+        let user = new UserModel(id, role, name, address1, address2, town, county, eircode, active)
         await db.collection("users").add(user.toFirestore())
     }
 
     // Deletes doc at users/{userId}.
     static async deleteUser(userId) {
         db.collection('users').doc(userId).delete()
+    }
+
+    // Sets users/{userId}/arhived field to true. 
+    static async archive(userId) {
+        await db.collection('users').doc(userId).update({
+            "archived": true
+        })
+    }
+
+    // Sets users/{userId}/arhived field to false. 
+    static async unArchive (userId) {
+        await db.collection('users').doc(userId).update({
+            "archived": true
+        })
     }
 
     // Sets users/{userId}/active field to false. 

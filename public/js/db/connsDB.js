@@ -2,23 +2,25 @@
 class ConnsDB{
     // Returns array of Conn objects where doc contains user/client id.
     static async getConns(id) {
+        console.log(id)
         let docs 
 
         // If {id} length > 20 then it is a userId else clientId.
         if(id.length > 20){
-            docs = await db.collection('conns').where('userId', '==', id).get()
+            docs = await db.collection('connections').where('userId', '==', id).get()
         }else{
-            docs = await db.collection('conns').where('clientId', '==', id).get()
+            docs = await db.collection('connections').where('clientId', '==', id).get()
         }
 
         let conns = []
 
         docs.forEach(doc => {
-            let conn = new Conn()  
+            let conn = new Connection()  
             conn.docToConn(doc)
             conns.push(conn)
         })
 
+        console.log(conns)
         return conns
     }
 

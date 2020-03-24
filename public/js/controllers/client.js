@@ -237,15 +237,15 @@ class ClientProfile{
 
     // Instantiate listeners. 
     static listeners() {
-        $('#btn-client-profile-close').click(function(){
+        $('#btn-client-profile-close').on('click touchstart', function(){
             $('#clientProfile').hide()
         })
 
-        $('#btn-client-delete-conn').click(function(){
+        $('#btn-client-delete-conn').on('click touchstart', function(){
             ClientProfile.deleteConn()
         })
 
-        $('#btn-client-add-visit').click(function(){
+        $('#btn-client-add-visit').on('click touchstart', function(){
             ClientProfile.viewAddVisitForm()
         })
 
@@ -259,15 +259,15 @@ class ClientProfile{
             ClientProfile.addConn()
         })
 
-        $('#btn-client-add-conn').click(function(){
+        $('#btn-client-add-conn').on('click touchstart', function(){
             ClientProfile.viewAddConnForm()
         })
 
-        $('#btn-add-presc').click(function(){
+        $('#btn-add-presc').on('click touchstart', function(){
             ClientProfile.viewAddPrescForm()
         })
 
-        $('#btn-edit-client').click(function(){
+        $('#btn-edit-client').on('click touchstart', function(){
             Clients.viewEditClientForm(ClientProfile.clientId)
         })
 

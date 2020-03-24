@@ -32,11 +32,11 @@ class Prompt{
     }
 
     static listeners(){
-        $('#btn-confirm-yes').click(function(){
+        $('#btn-confirm-yes').on('click touchstart', function(){
             Prompt.userInput = "yes"
         })
 
-        $('#btn-confirm-cancel').click(function(){
+        $('#btn-confirm-cancel').on('click touchstart', function(){
             Prompt.userInput = "cancel"
         })
 

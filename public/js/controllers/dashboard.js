@@ -3,7 +3,6 @@ var currentUser = {}
 
 var mobile = false
 
-
 // Listen for change in signed in state. 
 auth.onAuthStateChanged(user => {
     if(user){
@@ -24,50 +23,60 @@ auth.onAuthStateChanged(user => {
     }   
 })
 
-$( document ).ready(function() {
-    // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    //     mobile = true
-    // }
-
-    if(screen.width < 750)
-        mobile = true;
-
-    startLoad()
-    Promise.all(
-    [
-        loadClients(), 
-        loadUsers(),
-        loadMedications(),
-    ]).then(() => {
-        showModule("users")
-        endLoad()
-    })
+$(document).ready(function() {
+    Dashboard.load()
 })
 
-var el = document.getElementById('layoutSidenav_content');
-swipedetect(el, function(swipedir){
-    // swipedir contains either "none", "left", "right", "top", or "down"
-    // Notification.display(1, "Swiped " + swipedir)
-    // el.innerHTML = 'Swiped <span style="color:yellow;margin: 0 5px;">' + swipedir +'</span>';
-    if(swipedir == "right")
-        $("body").addClass("sidenav-toggled")
-    else if(swipedir == "left")
-        $("body").removeClass("sidenav-toggled")
+class Dashboard{
+    static load(){
+        // Initialises Users module. 
+        new Users("#users-container")
+        $("#user-profile-container").load("views/user.html")
 
-})
+    }
+
+    static loadUser(id){
+        new User(id, "#user-profile-container")
+
+    }
+}
+
+// $( document ).ready(function() {
+//     Dashboard.load()
+//     // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+//     //     mobile = true
+//     // }
+
+//     // if(screen.width < 750)
+//     //     mobile = true;
+
+
+//     // loadUsers()
+//     // startLoad()
+//     // Promise.all(
+//     // [
+//     //     loadClients(), 
+//     //     loadUsers(),
+//     //     loadMedications(),
+//     // ]).then(() => {
+//     //     showModule("users")
+//     //     endLoad()
+//     // })
+// })
+
 
 function startLoad(){
-    $('.lds-roller').show()
+    // $('.lds-roller').show()
 
-    // Prevents user interaction with page. 
-    $('*').css('pointer-events', 'none')
+    // // Prevents user interaction with page. 
+    // $('*').css('pointer-events', 'none')
 }
 
 function endLoad(){
-    $('.lds-roller').hide()
+    // $('.lds-roller').hide()
 
-    // Restores default functionality. 
-    $('*').css('pointer-events', 'auto')
+    // // Restores default functionality. 
+    // $('*').css('pointer-events', 'auto')
 }
 
 // // Sets active nav item in sidebar. 
@@ -75,18 +84,13 @@ function endLoad(){
 //     console.log("#btn-sidebar-"+module)
 // }
 
-function showModule(module){    
-    $(".nav-link").removeClass("selected")
-    $("#btn-sidebar-"+module).addClass("selected")
-    $('.module').addClass("d-none")
-    $(`#${module}-module`).removeClass("d-none")
-}
+// function showModule(module){    
+//     $(".nav-link").removeClass("selected")
+//     $("#btn-sidebar-"+module).addClass("selected")
+//     $('.module').addClass("d-none")
+//     $(`#${module}-module`).removeClass("d-none")
+// }
 
-function loadUsers(){
-    startLoad()
-    $(`#user-list-module`).load("views/users.html")
-    Users.load().then(() => { endLoad()})
-}
 
 function loadClients(){
     $(`#client-list-module`).load("views/clients.html")
@@ -103,10 +107,9 @@ function loadClient(id){
     ClientProfile.load(id)
 }
 
-function loadUser(id){
-    $('#user-profile-module').load(`views/user-profile.html`)
-    UserProfile.load(id)
-}
+// function loadUser(id){
+//     let user = new User(id)
+// }
 
 function loadMed(id){
     $('#medications-module').append(`<div id="medication"></div>`)
@@ -119,49 +122,38 @@ function toggleSidebar(){
 }
 
 // Toggle the side navigation
-$("#sidebarToggle").click(function (){
-    toggleSidebar()
+  $("#sidebarToggle").on("click", function(e) {
+    e.preventDefault();
+    $("body").toggleClass("sidenav-toggled");
 })
 
-$("#btn-signout").click(function (){
+$("#btn-signout").on('click touchstart', function (){
     Auth.signOut()
 })
 
-// $(window).resize(function () {
-//     $("table").resize();
-// });
-
-
-$("#btn-sidebar-users").click(function (){
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-        console.log("ANDROID")
-    }else{
-        console.log("NOT ANDROID")
-    }
+$("#btn-sidebar-users").on('click touchstart', function (){
+    // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    //     console.log("ANDROID")
+    // }else{
+    //     console.log("NOT ANDROID")
+    // }
     showModule("users")
 })
 
-$("#btn-sidebar-clients").click(function (){
+$("#btn-sidebar-clients").on('click touchstart', function (){
     showModule("clients")
 })
 
-$("#btn-sidebar-medications").click(function (){
+$("#btn-sidebar-medications").on('click touchstart', function (){
     showModule("medications")
 })
 
-$("#btn-sidebar-dashboard").click(function (){
+$("#btn-sidebar-dashboard").on('click touchstart', function (){
     $('.module').removeClass("d-none")
 })
 
-//USAGE:
 
-// let el = $('#layoutSidenav_content')
-
-
-
-
-
-// SB Admin JS
+// SB Admin JS //
 
 // Enable Bootstrap tooltips via data-attributes globally
 $('[data-toggle="tooltip"]').tooltip();
@@ -197,7 +189,7 @@ offset: 82
 });
 
 // Scrolls to an offset anchor when a sticky nav link is clicked
-$('.nav-sticky a.nav-link[href*="#"]:not([href="#"])').click(function() {
+$('.nav-sticky a.nav-link[href*="#"]:not([href="#"])').on('click touchstart', function() {
 if (
     location.pathname.replace(/^\//, "") ==
     this.pathname.replace(/^\//, "") &&
@@ -218,7 +210,7 @@ if (
 });
 
 // Click to collapse responsive sidebar
-$("#layoutSidenav_content").click(function() {
+$("#layoutSidenav_content").on('click touchstart', function() {
     if (window.innerWidth < 750) {
         if ($("body").hasClass("sidenav-toggled")) {
             $("body").toggleClass("sidenav-toggled");

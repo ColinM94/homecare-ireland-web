@@ -1,8 +1,8 @@
 class Prescription{
     constructor(id, dosage, notes){
         this.id = id
-        this.dosage = 
-        this. 
+        this.dosage = dosage
+        this.notes = notes
     }
 
     docToPrescription(doc){

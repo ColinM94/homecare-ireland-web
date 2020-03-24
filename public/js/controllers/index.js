@@ -7,7 +7,7 @@ $('#form-signin').submit(function(event){
     Auth.signIn(email, password)
         .then(user => {
             UsersDB.getUser(user.uid).then(userData => {
-                if(userData.active == true){
+                if(userData.archived == false){
                     $(".form-error").text("")
                     window.location.href = "dashboard.html"
                 }else{

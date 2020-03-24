@@ -9,7 +9,7 @@ class MedDetails{
     }
 
     static listeners(){
-            $('#btn-meddetails-close').click(function(){
+            $('#btn-meddetails-close').on('click touchstart', function(){
             $('#medDetails').hide()
         })
     }

@@ -32,7 +32,7 @@ class Notification{
     }
 
     static listeners(){
-        $('#btn-close-msg').click(function(){
+        $('#btn-close-msg').on('click touchstart', function(){
             $('#alert-box').css('display', 'none')
         })
     }

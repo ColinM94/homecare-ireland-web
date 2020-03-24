@@ -1,121 +1,94 @@
+html,body{overflow-x: hidden;}
+
+/* #btn-signout{
+  position: absolute;
+  bottom: 80px;
+} */
+
+/* #sidenav-bottom{
+  position: absolute !important;
+  bottom: 80px !important;
+} */
+
+.sidenav-menu *{
+  flex-shrink: 0 !important;
+}
+
 /* Mobile phones */
 @media only screen and (max-width: 750px) {
   .module{
-    padding: 0 !important;
+    padding: 5px;
     margin-top: 0 !important;
-    margin-right: 0 !important
+    margin-right: 0 !important;
   }
 
-  td{
-    /* display: inline-block; */
-    padding-left: 1px !important;
-    padding-right: 1px !important;
-    margin-right: 1px !important; 
-    margin-left: 1px !important;
-    width: fit-content !important;
+  #filters{
+    padding-left: 1px;
+    padding-right: 1px;
   }
 
-  .form-control{
+  select{
     padding: 1px !important;
   }
 
   .card-body{
-    padding: 1px;
+    padding: 5px;
+  }
+
+  #title{
+    margin-right: 10px;
   }
 }
 
-/* Datatables */
-.dataTable tbody tr:hover{
-  /* transform: scale(1.004); */
-}
-
-/* .dataTable tbody tr:active{
-  transform: scale(1.01);
-} */
-
-.dataTable tr:hover{
+#datatable tr:hover{
   cursor: pointer;
 }
 
-.dataTable .btn-td:not(th){
-  padding: 0 !important;
-  vertical-align: middle;
+#card-header *{
+  /* padding-left: 0;
+  padding-right: 0; */
 }
 
-/* .dataTable button{
-  width: 100%;
-  height: 46px;
-  margin: 0;
+/* Signin */
+#signin *{
+  width: 100% !important;
+}
+
+/* Filter Dropdown */
+#filter-titles *{
   padding: 0;
-  color: #0061f2;
-} */
+}
 
-.form-error{
-  height: 20px;
-  padding: 10px;
+/* Datatables */
+#datatable{
   text-align: center;
-  margin-top: 5px;
-  margin-bottom: 5px;
 }
 
-.modal .form-error{
-  margin-bottom: -5px;
+#datatable-search *{
+  width: 100%;
+  margin-bottom: 0;
 }
 
-/* Datatable Search Box */
-.card-header label{
-  margin: 0 !important;
+#datatable .btn-filters{
+  float: right;
+}
+
+#datatable .row{
   width: 100%;
 }
 
-.card-header .btn{
-  /* padding: 0; */
+#datatable .btn{
+  padding: 0;
 }
 
-.modal form{
-  padding: 0px 20px 20px 20px;
-}
-form label{
-  margin-top: auto;
-}
-
-#users-datatable, #clients-datatable, #medications-datatable{
-  text-align: center;
-}
-
-.datatable_filter{
-  width: 0 !important;
-}
-
-.selected{
-  color: #fff !important;
-}
-
-.page-header .page-header-content {
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
-    padding-left: 2rem !important;
-}
-
-/* Notification Alerts */
-#notification {
-  position: absolute;
-  bottom:0;
-  right:0;
-  margin: 0px 15px 0px 0px;
-  width: 300px;
-}
-
-#notification .close{
-  position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
-  margin: 8px 10px;
+#datatable .td-btn:not(th){
+  padding: 0;
+  vertical-align: middle;
 }
 
 /* Loading Spinner */
 .lds-roller {
-    display: block;
+    display: none;
     position: absolute;
     left: 50%;
     top: 40%;
