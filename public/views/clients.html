@@ -1,40 +1,4 @@
-<div id="clients-module">
-  <div class="card mb-4">
-    <div class="card-header row">
-        <span class="col-3">Clients</span>
-        <div id="clients-search" class="col-6" title="Filter Table"></div>
-        <div class="col-2">
-            <button class="btn" id="btn-clients-filter" title="Filters">
-              <i class="fa fa-chevron-down fa-lg" id="icon-clients-filter"></i>
-            </button>
-        </div>
-        <div class="col-1">
-          <button class="btn" id="btn-add-client" title="Add Client">
-            <i class="fa fa-plus fa-lg"></i>
-          </button>
-        </div>
-    </div>
-    <div class="card-header row d-none pl-5" id="clients-filters">
-        <div class="row text-dark" id="clients-filters-titles">
-            <h6 class="col">Active</h6>  
-            <h6 class="col">Town</h6>
-            <h6 class="col">County</h6>
-            <h6 class="col">Marital Status</h6>
-        </div>
-        <div class="row" id="clients-filters-dropdown" class="filters-dropdown">
-
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="datatable table-responsive">
-            <table class="table table-bordered table-hover" id="datatable" width="100%" cellspacing="0">
-
-            </table>
-        </div>
-    </div>
-  </div>
-</div>
-
+<div id="content"></div>
 
 <!-- ADD CLIENT MODAL -->
 <div class="modal fade" id="modal-add-client" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -47,7 +11,7 @@
               </button>
           </div>
           <div class="modal-body">
-            <form class="mt-auto" id="form-add-client">
+            <form class="mt-auto p-2" id="form-add-client">
               <div class="form-group row">
                 <label class="control-label col-sm-3" for="add-client-name">Name</label>
                 <input type="text" class="form-control col-sm-9" id="add-client-name" title="Name">

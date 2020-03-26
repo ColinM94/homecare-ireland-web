@@ -1,4 +1,4 @@
-class Prescription{
+class PrescModel{
     constructor(id, dosage, notes){
         this.id = id
         this.dosage = dosage

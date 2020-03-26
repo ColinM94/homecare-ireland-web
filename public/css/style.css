@@ -1,175 +1,35 @@
-html,body{overflow-x: hidden;}
-
-/* #btn-signout{
-  position: absolute;
-  bottom: 80px;
-} */
-
-/* #sidenav-bottom{
-  position: absolute !important;
-  bottom: 80px !important;
-} */
-
-.sidenav-menu *{
-  flex-shrink: 0 !important;
+html,body{
+  overflow-x: hidden;
 }
 
-/* Mobile phones */
-@media only screen and (max-width: 750px) {
-  .module{
-    padding: 5px;
-    margin-top: 0 !important;
-    margin-right: 0 !important;
-  }
+#navbar-brand{
+  position: absolute;
+  /* top: 12px; */
+}
 
-  #filters{
-    padding-left: 1px;
-    padding-right: 1px;
-  }
+/* DATATABLES */
+#datatable_filter > label{
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  height: 0;
+}
 
-  select{
-    padding: 1px !important;
-  }
+#datatable_filter .form-control::-ms-clear {
+  width : 0;
+  height: 0;
+}
 
-  .card-body{
-    padding: 15px;
-  }
-
-  #title{
-    margin-right: 10px;
-  }
+#datatable-search{
+  height: 100%;
+}
+#btn-filters{
+  position: absolute;
+  right: 10px;
+  top: 0;
 }
 
 #datatable tr:hover{
   cursor: pointer;
 }
 
-#card-header *{
-  /* padding-left: 0;
-  padding-right: 0; */
-}
-
-/* Signin */
-#signin *{
-  width: 100% !important;
-}
-
-/* Filter Dropdown */
-#filter-titles *{
-  padding: 0;
-}
-
-/* Datatables */
-#datatable{
-  text-align: center;
-}
-
-#datatable-search *{
-  width: 100%;
-  margin-bottom: 0;
-}
-
-#datatable .btn-filters{
-  float: right;
-}
-
-#datatable .row{
-  width: 100%;
-}
-
-#datatable .btn{
-  padding: 0;
-}
-
-#datatable .td-btn:not(th){
-  padding: 0;
-  vertical-align: middle;
-}
-
-/* Loading Spinner */
-.lds-roller {
-    display: none;
-    position: absolute;
-    left: 50%;
-    top: 40%;
-    width: 80px;
-    height: 80px;
-  }
-  .lds-roller div {
-    animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    transform-origin: 40px 40px;
-  }
-  .lds-roller div:after {
-    content: " ";
-    display: block;
-    position: absolute;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #E44B4B;
-    margin: -4px 0 0 -4px;
-  }
-  .lds-roller div:nth-child(1) {
-    animation-delay: -0.036s;
-  }
-  .lds-roller div:nth-child(1):after {
-    top: 63px;
-    left: 63px;
-  }
-  .lds-roller div:nth-child(2) {
-    animation-delay: -0.072s;
-  }
-  .lds-roller div:nth-child(2):after {
-    top: 68px;
-    left: 56px;
-  }
-  .lds-roller div:nth-child(3) {
-    animation-delay: -0.108s;
-  }
-  .lds-roller div:nth-child(3):after {
-    top: 71px;
-    left: 48px;
-  }
-  .lds-roller div:nth-child(4) {
-    animation-delay: -0.144s;
-  }
-  .lds-roller div:nth-child(4):after {
-    top: 72px;
-    left: 40px;
-  }
-  .lds-roller div:nth-child(5) {
-    animation-delay: -0.18s;
-  }
-  .lds-roller div:nth-child(5):after {
-    top: 71px;
-    left: 32px;
-  }
-  .lds-roller div:nth-child(6) {
-    animation-delay: -0.216s;
-  }
-  .lds-roller div:nth-child(6):after {
-    top: 68px;
-    left: 24px;
-  }
-  .lds-roller div:nth-child(7) {
-    animation-delay: -0.252s;
-  }
-  .lds-roller div:nth-child(7):after {
-    top: 63px;
-    left: 17px;
-  }
-  .lds-roller div:nth-child(8) {
-    animation-delay: -0.288s;
-  }
-  .lds-roller div:nth-child(8):after {
-    top: 56px;
-    left: 12px;
-  }
-  @keyframes lds-roller {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }

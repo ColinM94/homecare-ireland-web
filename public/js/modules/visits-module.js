@@ -1,11 +1,9 @@
-class Visits{
+class VisitsModule{
     // user/client id, module id, table id, search id
     constructor(id, div){
 
                 // $(`${div}`).load("views/visits.html")
 
-        console.log(id)
-        console.log(div)
         let visits = db.collection('visits').where('userId', '==', id).where('clientId', '==', id)
 
         visits.onSnapshot(querySnapshot => {

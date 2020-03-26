@@ -1,4 +1,4 @@
-class Visit{
+class VisitModel{
     constructor(id, clientId, userId, clockInTime, clockOutTime, start, end, notes) {
         this.id = id
         this.clientId = clientId

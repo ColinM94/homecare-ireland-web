@@ -1,53 +1,41 @@
-class Clients{
-    constructor(div, conn){
+class ClientsModule{
+    constructor(div, userId, title){
         this.div = div
         this.showArchived = false
-        this.conn = conn
+        this.userId = userId
 
-        // Sub module locations. 
-        this.clientsModule = `${div} #clients-module` 
+        $(div).load("views/clients.html", () => {
+            $(`${div} #content`).load("views/templates/datatable.html", () => {
 
-        $(div).load("views/datatable.html")
+                if(title != undefined) $(`${this.div} #title`).text(title)
+                else $(`${this.div} #title`).text("Clients")
 
-        this.loadData()
-        this.listeners()
+                this.loadData()
+                this.listeners()
+            })
+        })
     }
 
     async loadData(){
         let query = db.collection('clients')
 
-        if(this.conn != undefined){
-            let conns = await ConnsDB.getConns(this.conn)
+        if(this.userId != undefined){
+            let conns = await ConnsDB.getConns(this.userId)
 
             let ids = new Array()
             conns.forEach(conn => {
                 ids.push(conn.clientId)
             })
 
-            if(ids.length > 0){
+            if(ids.length != 0){
                 query = query.where(firebase.firestore.FieldPath.documentId(), 'in', ids)
             }else{
                 return
             }
         }
 
-        if(this.showArchived) query = query.where('archived', '==', true)
-        else if(this.showArchived) query = query.where('archived', '==', false)
-
-        // if(this.userId != null){
-
-            // console.log(conns)
-                // console.log(this.userId)
-            // conns.forEach(conn => {
-                // console.log(conn.clientId)
-                // query = query.where('id', '==', conn.clientId)
-
-            // })
-        // }
-
         query.onSnapshot(querySnapshot => {
                 let clients = new Array()
-
                 querySnapshot.forEach(doc => {
                     let client = new ClientModel()
                     client.docToClient(doc)
@@ -72,7 +60,7 @@ class Clients{
             return
         }
           
-        this.datatable = $(`${this.clientsModule} #datatable`).DataTable({
+        this.datatable = $(`${this.div} #datatable`).DataTable({
             data: clients,
             // bLengthChange: false,
             paging: false,
@@ -102,14 +90,12 @@ class Clients{
                 Table.detachSearch(this.div)    
             },
         })
-
-        $(`${this.div} #title`).text("Clients")
     }
 
     listeners(){
         // Toggles display of table filters. 
         $(this.div).on('click', `#btn-filters`, (ref) => {
-            console.log(this.div)
+            console.log("click")
             toggleFilters(this.div)
         })
 
@@ -119,6 +105,21 @@ class Clients{
             else this.showArchived = false
 
             this.loadData()
+        })
+
+        $(this.div).on('click', '#btn-add', (ref) => {
+            $('#modal-add-client').modal('show')
+        })
+    }
+
+    externalListeners(callback){
+        $(this.div).on('click', 'tr', (ref) => {
+            let client = Table.rowClick(this.datatable, ref)
+
+            // Prevents loading module if table header row is clicked. 
+            if(client != undefined){
+                callback(["client", client])
+            }
         })
     }
 }

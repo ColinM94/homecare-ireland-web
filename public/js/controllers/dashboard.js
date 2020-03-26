@@ -1,116 +1,92 @@
-// Holds information about currently signed in user. 
-var currentUser = {}
-
-var mobile = false
+let currentUser 
 
 // Listen for change in signed in state. 
 auth.onAuthStateChanged(user => {
     if(user){
         UsersDB.getUser(user.uid)
             .then(user => {
-                $('.sidenav-footer-title').text(user.name)
+                Dashboard.load()
+                currentUser = user
             })
-
-        /*
-        // If doctor show medication option. 
-        if(user.role == "doctor"){
-            $('#nav-meds').removeClass("d-none")
-        }
-        */
-    } else{
+    }else{
         Auth.signOut()
-        window.location = "index.html"
+        Index.load()
     }   
-})
-
-$(document).ready(function() {
-    Dashboard.load()
 })
 
 class Dashboard{
     static load(){
-        // Initialises Users module. 
-        // new Users("#staff-container")
-        Staff.load()
-        // $("#user-container").load("views/user.html")
-
+        $("#main-content").load("views/dashboard.html", () => {
+            // Staff.load()
+            this.loadView("staff")
+            this.div = "#dashboard"
+            $('.sidenav-footer-title').text(currentUser.name)
+            this.listeners()
+            sbAdmin()
+        })
     }
 
-    static loadUser(id){
-        new User(id, "#user-profile-container")
+    // If view doesn't exist it is created, if it exists it is displayed. 
+    static loadView(view){       
+        switch(view){
+            case "staff":
+                if($("#staff-view").text().trim() == "")
+                    StaffView.load()
+                break
+            case "clients":
+                if($("#clients-view").text().trim() == "")
+                    ClientsView.load()
+                break
+            case "meds":
+                if($("#meds-view").text().trim() == "")
+                    MedsView.load()
+                break
+        }
 
+        $('.view').addClass("d-none")
+        $(`#${view}-view`).removeClass("d-none")
+        $(".nav-link").removeClass("active")
+        $(`#btn-sidebar-${view}`).addClass("active")
+    }
+
+    static async signOut(){
+        if(await Prompt.confirm("Are you sure you want to sign out?")){
+            Auth.signOut()
+        }
+    }
+
+    static listeners(){
+        // $("#sidebarToggle").on("click", function(e) {
+        //     e.preventDefault();
+        //     $("body").toggleClass("sidenav-toggled")
+        // })
+
+        // $(document).on('click', '#sidebarToggle', (ref) => {
+        //     Notification.display(1, "Toggled")
+        //     $("body").toggleClass("sidenav-toggled")
+        // })
+
+        $(document).on('click', '#btn-sidebar-staff', (ref) => {
+            this.loadView("staff")
+        })
+
+        $(document).on('click', '#btn-sidebar-clients', () => {
+            this.loadView("clients")
+        })
+
+        $(document).on('click', '#btn-sidebar-medications', () => {
+            this.loadView("meds")
+        })
+
+        $(document).on('click', '#btn-signout', () => {
+            this.signOut()
+        })
+
+        $(document).on('click', '#btn-settings', () => {
+            
+        })
     }
 }
-
-// $( document ).ready(function() {
-//     Dashboard.load()
-//     // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-//     //     mobile = true
-//     // }
-
-//     // if(screen.width < 750)
-//     //     mobile = true;
-
-
-//     // loadUsers()
-//     // startLoad()
-//     // Promise.all(
-//     // [
-//     //     loadClients(), 
-//     //     loadUsers(),
-//     //     loadMedications(),
-//     // ]).then(() => {
-//     //     showModule("users")
-//     //     endLoad()
-//     // })
-// })
-
-
-function startLoad(){
-    // $('.lds-roller').show()
-
-    // // Prevents user interaction with page. 
-    // $('*').css('pointer-events', 'none')
-}
-
-function endLoad(){
-    // $('.lds-roller').hide()
-
-    // // Restores default functionality. 
-    // $('*').css('pointer-events', 'auto')
-}
-
-// // Sets active nav item in sidebar. 
-// function setActive(module){
-//     console.log("#btn-sidebar-"+module)
-// }
-
-// function showModule(module){    
-//     $(".nav-link").removeClass("selected")
-//     $("#btn-sidebar-"+module).addClass("selected")
-//     $('.module').addClass("d-none")
-//     $(`#${module}-module`).removeClass("d-none")
-// }
-
-
-function loadClients(){
-    $(`#client-list-module`).load("views/clients.html")
-    Clients.load()
-}
-
-function loadMedications(){
-    $(`#medications-module`).load("views/medications.html")
-    Medications.load()
-}
-
-function loadClient(id){
-    $('#client-profile-module').load(`views/client-profile.html`)
-    ClientProfile.load(id)
-}
-
-// function loadUser(id){
-//     let user = new User(id)
-// }
 
 function loadMed(id){
     $('#medications-module').append(`<div id="medication"></div>`)
@@ -118,124 +94,97 @@ function loadMed(id){
     MedDetails.load(id)
 }
 
-function toggleSidebar(){
-    $("body").toggleClass("sidenav-toggled")
-}
-
-// Toggle the side navigation
-  $("#sidebarToggle").on("click", function(e) {
-    e.preventDefault();
-    $("body").toggleClass("sidenav-toggled");
-})
-
-$("#btn-signout").on('click touchstart', function (){
-    Auth.signOut()
-})
-
-$("#btn-sidebar-users").on('click touchstart', function (){
-    // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    //     console.log("ANDROID")
-    // }else{
-    //     console.log("NOT ANDROID")
-    // }
-    showModule("users")
-})
-
-$("#btn-sidebar-clients").on('click touchstart', function (){
-    showModule("clients")
-})
-
-$("#btn-sidebar-medications").on('click touchstart', function (){
-    showModule("medications")
-})
-
-$("#btn-sidebar-dashboard").on('click touchstart', function (){
-    $('.module').removeClass("d-none")
-})
+// function toggleSidebar(){
+//     $("body").toggleClass("sidenav-toggled")
+// }
 
 
-// SB Admin JS //
+// // SB Admin JS //
 
-// Enable Bootstrap tooltips via data-attributes globally
-$('[data-toggle="tooltip"]').tooltip();
+function sbAdmin(){
+    // Enable Bootstrap tooltips via data-attributes globally
+    $('[data-toggle="tooltip"]').tooltip();
 
-// Enable Bootstrap popovers via data-attributes globally
-$('[data-toggle="popover"]').popover();
+    // Enable Bootstrap popovers via data-attributes globally
+    $('[data-toggle="popover"]').popover();
 
-$(".popover-dismiss").popover({
-trigger: "focus"
-});
+    $(".popover-dismiss").popover({
+        trigger: "focus"
+    });
 
-// Add active state to sidbar nav links
-var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
-$("#layoutSidenav_nav .sidenav a.nav-link").each(function() {
-if (this.href === path) {
-    $(this).addClass("active");
-}
-});
+    // // Add active state to sidbar nav links
+    // var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
+    // $("#layoutSidenav_nav .sidenav a.nav-link").each(function() {
+    //     if (this.href === path) {
+    //     $(this).addClass("active");
+    //     }
+    // });
 
-// // Toggle the side navigation
-// $("#sidebarToggle").on("click", function(e) {
-// e.preventDefault();
-// $("body").toggleClass("sidenav-toggled");
-// });
+    // Toggle the side navigation
+    $("#sidebarToggle").on("click", function(e) {
+        e.preventDefault();
+        $("body").toggleClass("sidenav-toggled");
+    });
 
-// Activate Feather icons
-feather.replace();
+    // Activate Feather icons
+    feather.replace();
 
-// Activate Bootstrap scrollspy for the sticky nav component
-$("body").scrollspy({
-target: "#stickyNav",
-offset: 82
-});
+    // Activate Bootstrap scrollspy for the sticky nav component
+    $("body").scrollspy({
+        target: "#stickyNav",
+        offset: 82
+    });
 
-// Scrolls to an offset anchor when a sticky nav link is clicked
-$('.nav-sticky a.nav-link[href*="#"]:not([href="#"])').on('click touchstart', function() {
-if (
-    location.pathname.replace(/^\//, "") ==
-    this.pathname.replace(/^\//, "") &&
-    location.hostname == this.hostname
-) {
-    var target = $(this.hash);
-    target = target.length ? target : $("[name=" + this.hash.slice(1) + "]");
-    if (target.length) {
-    $("html, body").animate(
-        {
-        scrollTop: target.offset().top - 81
-        },
-        200
-    );
-    return false;
-    }
-}
-});
+    // Scrolls to an offset anchor when a sticky nav link is clicked
+    $('.nav-sticky a.nav-link[href*="#"]:not([href="#"])').click(function() {
+        if (
+        location.pathname.replace(/^\//, "") ==
+            this.pathname.replace(/^\//, "") &&
+        location.hostname == this.hostname
+        ) {
+        var target = $(this.hash);
+        target = target.length ? target : $("[name=" + this.hash.slice(1) + "]");
+        if (target.length) {
+            $("html, body").animate(
+            {
+                scrollTop: target.offset().top - 81
+            },
+            200
+            );
+            return false;
+        }
+        }
+    });
 
-// Click to collapse responsive sidebar
-$("#layoutSidenav_content").on('click touchstart', function() {
-    if (window.innerWidth < 750) {
+    // Click to collapse responsive sidebar
+    $("#layoutSidenav_content").click(function() {
+        const BOOTSTRAP_LG_WIDTH = 992;
+        if (window.innerWidth >= 992) {
+        return;
+        }
         if ($("body").hasClass("sidenav-toggled")) {
             $("body").toggleClass("sidenav-toggled");
         }
+    });
+
+    // Init sidebar
+    let activatedPath = window.location.pathname.match(/([\w-]+\.html)/, '$1');
+
+    if (activatedPath) {
+        activatedPath = activatedPath[0];
     }
-})
-
-// Init sidebar
-let activatedPath = window.location.pathname.match(/([\w-]+\.html)/, '$1');
-
-if (activatedPath) {
-activatedPath = activatedPath[0];
-}
-else {
-activatedPath = 'index.html';
-}
-
-let targetAnchor = $('[href="' + activatedPath + '"]');
-let collapseAncestors = targetAnchor.parents('.collapse');
-
-targetAnchor.addClass('active');
-
-collapseAncestors.each(function() {
-$(this).addClass('show');
-$('[data-target="#' + this.id +  '"]').removeClass('collapsed');
+    else {
+        activatedPath = 'index.html';
+    }
+        
+    let targetAnchor = $('[href="' + activatedPath + '"]');
+    let collapseAncestors = targetAnchor.parents('.collapse');
     
-})
+    // targetAnchor.addClass('active');
+    
+    collapseAncestors.each(function() {
+        $(this).addClass('show');
+        $('[data-target="#' + this.id +  '"]').removeClass('collapsed');
+        
+    })
+}

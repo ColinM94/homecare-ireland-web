@@ -1,4 +1,4 @@
-class Medication{
+class MedModel{
     constructor(id, name, description, sideEffects){
         this.id = id
         this.name = name

@@ -1,0 +1,56 @@
+<nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
+    <button class="btn btn-icon btn-transparent-dark ml-2" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+    <div class="w-100 text-center"><a class="navbar-brand" href="#">Homecare Ireland</a></div>
+</nav>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sidenav shadow-right sidenav-dark">
+            <div class="sidenav-menu">
+                <div class="nav accordion" id="accordionSidenav">
+                    <a id="btn-sidebar-staff" class="nav-link row mt-lg-4 mt-sm-2" href="#!">
+                        <i class="fas fa-user-md fa-2x col-3"></i>
+                        <span class="col-9">Staff</span>
+                    </a>
+                    <a id="btn-sidebar-clients" class="nav-link row" href="#!">
+                        <i class="fas fa-user fa-2x col-3 w-100"></i>
+                        <span class="col-9">Clients</span>
+                    </a>
+                    <a id="btn-sidebar-medications" class="nav-link row" href="#!">
+                        <i class="fas fa-tablets fa-2x col-3 w-100"></i>
+                        <span class="col-9">Medication</span>
+                    </a>
+                </div>
+            </div>
+            <div class="sidenav-menu d-flex align-items-end mb-3">
+                <div class="nav accordion w-100" id="accordionSidenav">
+                    <div class="mt-lg-4 mt-sm-2"></div>
+                    <a id="btn-settings" class="nav-link row" href="#!">
+                        <i class="fas fa-cog fa-2x col-3"></i>
+                        <span class="col-9">Settings</span>
+                    </a>
+                    <a class="nav-link row" id="btn-signout" href="#!"><i class="fas fa-sign-out-alt fa-2x col-3"></i><span class="col-9">Sign Out</span></a>
+                </div>
+            </div>
+            <div class="sidenav-footer">
+                <div class="sidenav-footer-content">
+                    <div class="sidenav-footer-subitle">Signed in as:</div>
+                    <div class="sidenav-footer-title"></div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main class="h-100 "> 
+            <div id="staff-view" class="view">
+
+            </div>
+            <div id="clients-view" class="view d-none">
+        
+            </div>
+            <div id="meds-view" class="view d-none">
+                
+            </div>
+        </main>
+    </div>          
+</div>
+

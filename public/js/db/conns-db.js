@@ -2,7 +2,6 @@
 class ConnsDB{
     // Returns array of Conn objects where doc contains user/client id.
     static async getConns(id) {
-        console.log(id)
         let docs 
 
         // If {id} length > 20 then it is a userId else clientId.
@@ -15,12 +14,11 @@ class ConnsDB{
         let conns = []
 
         docs.forEach(doc => {
-            let conn = new Connection()  
+            let conn = new ConnModel()  
             conn.docToConn(doc)
             conns.push(conn)
         })
 
-        console.log(conns)
         return conns
     }
 

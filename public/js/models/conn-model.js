@@ -1,4 +1,4 @@
-class Connection {
+class ConnModel {
     constructor(id, userId, clientId){
         this.id = id
         this.userId = userId

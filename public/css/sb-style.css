@@ -20002,7 +20002,7 @@ body {
   color: #fff;
 }
 .sidenav-dark .sidenav-menu .nav-link.active {
-  color: none;
+  color: #fff;
 }
 .sidenav-dark .sidenav-menu .nav-link.active .nav-link-icon {
   color: #fff;
