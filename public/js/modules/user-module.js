@@ -2,7 +2,7 @@ class UserModule{
     constructor(div, id){
         this.div = div
 
-        $(`${this.div}`).load("views/details.html", () => {
+        $(`${this.div}`).load("views/templates/details.html", () => {
             this.listeners()
             let db = new UsersDB()
             db.listenUser(UserModule.displayData, id, this.div)
@@ -23,6 +23,7 @@ class UserModule{
 
         Module.appendDetail(div, "Archived", Convert.boolToText(user.archived))
 
+        Module.scroll(div)
     }
 
     listeners(){

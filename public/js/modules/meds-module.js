@@ -3,7 +3,7 @@ class MedsModule{
         this.div = div
 
         $(div).load("views/meds.html", () => {
-            $(`${div} #content`).load("views/datatable.html", () => {
+            $(`${div} #content`).load("views/templates/datatable.html", () => {
                 this.loadData()
                 this.listeners()
                 $(`${this.div} #title`).text("Medication")
@@ -50,9 +50,11 @@ class MedsModule{
             paging: false,
             filter: true,
             info: false,
-            responsive: {
-                details: false
-            },
+            responsive: false,
+            "scrollX": true,
+            // responsive: {
+            //     details: false
+            // },
             oLanguage: {
                 sLengthMenu: "_MENU_",
                 sSearch: '', searchPlaceholder: "Search..." 

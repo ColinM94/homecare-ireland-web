@@ -2,14 +2,21 @@ class MedsView{
     static load(){
         this.div = "#meds-view"
 
-        $(`${this.div}`).text("")
-        $(`${this.div}`).append(`
-            <div id="meds-module"></div>
-            <div id="med-module"></div>
-        `)
+        $(this.div).text("")
+        $(this.div).load("views/templates/header.html", () => {
+            $(this.div).append(`
+                <div class="mt-n5 mx-2 mx-sm-4 ">
+                    <div id="meds-module"></div>
+                    <div id="med-module"></div>
+                </div>
+            `)
 
-        let meds = new MedsModule(`${this.div} #meds-module`)
-        meds.listen(this.listener)
+            View.setTitle(this.div, "Medication")
+            View.setIcon(this.div, "fas fa-tablets")
+
+            let meds = new MedsModule(`${this.div} #meds-module`)
+            meds.listen(this.listener)
+        })
     }
 
     static loadMed(id){

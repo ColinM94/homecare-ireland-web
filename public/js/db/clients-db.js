@@ -1,19 +1,14 @@
 class ClientsDB{
-    static async observe(){
-        let query = db.collection('clients')
-        
-        query.onSnapshot(querySnapshot => {
-                let clients = new Array()
-
-                querySnapshot.forEach(doc => {
-                    let client = new Client()
-                    client.docToClient(doc)
-                    clients.push(client)
-
-                    Clients.refreshTable(clients)
-                })
-            }, err => {
-                console.log(`Encountered error: ${err}`);
+    // Listens for changes and calls callback function. 
+    listenClient(callback, id, ref){
+        let doc = db.collection('clients').doc(id)
+        let observer = doc.onSnapshot(docSnapshot => {
+            let client = new ClientModel()
+            client.docToClient(docSnapshot)
+            callback(client, ref)
+        }, err => {
+            console.log(`Encountered error: ${err}`)
+            Notification.display(2, "Problem loading client")
         })
     }
 

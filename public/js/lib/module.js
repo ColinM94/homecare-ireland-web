@@ -1,4 +1,18 @@
 class Module{
+    // Loads {file} into {div} then calls module load function.
+    static loadHTML(ref, div, file){  
+        $(div).load(file, () => {
+            ref.load()
+        })
+    }
+
+    // Scrolls element into view. 
+    static scroll(div){
+        let element = $(div)[0]
+    
+        element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest", top: 50});
+    }
+
     static appendDetail(div, name, value){
 
         $(`${div} .card-body`).append(`
@@ -17,4 +31,5 @@ class Module{
     static clearDetails(div){
         $(`${this.div} .card-body`).text("")
     }
+
 }

@@ -66,9 +66,11 @@ class ClientsModule{
             paging: false,
             filter: true,
             info: false,
-            responsive: {
-                details: false
-            },
+            responsive: false,
+            "scrollX": true,
+            // responsive: {
+            //     details: false
+            // },
             oLanguage: {
                 sLengthMenu: "_MENU_",
                 sSearch: '', searchPlaceholder: "Search..." 
@@ -90,8 +92,11 @@ class ClientsModule{
                 Table.detachSearch(this.div)    
             },
         })
-    }
 
+        // Module.scroll(this.div)
+    }
+    
+    // Internal listeners
     listeners(){
         // Toggles display of table filters. 
         $(this.div).on('click', `#btn-filters`, (ref) => {
@@ -108,11 +113,13 @@ class ClientsModule{
         })
 
         $(this.div).on('click', '#btn-add', (ref) => {
+            Modal.load(this.div)
             $('#modal-add-client').modal('show')
         })
     }
 
-    externalListeners(callback){
+    // External listeners
+    listen(callback){
         $(this.div).on('click', 'tr', (ref) => {
             let client = Table.rowClick(this.datatable, ref)
 

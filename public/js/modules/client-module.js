@@ -2,9 +2,10 @@ class ClientModule{
     constructor(div, id){
         this.div = div
 
-        $(`${this.div}`).load("views/client.html", () => {
-            this.loadData(id)
+        $(`${this.div}`).load("views/templates/details.html", () => {
             this.listeners()
+            let db = new ClientsDB()
+            db.listenClient(ClientModule.displayData, id, this.div)
         })
     }
 
@@ -20,19 +21,20 @@ class ClientModule{
         })
     }
 
-    displayData(client){
-        $(`${this.div} #title`).text(`${client.name}'s Details`)
+    static displayData(client, div){
+        Module.clearDetails(div)
 
-        $('#client-profile-id').text(` ${client.id}`)
+        Module.appendDetail(div, "Name", client.name)
+        Module.appendDetail(div, "Gender", client.gender)
+        Module.appendDetail(div, "Date of Birth", client.dob)
+        Module.appendDetail(div, "Mobile", client.mobile)
+        Module.appendDetail(div, "Marital Status", client.marital)
 
-        if(client.archived) $('#client-profile-archived').text(" Yes")
-        else $('#client-profile-archived').text(`No`)
+        let address = Format.address(client.address1, client.address2, client.town, client.county, client.eircode)
+        Module.appendDetail(div, "Address", address)
 
-        $('#client-profile-role').text(`${client.role}`)
-        $('#client-profile-name').text(`${client.name}`)
-        $('#client-profile-gender').text(`${client.gender}`)
-        $('#client-profile-mobile').text(`${client.mobile}`)
-        $('#client-profile-address').text(`${client.address1}, ${client.address2}, ${client.town}, ${client.county}, ${client.eircode}`)
+        Module.appendDetail(div, "Archived", Convert.boolToText(client.archived))
+        Module.scroll(div)
     }
 
     listeners(){

@@ -83,7 +83,7 @@ class Dashboard{
         })
 
         $(document).on('click', '#btn-settings', () => {
-            
+            $('#modal-settings').modal('show')
         })
     }
 }
