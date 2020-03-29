@@ -1,15 +1,65 @@
+/* <!----- GENERAL -----> */
 html,body{
   overflow-x: hidden;
 }
 
 input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 
-#navbar-brand{
-  position: absolute;
-  /* top: 12px; */
+@media only screen and (max-width: 575px) {
+  main{
+      margin-bottom: 70px;
+  }
 }
 
-/* DATATABLES */
+@media only screen and (min-width: 576px) {
+  main{
+      margin-left: 200px;
+  }
+}
+
+/* <!---- NAVBAR ----> */
+.nav-btn{
+  color: lightgrey;
+}
+
+.nav-btn:hover{
+  color: white;
+}
+
+.nav-btn:focus{
+  outline: none !important;
+  box-shadow: none;
+}
+
+#side-nav{
+  position: absolute;
+  width: 200px;
+  left: 0;
+  top: 0;
+}
+
+#side-nav button{
+  height: 45px;
+}
+
+#bottom-nav{
+  height: 70px;
+}
+
+@media only screen and (max-width: 575px) {
+  #side-nav{
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  #bottom-nav{
+    display: none;
+  }
+}
+
+
+/* <---- DATATABLES -----> */
 #datatable_filter > label{
   width: 100%;
   padding: 0;

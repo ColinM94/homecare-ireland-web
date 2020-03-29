@@ -28,6 +28,12 @@ class Module{
          )
     }
 
+    static setTitle(div, title){
+        console.log(`${div} #title`)
+    
+        $(`${div} #title`).text(title)
+    }
+
     static clearDetails(div){
         $(`${this.div} .card-body`).text("")
     }

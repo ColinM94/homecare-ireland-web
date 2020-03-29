@@ -17,6 +17,11 @@ auth.onAuthStateChanged(user => {
 class Dashboard{
     static load(){
         $("#main-content").load("views/dashboard.html", () => {
+            Dashboard.addLink("staff", "fas fa-user-md", "Staff")
+            Dashboard.addLink("clients", "fas fa-users", "Clients")
+            Dashboard.addLink("meds", "fas fa-tablets", "Medication")
+            Dashboard.addLink("settings", "fas fa-cog", "Settings")
+
             // Staff.load()
             this.loadView("staff")
             this.div = "#dashboard"
@@ -26,8 +31,24 @@ class Dashboard{
         })
     }
 
+     static addLink(id, icon, text){
+        $('#side-nav .nav-btns').append(`
+            <button id="btn-nav-${id}" class="nav-btn w-100 bg-transparent mb-2 border-0 text-left pl-4 row">
+                <i class="${icon} fa-lg col-3 my-auto"></i>
+                <span class="col-9">${text}</span>
+            </button>
+        `)
+
+        $('#bottom-nav').append(`
+            <button id="btn-nav-${id}" class="btn nav-btn row col p-0 h-100" href="#">
+                <i class="${icon} fa-lg col-12"></i>
+                <span class="col-12 mt-2 d-none">${text}</span>
+            </button>
+        `)
+    }
+
     // If view doesn't exist it is created, if it exists it is displayed. 
-    static loadView(view){       
+    static loadView(view){     
         switch(view){
             case "staff":
                 if($("#staff-view").text().trim() == "")
@@ -41,18 +62,44 @@ class Dashboard{
                 if($("#meds-view").text().trim() == "")
                     MedsView.load()
                 break
-        }
+            case "settings":
+                if($("#settings-view").text().trim() == "")
+                    SettingsView.load()
+                break        
+            }
 
         $('.view').addClass("d-none")
         $(`#${view}-view`).removeClass("d-none")
-        $(".nav-link").removeClass("active")
-        $(`#btn-sidebar-${view}`).addClass("active")
+        this.navSetActive(`#btn-sidebar-${view}`)
     }
 
     static async signOut(){
         if(await Prompt.confirm("Are you sure you want to sign out?")){
             Auth.signOut()
         }
+    }
+
+    static navSetActive(id){
+        $(".navbar span").each(function() {
+            // $(this).addClass("d-none")
+            $(this).removeClass("active")
+        })
+
+        $(".navbar i").each(function() {
+            $(this).removeClass("active")
+        })
+
+    
+        // $(".navbar i").each(function() {
+        //     $(this).addClass("d-none")
+            
+        //     $(`${this} i`).removeClass("active")
+        //     $(`${this} span`).removeClass("active")
+        // })
+
+        $(`${id} i`).addClass("active")
+        $(`${id} span`).addClass("active")
+        $(`${id} span`).removeClass("d-none")
     }
 
     static listeners(){
@@ -66,24 +113,28 @@ class Dashboard{
         //     $("body").toggleClass("sidenav-toggled")
         // })
 
-        $(document).on('click', '#btn-sidebar-staff', (ref) => {
+        $(document).on('click', '#btn-nav-staff', (ref) => {
+            // this.navSetActive("#btn-sidebar-staff")
             this.loadView("staff")
         })
 
-        $(document).on('click', '#btn-sidebar-clients', () => {
+        $(document).on('click', '#btn-nav-clients', () => {
+            // this.navSetActive("#btn-sidebar-clients")
             this.loadView("clients")
         })
 
-        $(document).on('click', '#btn-sidebar-medications', () => {
+        $(document).on('click', '#btn-nav-meds', () => {
+        //    this.navSetActive("#btn-sidebar-medications")
             this.loadView("meds")
+        })
+
+        $(document).on('click', '#btn-nav-settings', () => {
+            // this.navSetActive("#btn-sidebar-settings")
+            this.loadView("settings")
         })
 
         $(document).on('click', '#btn-signout', () => {
             this.signOut()
-        })
-
-        $(document).on('click', '#btn-settings', () => {
-            $('#modal-settings').modal('show')
         })
     }
 }

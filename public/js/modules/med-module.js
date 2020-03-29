@@ -22,19 +22,19 @@ class MedModule{
     }
 
     displayData(med){
-        $(`${this.div} #med-name`).text("")
+        $(`${this.div} #med-title`).text("")
         $(`${this.div} #med-desc`).text("")
         $(`${this.div} #med-sides`).text("")
 
 
-        $(`${this.div} #med-name`).text(`${med.name}`)
+        $(`${this.div} #title`).text(`${med.name}`)
 
         med.description.forEach(desc => {
-            $(`${this.div} #med-desc`).append(desc + "</br></br>")
+            $(`${this.div} #med-desc`).append(desc)
         }) 
 
         med.sideEffects.forEach(side => {
-            $(`${this.div} #med-sides`).append(side + "</br></br>")
+            $(`${this.div} #med-sides`).append(side)
         })  
 
         Module.scroll(this.div)

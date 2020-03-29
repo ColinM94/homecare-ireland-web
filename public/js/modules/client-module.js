@@ -24,6 +24,8 @@ class ClientModule{
     static displayData(client, div){
         Module.clearDetails(div)
 
+        Module.setTitle(div, `${client.name}'s Details`)
+
         Module.appendDetail(div, "Name", client.name)
         Module.appendDetail(div, "Gender", client.gender)
         Module.appendDetail(div, "Date of Birth", client.dob)

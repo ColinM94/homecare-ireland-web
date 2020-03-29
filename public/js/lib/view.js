@@ -1,6 +1,5 @@
 class View{
     static setTitle(div, title){
-        console.log(div)
         $(`${div} .page-header-text`).text(title)
     }
 

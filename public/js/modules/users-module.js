@@ -3,6 +3,7 @@ class UsersModule{
         this.div = div
 
         $(`${this.div}`).load('views/templates/datatable.html', () => {
+            $(`${this.div} #title`).hide()
             $(`${this.div} #btn-add`).hide()
             this.listeners()
             this.loadData()
@@ -46,11 +47,11 @@ class UsersModule{
             paging: false,
             filter: true,
             info: false,
-            responsive: false,
-            "scrollX": true,
-            // responsive: {
-            //     details: false
-            // },
+            // responsive: false,
+            // "scrollX": true,
+            responsive: {
+                details: false
+            },
             oLanguage: {
                 sLengthMenu: "_MENU_",
                 sSearch: '', searchPlaceholder: "Search..." 

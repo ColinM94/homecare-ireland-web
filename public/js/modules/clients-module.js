@@ -1,15 +1,18 @@
 class ClientsModule{
-    constructor(div, userId, title){
+    constructor(div, title, conn, search, add){
         this.div = div
         this.showArchived = false
-        this.userId = userId
+        this.conn = conn
 
         $(div).load("views/clients.html", () => {
             $(`${div} #content`).load("views/templates/datatable.html", () => {
 
-                if(title != undefined) $(`${this.div} #title`).text(title)
+                if(title) $(`${this.div} #title`).text(title)
                 else $(`${this.div} #title`).text("Clients")
 
+                if(!search) $(`${this.div} #datatable-search`).hide()
+                if(!add) $(`${this.div} #btn-add`).hide()
+                
                 this.loadData()
                 this.listeners()
             })
@@ -19,8 +22,8 @@ class ClientsModule{
     async loadData(){
         let query = db.collection('clients')
 
-        if(this.userId != undefined){
-            let conns = await ConnsDB.getConns(this.userId)
+        if(this.conn != undefined){
+            let conns = await ConnsDB.getConns(this.conn)
 
             let ids = new Array()
             conns.forEach(conn => {
@@ -66,11 +69,11 @@ class ClientsModule{
             paging: false,
             filter: true,
             info: false,
-            responsive: false,
-            "scrollX": true,
-            // responsive: {
-            //     details: false
-            // },
+            // responsive: false,
+            // "scrollX": true,
+            responsive: {
+                details: false
+            },
             oLanguage: {
                 sLengthMenu: "_MENU_",
                 sSearch: '', searchPlaceholder: "Search..." 
@@ -113,7 +116,6 @@ class ClientsModule{
         })
 
         $(this.div).on('click', '#btn-add', (ref) => {
-            Modal.load(this.div)
             $('#modal-add-client').modal('show')
         })
     }

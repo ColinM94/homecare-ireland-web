@@ -12,6 +12,8 @@ class UserModule{
     static displayData(user, div){
         Module.clearDetails(div)
 
+        Module.setTitle(div, `${user.name}'s Details`)
+        
         Module.appendDetail(div, "Name", user.name)
         Module.appendDetail(div, "Role", user.role)
         Module.appendDetail(div, "Gender", user.gender)

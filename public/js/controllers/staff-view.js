@@ -5,11 +5,11 @@ class StaffView{
         $(this.div).text("")
         $(this.div).load("views/templates/header.html", () => {
             $(this.div).append(`
-                <div class="mt-n5 mx-2 mx-sm-4 ">
-                    <div id="users-module"></div>
-                    <div id="user-module"></div>
-                    <div id="clients-module"></div>
-                    <div id="client-module"></div>
+                <div class="row w-100 mx-0 px-0">
+                    <div id="users-module" class="col-12 w-100"></div>
+                    <div id="user-module" class="col-12 col-lg-6 w-100"></div>
+                    <div id="clients-module" class="col-12 col-lg-6 w-100"></div>
+                    <div id="client-module" class="col-12 col-lg-6 w-100"></div>
                 </div>
             `)
 
@@ -34,7 +34,7 @@ class StaffView{
 
     static loadUser(id, title){
         new UserModule(`${StaffView.div} #user-module`, id)
-        let clients = new ClientsModule(`${StaffView.div} #clients-module`, id, `${title}'s Clients`)
+        let clients = new ClientsModule(`${StaffView.div} #clients-module`, `${title}'s Clients`, id, false, false)
         clients.listen(StaffView.handleEvent)
         $('#client-module').hide()
     }

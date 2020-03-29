@@ -50,11 +50,11 @@ class MedsModule{
             paging: false,
             filter: true,
             info: false,
-            responsive: false,
-            "scrollX": true,
-            // responsive: {
-            //     details: false
-            // },
+            // responsive: false,
+            // "scrollX": true,
+            responsive: {
+                details: false
+            },
             oLanguage: {
                 sLengthMenu: "_MENU_",
                 sSearch: '', searchPlaceholder: "Search..." 
