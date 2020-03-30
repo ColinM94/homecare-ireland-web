@@ -1,25 +1,24 @@
 class ClientsModule{
-    constructor(div, title, conn, search, add){
+    // div: string = Div id/class to load module into. 
+    // title: string = Title of card.
+    // userId: string = Show clients of this user.   
+    // showSearch: boolean = Show/hide search box. 
+    // showSearch: boolean = Show/hide add button. 
+    constructor(div, title, showSearch, showAdd, userId){
         this.div = div
-        this.showArchived = false
-        this.conn = conn
 
-        $(div).load("views/clients.html", () => {
-            $(`${div} #content`).load("views/templates/datatable.html", () => {
+        $(`${div}`).load("views/templates/datatable.html", () => {
+            $(`${div} #title`).text(title)
 
-                if(title) $(`${this.div} #title`).text(title)
-                else $(`${this.div} #title`).text("Clients")
-
-                if(!search) $(`${this.div} #datatable-search`).hide()
-                if(!add) $(`${this.div} #btn-add`).hide()
-                
-                this.loadData()
-                this.listeners()
-            })
+            if(!showSearch) $(`${div} #datatable-search`).hide()
+            if(!showAdd) $(`${div} #btn-add`).hide()
+            
+            this.observe()
+            this.listeners()
         })
     }
 
-    async loadData(){
+    async observe(){
         let query = db.collection('clients')
 
         if(this.conn != undefined){

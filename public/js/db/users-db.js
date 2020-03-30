@@ -1,48 +1,4 @@
 class UsersDB{    
-    listen(callback, id, type){
-        let query = db.collection('users')
-        
-        query.onSnapshot(querySnapshot => {
-                let users = new Array()
-
-                querySnapshot.forEach(doc => {
-                    let user = new UserModel()
-                    user.docToUser(doc)
-                    users.push(user)
-
-                    // Users.refreshTable(users)
-                })
-            }, err => {
-                console.log(`Encountered error: ${err}`);
-        })
-    }
-
-    // Listens for changes and calls callback function. 
-    listenUsers(callback, id, ref){
-        let doc = db.collection('users').doc(id)
-        let observer = doc.onSnapshot(docSnapshot => {
-            let user = new UserModel()
-            user.docToUser(docSnapshot)
-            callback(user, ref)
-        }, err => {
-            console.log(`Encountered error: ${err}`)
-            Notification.display(2, "Problem loading user")
-        })
-    }
-
-    // Listens for changes and calls callback function. 
-    listenUser(callback, id, ref){
-        let doc = db.collection('users').doc(id)
-        let observer = doc.onSnapshot(docSnapshot => {
-            let user = new UserModel()
-            user.docToUser(docSnapshot)
-            callback(user, ref)
-        }, err => {
-            console.log(`Encountered error: ${err}`)
-            Notification.display(2, "Problem loading user")
-        })
-    }
-
     // Returns User object from users/{userId}. 
     static async getUser(userId) {
         let doc = await db.collection('users').doc(userId).get()

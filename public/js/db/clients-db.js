@@ -1,16 +1,5 @@
 class ClientsDB{
-    // Listens for changes and calls callback function. 
-    listenClient(callback, id, ref){
-        let doc = db.collection('clients').doc(id)
-        let observer = doc.onSnapshot(docSnapshot => {
-            let client = new ClientModel()
-            client.docToClient(docSnapshot)
-            callback(client, ref)
-        }, err => {
-            console.log(`Encountered error: ${err}`)
-            Notification.display(2, "Problem loading client")
-        })
-    }
+
 
     // Returns Client object from clients/{clientId}.
     static async getClient(clientId) {

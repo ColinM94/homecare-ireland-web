@@ -14,7 +14,6 @@ class Module{
     }
 
     static appendDetail(div, name, value){
-
         $(`${div} .card-body`).append(`
             <div class="row">
                 <div class="col">
@@ -29,8 +28,6 @@ class Module{
     }
 
     static setTitle(div, title){
-        console.log(`${div} #title`)
-    
         $(`${div} #title`).text(title)
     }
 

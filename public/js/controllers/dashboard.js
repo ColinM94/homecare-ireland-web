@@ -17,21 +17,20 @@ auth.onAuthStateChanged(user => {
 class Dashboard{
     static load(){
         $("#main-content").load("views/dashboard.html", () => {
+            $('.sidenav-footer-title').text(currentUser.name)
+
             Dashboard.addLink("staff", "fas fa-user-md", "Staff")
             Dashboard.addLink("clients", "fas fa-users", "Clients")
             Dashboard.addLink("meds", "fas fa-tablets", "Medication")
             Dashboard.addLink("settings", "fas fa-cog", "Settings")
 
-            // Staff.load()
             this.loadView("staff")
-            this.div = "#dashboard"
-            $('.sidenav-footer-title').text(currentUser.name)
             this.listeners()
-            sbAdmin()
+            //  sbAdmin()
         })
     }
 
-     static addLink(id, icon, text){
+    static addLink(id, icon, text){
         $('#side-nav .nav-btns').append(`
             <button id="btn-nav-${id}" class="nav-btn w-100 bg-transparent mb-2 border-0 text-left pl-4 row">
                 <i class="${icon} fa-lg col-3 my-auto"></i>
@@ -70,7 +69,7 @@ class Dashboard{
 
         $('.view').addClass("d-none")
         $(`#${view}-view`).removeClass("d-none")
-        this.navSetActive(`#btn-sidebar-${view}`)
+        this.navSetActive(`#btn-nav-${view}`)
     }
 
     static async signOut(){
@@ -80,56 +79,32 @@ class Dashboard{
     }
 
     static navSetActive(id){
-        $(".navbar span").each(function() {
-            // $(this).addClass("d-none")
+        $(".nav-btn").each(function() {
             $(this).removeClass("active")
         })
 
-        $(".navbar i").each(function() {
-            $(this).removeClass("active")
+        $("#bottom-nav .nav-btn span").each(function() {
+            $(this).addClass("d-none")
         })
 
-    
-        // $(".navbar i").each(function() {
-        //     $(this).addClass("d-none")
-            
-        //     $(`${this} i`).removeClass("active")
-        //     $(`${this} span`).removeClass("active")
-        // })
-
-        $(`${id} i`).addClass("active")
-        $(`${id} span`).addClass("active")
-        $(`${id} span`).removeClass("d-none")
+        $(`${id}`).addClass("active")
+        $(`#bottom-nav ${id} span`).removeClass("d-none")
     }
 
     static listeners(){
-        // $("#sidebarToggle").on("click", function(e) {
-        //     e.preventDefault();
-        //     $("body").toggleClass("sidenav-toggled")
-        // })
-
-        // $(document).on('click', '#sidebarToggle', (ref) => {
-        //     Notification.display(1, "Toggled")
-        //     $("body").toggleClass("sidenav-toggled")
-        // })
-
-        $(document).on('click', '#btn-nav-staff', (ref) => {
-            // this.navSetActive("#btn-sidebar-staff")
+        $(document).on('click', '#btn-nav-staff', () => {
             this.loadView("staff")
         })
 
         $(document).on('click', '#btn-nav-clients', () => {
-            // this.navSetActive("#btn-sidebar-clients")
             this.loadView("clients")
         })
 
         $(document).on('click', '#btn-nav-meds', () => {
-        //    this.navSetActive("#btn-sidebar-medications")
             this.loadView("meds")
         })
 
         $(document).on('click', '#btn-nav-settings', () => {
-            // this.navSetActive("#btn-sidebar-settings")
             this.loadView("settings")
         })
 
@@ -139,19 +114,8 @@ class Dashboard{
     }
 }
 
-function loadMed(id){
-    $('#medications-module').append(`<div id="medication"></div>`)
-    $('#medication').load('views/med-details.html')
-    MedDetails.load(id)
-}
 
-// function toggleSidebar(){
-//     $("body").toggleClass("sidenav-toggled")
-// }
-
-
-// // SB Admin JS //
-
+// SB Admin JS //
 function sbAdmin(){
     // Enable Bootstrap tooltips via data-attributes globally
     $('[data-toggle="tooltip"]').tooltip();
@@ -161,50 +125,6 @@ function sbAdmin(){
 
     $(".popover-dismiss").popover({
         trigger: "focus"
-    });
-
-    // // Add active state to sidbar nav links
-    // var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
-    // $("#layoutSidenav_nav .sidenav a.nav-link").each(function() {
-    //     if (this.href === path) {
-    //     $(this).addClass("active");
-    //     }
-    // });
-
-    // Toggle the side navigation
-    $("#sidebarToggle").on("click", function(e) {
-        e.preventDefault();
-        $("body").toggleClass("sidenav-toggled");
-    });
-
-    // Activate Feather icons
-    feather.replace();
-
-    // Activate Bootstrap scrollspy for the sticky nav component
-    $("body").scrollspy({
-        target: "#stickyNav",
-        offset: 82
-    });
-
-    // Scrolls to an offset anchor when a sticky nav link is clicked
-    $('.nav-sticky a.nav-link[href*="#"]:not([href="#"])').click(function() {
-        if (
-        location.pathname.replace(/^\//, "") ==
-            this.pathname.replace(/^\//, "") &&
-        location.hostname == this.hostname
-        ) {
-        var target = $(this.hash);
-        target = target.length ? target : $("[name=" + this.hash.slice(1) + "]");
-        if (target.length) {
-            $("html, body").animate(
-            {
-                scrollTop: target.offset().top - 81
-            },
-            200
-            );
-            return false;
-        }
-        }
     });
 
     // Click to collapse responsive sidebar

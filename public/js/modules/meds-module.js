@@ -4,7 +4,7 @@ class MedsModule{
 
         $(div).load("views/meds.html", () => {
             $(`${div} #content`).load("views/templates/datatable.html", () => {
-                this.loadData()
+                this.observe()
                 this.listeners()
                 $(`${this.div} #title`).text("Medication")
                 $(`${this.div} #btn-filters`).hide()
@@ -14,7 +14,7 @@ class MedsModule{
     }
 
     // Watches for changes in db and auto updates table. 
-    loadData(){
+    observe(){
         let query = db.collection('meds')
 
         query.onSnapshot(querySnapshot => {

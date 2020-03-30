@@ -1,31 +1,44 @@
 class UserModule{
-    constructor(div, id){
+    // div: string = Div id/class to load module into. 
+    // userId: string = Id of user to be loaded from db. 
+    constructor(div, userId){
         this.div = div
 
         $(`${this.div}`).load("views/templates/details.html", () => {
             this.listeners()
-            let db = new UsersDB()
-            db.listenUser(UserModule.displayData, id, this.div)
+            this.observe(userId)
         })
     }
 
-    static displayData(user, div){
-        Module.clearDetails(div)
+    observe(userId){
+        let doc = db.collection('users').doc(userId)
+        let observer = doc.onSnapshot(docSnapshot => {
+            let user = new UserModel()
+            user.docToUser(docSnapshot)
+            this.displayData(user)
+        }, err => {
+            console.log(`Encountered error: ${err}`)
+            Notification.display(2, "Problem loading user")
+        })
+    }
 
-        Module.setTitle(div, `${user.name}'s Details`)
+    displayData(user){
+        Module.clearDetails(this.div)
+
+        Module.setTitle(this.div, `${user.name}'s Details`)
         
-        Module.appendDetail(div, "Name", user.name)
-        Module.appendDetail(div, "Role", user.role)
-        Module.appendDetail(div, "Gender", user.gender)
-        Module.appendDetail(div, "Date of Birth", user.dob)
-        Module.appendDetail(div, "Mobile", user.mobile)
+        Module.appendDetail(this.div, "Name", user.name)
+        Module.appendDetail(this.div, "Role", user.role)
+        Module.appendDetail(this.div, "Gender", user.gender)
+        Module.appendDetail(this.div, "Date of Birth", user.dob)
+        Module.appendDetail(this.div, "Mobile", user.mobile)
 
         let address = Format.address(user.address1, user.address2, user.town, user.county, user.eircode)
-        Module.appendDetail(div, "Address", address)
+        Module.appendDetail(this.div, "Address", address)
 
-        Module.appendDetail(div, "Archived", Convert.boolToText(user.archived))
+        Module.appendDetail(this.div, "Archived", Convert.boolToText(user.archived))
 
-        Module.scroll(div)
+        Module.scroll(this.div)
     }
 
     listeners(){

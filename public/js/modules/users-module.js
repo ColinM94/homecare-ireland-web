@@ -1,17 +1,25 @@
 class UsersModule{ 
-    constructor(div){
+    // div: string = Div id/class to load module into. 
+    // title: string = Title of card. 
+    // showSearch: boolean = Show/hide search box. 
+    constructor(div, title, showSearch){
         this.div = div
 
-        $(`${this.div}`).load('views/templates/datatable.html', () => {
-            $(`${this.div} #title`).hide()
-            $(`${this.div} #btn-add`).hide()
+        $(`${div}`).load('views/templates/datatable.html', () => {
+            if(!showSearch){
+                $(`${div} #datatable-search`).hide()
+                $(`${div} #btn-filters`).hide()
+            }
+            $(`${div} #btn-add`).hide()
+            $(`${div} #title`).text(title)
+            
             this.listeners()
-            this.loadData()
+            this.observe()
         })
     }
 
     // Watches for changes in db and auto updates table. 
-    loadData(){
+    observe(){
         let query = db.collection('users')
 
         query.onSnapshot(querySnapshot => {
