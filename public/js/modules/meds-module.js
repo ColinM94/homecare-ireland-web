@@ -2,14 +2,11 @@ class MedsModule{
     constructor(div){
         this.div = div
 
-        $(div).load("views/meds.html", () => {
-            $(`${div} #content`).load("views/templates/datatable.html", () => {
-                this.observe()
-                this.listeners()
-                $(`${this.div} #title`).text("Medication")
-                $(`${this.div} #btn-filters`).hide()
-
-            })
+        $(`${div}`).load("views/templates/datatable.html", () => {
+            this.observe()
+            this.listeners()
+            $(`${this.div} #title`).text("Medication")
+            $(`${this.div} #btn-filters`).hide()
         })
     }
 
@@ -68,6 +65,21 @@ class MedsModule{
             },
         })
     }
+
+    // addMed(){
+    //     let name = $("#add-med-name").val()
+    //     let description = $('#add-med-desc').val().split(/\n/)
+    //     let sideEffects = $('#add-med-sides').val().split(/\n/)
+
+    //     // Removes empty lines from arrays. 
+    //     description = description.filter(item => item)
+    //     sideEffects = sideEffects.filter(item => item)
+
+    //     await MedsDB.addMed(name, description, sideEffects)
+    //         .then(() => {
+    //             $('#modal-add-med').modal('hide')
+    //         })
+    // }
 
     // Internal listeners.
     listeners(div){

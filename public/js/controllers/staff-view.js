@@ -3,10 +3,10 @@ class StaffView{
         this.div = "#staff-view"
 
         $(this.div).append(`
-            <div id="users-module" class="col-12 w-100"></div>
-            <div id="user-module" class="col-12 w-100"></div>
-            <div id="clients-module" class="col-12 w-100"></div>
-            <div id="client-module" class="col-12 w-100"></div>
+            <div id="users-module" class="col-12 w-100 module"></div>
+            <div id="user-module" class="col-12 w-100 module"></div>
+            <div id="clients-module" class="col-12 w-100 module"></div>
+            <div id="client-module" class="col-12 w-100 module"></div>
         `)
 
         let users = new UsersModule(`${this.div} #users-module`, "", true)

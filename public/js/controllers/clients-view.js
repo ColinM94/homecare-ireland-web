@@ -3,8 +3,8 @@ class ClientsView{
         this.div = "#clients-view"
 
         $(this.div).append(`
-            <div id="clients-module"></div>
-            <div id="client-module"></div>
+            <div id="clients-module" class="col-12 w-100 module"></div>
+            <div id="client-module" class="col-12 w-100 module"></div>
         `)
 
         let clients = new ClientsModule(`${this.div} #clients-module`, "", true, true)

@@ -1,0 +1,9 @@
+// TODO
+Finish add med form
+Fix user clients
+
+//DONE
+Add signout button to sidebar.
+Add signout button to settings page for mobile. 
+Fix padding incosistencies between views. 
+Add new client form

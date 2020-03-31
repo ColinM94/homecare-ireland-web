@@ -3,7 +3,7 @@ class ClientModule{
     // userId: string = Id of user to be loaded from db. 
     constructor(div, clientId){
         this.div = div
-
+        console.log(div)
         $(`${div}`).show()
         $(`${div}`).load("views/templates/details.html", () => {
             this.listeners()

@@ -30,11 +30,11 @@ class MedModule{
         $(`${this.div} #title`).text(`${med.name}`)
 
         med.description.forEach(desc => {
-            $(`${this.div} #med-desc`).append(desc)
+            $(`${this.div} #med-desc`).append(desc + "<br><br>")
         }) 
 
         med.sideEffects.forEach(side => {
-            $(`${this.div} #med-sides`).append(side)
+            $(`${this.div} #med-sides`).append(side + "<br><br>")
         })  
 
         Module.scroll(this.div)

@@ -18,32 +18,37 @@ class Dashboard{
     static load(){
         $("#main-content").load("views/dashboard.html", () => {
             $('.sidenav-footer-title').text(currentUser.name)
+            $("#modals").load("views/modals.html")
 
-            Dashboard.addLink("staff", "fas fa-user-md", "Staff")
-            Dashboard.addLink("clients", "fas fa-users", "Clients")
-            Dashboard.addLink("meds", "fas fa-tablets", "Medication")
-            Dashboard.addLink("settings", "fas fa-cog", "Settings")
-
+            Dashboard.addLink("staff", "fas fa-user-md", "Staff", true, true)
+            Dashboard.addLink("clients", "fas fa-users", "Clients", true, true)
+            Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
+            Dashboard.addLink("settings", "fas fa-cog", "Settings", true, true)
+            Dashboard.addLink("signout", "fas fa-sign-out-alt", "Sign Out", true, false)
             this.loadView("staff")
             this.listeners()
             //  sbAdmin()
         })
     }
 
-    static addLink(id, icon, text){
-        $('#side-nav .nav-btns').append(`
-            <button id="btn-nav-${id}" class="nav-btn w-100 bg-transparent mb-2 border-0 text-left pl-4 row">
-                <i class="${icon} fa-lg col-3 my-auto"></i>
-                <span class="col-9">${text}</span>
-            </button>
-        `)
+    static addLink(id, icon, text, web, mobile){
+        if(web){
+            $('#side-nav .nav-btns').append(`
+                <button id="btn-nav-${id}" class="nav-btn w-100 bg-transparent mb-2 border-0 text-left pl-4 row">
+                    <i class="${icon} fa-lg col-3 my-auto"></i>
+                    <span class="col-9">${text}</span>
+                </button>
+            `)
+        }
 
-        $('#bottom-nav').append(`
-            <button id="btn-nav-${id}" class="btn nav-btn row col p-0 h-100" href="#">
-                <i class="${icon} fa-lg col-12"></i>
-                <span class="col-12 mt-2 d-none">${text}</span>
-            </button>
-        `)
+        if(mobile){
+            $('#bottom-nav').append(`
+                <button id="btn-nav-${id}" class="btn nav-btn row col p-0 h-100" href="#">
+                    <i class="${icon} fa-lg col-12"></i>
+                    <span class="col-12 mt-2 d-none">${text}</span>
+                </button>
+            `)
+        }
     }
 
     // If view doesn't exist it is created, if it exists it is displayed. 
@@ -73,6 +78,7 @@ class Dashboard{
     }
 
     static async signOut(){
+        console.log("hi")
         if(await Prompt.confirm("Are you sure you want to sign out?")){
             Auth.signOut()
         }
@@ -108,7 +114,7 @@ class Dashboard{
             this.loadView("settings")
         })
 
-        $(document).on('click', '#btn-signout', () => {
+        $(document).on('click', '#btn-nav-signout', () => {
             this.signOut()
         })
     }

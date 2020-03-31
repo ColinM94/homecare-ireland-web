@@ -1,22 +1,23 @@
-<!-- ADD CLIENT MODAL -->
-<div class="modal fade" id="modal-add-client" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal -->
+<div class="modal fade" id="modal-add-client" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+                <h5 class="modal-title" id="modal-title">New Client</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                  <span aria-hidden="true">                    
+                  <i class="fas fa-times"></i></span>
                 </button>
             </div>
             <div class="modal-body">
-              <form class="mt-auto" id="form-add-client">
+              <form id="form-add-client">
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-name">Name</label>
+                  <label class="col-sm-3" for="add-client-name">Name</label>
                   <input type="text" class="form-control col-sm-9" id="add-client-name" title="Name">
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-gender">Gender</label>
-                  <select class="form-control form-select col-sm-9" id="add-client-gender">
+                  <label class="col-sm-3" for="add-client-gender">Gender</label>
+                  <select class="form-control col-sm-9" id="add-client-gender">
                     <option value="" selected disabled hidden>Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -24,27 +25,27 @@
                   </select>
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-dob">Date of Birth</label>
+                  <label class="col-sm-3" for="add-client-dob">Date of Birth</label>
                   <input type="date" class="form-control col-sm-9" id="add-client-dob">
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-mobile">Mobile</label>
+                  <label class="col-sm-3" for="add-client-mobile">Mobile</label>
                   <input type="text" class="form-control col-sm-9" id="add-client-mobile">
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-address1">Address 1</label>
+                  <label class="col-sm-3" for="add-client-address1">Address 1</label>
                   <input type="text" class="form-control col-sm-9" id="add-client-address1">
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-address2">Address 2</label>
+                  <label class="col-sm-3" for="add-client-address2">Address 2</label>
                   <input type="text" class="form-control col-sm-9" id="add-client-address2">
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-town">Town</label>
+                  <label class="col-sm-3" for="add-client-town">Town</label>
                   <input type="text" class="form-control col-sm-9" id="add-client-town">
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-county">County</label>
+                  <label class="col-sm-3" for="add-client-county">County</label>
                   <select class="form-control form-select col-sm-9" id="add-client-county">
                     <option value="" selected disabled hidden>Select County</option>
                     <option value="Carlow">Carlow</option>
@@ -76,11 +77,11 @@
                   </select>
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-eircode">Eircode</label>
+                  <label class="col-sm-3" for="add-client-eircode">Eircode</label>
                   <input type="text" class="form-control col-sm-9" id="add-client-eircode">
                 </div>
                 <div class="form-group row">
-                  <label class="control-label col-sm-3" for="add-client-marital">Marital Status</label>
+                  <label class="col-sm-3" for="add-client-marital">Marital Status</label>
                   <select class="form-control form-select col-sm-9" id="add-client-marital">
                     <option value="" selected disabled hidden>Select Marital Status</option>
                     <option value="Single">Single</option>
@@ -90,14 +91,13 @@
                     <option value="Relationship">Relationship</option>
                   </select>
                 </div>
-                <hr>
-                <button class="btn btn-primary btn-user btn-block">Add Client</button>
-                <div class="form-error text-danger"></div>
-              </form>          
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
+              </form>       
+          </div>
+          <div class="modal-footer">
+            <div class="form-error text-danger mx-auto"></div>
+            <button class="btn btn-primary" id="btn-add-client" type="button">Add Client</button>
+          </div>
+      </div>
     </div>
   </div>
   
@@ -117,7 +117,7 @@
                         <input type="text" class="form-control" id="edit-client-id" hidden>
                       </div>
                       <div class="form-group row">
-                        <label class="control-label col-3" for="edit-client-name">Name</label>
+                        <label class="control-label col-3 my-auto" for="edit-client-name">Name</label>
                         <input type="text" class="form-control col-9" id="edit-client-name" title="Name">
                       </div>
                       <div class="form-group row">
@@ -207,4 +207,38 @@
       </div>
   </div>
   
-  
+  <!-- ADD MED MODAL -->
+<div class="modal fade" id="modal-add-med" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Add Medication</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <form class="mt-auto p-2" id="form-add-med">
+                  <div class="form-group row">
+                      <label class="control-label col-sm-3" for="add-client-dob">Name</label>
+                      <input type="text" class="form-control col-sm-9" id="add-med-name">
+                  </div>
+                  <div class="form-group row">
+                      <label class="control-label col-sm-3" for="add-client-dob">Description</label>
+                      <textarea class="form-control col-sm-9" id="add-med-desc"></textarea>
+                  </div>
+                  <div class="form-group row">
+                      <label class="control-label col-sm-3" for="add-client-dob">Side Effects</label>
+                      <textarea class="form-control col-sm-9" id="add-med-sides"></textarea>
+                  </div>
+                  <button class="btn btn-primary btn-user btn-block">
+                      Add Medication
+                  </button>
+                  <p class="form-error" id="client-error"></p>
+              </form>    
+          </div>
+          <div class="modal-footer">
+          </div>
+      </div>
+  </div>
+</div>

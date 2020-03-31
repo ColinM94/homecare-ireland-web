@@ -1,10 +1,8 @@
 class ClientsDB{
-
-
     // Returns Client object from clients/{clientId}.
     static async getClient(clientId) {
         let doc = await db.collection('clients').doc(clientId).get()
-        let client = new Client()
+        let client = new ClientModel()
         client.docToClient(doc)
         return client
     }
@@ -15,7 +13,7 @@ class ClientsDB{
         let result = await db.collection('clients').get()
 
         result.forEach(doc => {
-            let client = new Client()   
+            let client = new ClientModel()   
             client.docToClient(doc)
             clients.push(client)
         })
@@ -29,7 +27,7 @@ class ClientsDB{
         let result = await db.collection('clients').where('active' ,'==', true).get()
 
         result.forEach(doc => {
-            let client = new Client()   
+            let client = new ClientModel()   
             client.docToClient(doc)
             clients.push(client)
         })
@@ -45,7 +43,7 @@ class ClientsDB{
         await db.collection('clients').where('active' ,'==', false).get()
 
         result.forEach(doc => {
-            let client = new Client()   
+            let client = new ClientModel()   
             client.docToClient(doc)
             clients.push(client)
         })
@@ -55,14 +53,14 @@ class ClientsDB{
 
     // Adds a new doc to clients. 
     static async addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active) {  
-        let client = new Client(null, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active)
+        let client = new ClientModel(null, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active)
 
         db.collection("clients").add(client.toFirestore())
     }
 
     // Updates existing client doc at clients/{clientId}.
     static async updateClient(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active) {
-        let client = new Client(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active)
+        let client = new ClientModel(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active)
 
         db.collection("clients").doc(clientId).set(client.toFirestore())
     }
