@@ -24,7 +24,7 @@ class ClientsDB{
     // Returns array of Client objects from all docs in clients.
     static async getActiveClients() {
         let clients = new Array()
-        let result = await db.collection('clients').where('active' ,'==', true).get()
+        let result = await db.collection('clients').where('archived' ,'==', false).get()
 
         result.forEach(doc => {
             let client = new ClientModel()   
@@ -72,12 +72,37 @@ class ClientsDB{
 
     // Sets clients/{clientId}/active field to true.
     static async activateClient (clientId) {
-        await db.collection('clients').doc(clientId).update({"active": true})
+        await db.collection('clients').doc(clientId).update({"archived": false})
     }
 
     // Sets clients/{clientId}/active field to false. 
     static async deactivateClient (clientId) {
-        await db.collection('clients').doc(clientId).update({"active": false})
+        await db.collection('clients').doc(clientId).update({"archived": true})
+    }
+
+    static async addConn(userId, clientId){
+        let client = await this.getClient(clientId)
+
+        let users = client.users
+        if(!users.includes(userId))
+            users.push(userId)
+
+        await db.collection('clients').doc(clientId).update({
+            users: users
+        })
+    }
+
+    static async deleteConn(userId, clientId){
+        let client = await this.getClient(clientId)
+
+        let users = client.users
+
+        let index = users.indexOf(userId)
+        users.splice(index)
+
+        await db.collection('clients').doc(clientId).update({
+            users: users
+        })
     }
 }
 

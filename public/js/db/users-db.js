@@ -129,4 +129,30 @@ class UsersDB{
             "active": true
         })
     }
+
+    static async addConn(userId, clientId){
+        let user = await this.getUser(userId)
+
+        let clients = user.clients
+
+        if(!clients.includes(clientId))
+            clients.push(clientId)
+
+        await db.collection('users').doc(userId).update({
+            clients: clients
+        })
+    }
+
+    static async deleteConn(userId, clientId){
+        let user = await this.getUser(userId)
+
+        let clients = user.clients
+
+        let index = clients.indexOf(userId)
+        clients.splice(index)
+
+        await db.collection('users').doc(userId).update({
+            clients: clients
+        })
+    }
 }

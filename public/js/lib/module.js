@@ -32,7 +32,7 @@ class Module{
     }
 
     static clearDetails(div){
-        $(`${this.div} .card-body`).text("")
+        $(`${div} .card-body`).text("")
     }
 
 }

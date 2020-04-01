@@ -56,15 +56,15 @@ class Dashboard{
         switch(view){
             case "staff":
                 if($("#staff-view").text().trim() == "")
-                    StaffView.load()
+                    new StaffView()
                 break
             case "clients":
                 if($("#clients-view").text().trim() == "")
-                    ClientsView.load()
+                    new ClientsView
                 break
             case "meds":
                 if($("#meds-view").text().trim() == "")
-                    MedsView.load()
+                    new MedsView
                 break
             case "settings":
                 if($("#settings-view").text().trim() == "")

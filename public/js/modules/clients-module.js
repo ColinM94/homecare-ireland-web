@@ -1,43 +1,38 @@
 class ClientsModule{
     // div: string = Div id/class to load module into. 
-    // title: string = Title of card.
-    // userId: string = Show clients of this user.   
     // showSearch: boolean = Show/hide search box. 
     // showSearch: boolean = Show/hide add button. 
-    constructor(div, title, showSearch, showAdd, userId){
+    // title: string = Title of card.
+    // userId: string = Show clients of this user.   
+    // callback
+    constructor(callback, div, title, showSearch, showAdd, userId){
         this.div = div
+        this.callback = callback
+        this.userId = userId
 
         $(`${div}`).load("views/templates/datatable.html", () => {
-            $(`${div} #title`).text(title)
+            if(userId) $(`${this.div} #modal`).load("views/modals/add-conn.html")
 
-            if(!showSearch){
-                $(`${div} #datatable-search`).hide()
-                $(`${div} #btn-filters`).hide()
+            if(showSearch){
+                $(`${div} #datatable-search`).removeClass("d-none")
+                $(`${div} #btn-filters`).removeClass("d-none")
             } 
-            if(!showAdd) $(`${div} #btn-add`).hide()
-            
-            this.observe(userId)
+
+            if(showAdd) $(`${div} #btn-add`).removeClass("d-none")
+
+            $(`${this.div} #title`).text(title)
+
+            this.observe()
+
             this.listeners()
+            this.show()
         })
     }
 
-    async observe(userId){
-        let query = db.collection('clients')
-
-        if(userId != undefined){
-            let conns = await ConnsDB.getConns(userId)
-
-            let ids = new Array()
-            conns.forEach(conn => {
-                ids.push(conn.clientId)
-            })
-
-            if(ids.length != 0){
-                query = query.where(firebase.firestore.FieldPath.documentId(), 'in', ids)
-            }else{
-                return
-            }
-        }
+    observe(){
+        let query = db.collection(`clients`)
+        
+        if(this.userId) query = query.where('users', 'array-contains', this.userId)
 
         query.onSnapshot(querySnapshot => {
                 let clients = new Array()
@@ -51,7 +46,7 @@ class ClientsModule{
 
             }, err => {
                 console.log(`Encountered error: ${err}`)
-                Notification.display(2, "Problem loading staff")
+                Notification.display(2, "Problem loading connections")
         })
     }
 
@@ -64,7 +59,9 @@ class ClientsModule{
 
             return
         }
-          
+
+        let userId = this.userId
+
         this.datatable = $(`${this.div} #datatable`).DataTable({
             data: clients,
             // bLengthChange: false,
@@ -87,18 +84,56 @@ class ClientsModule{
                     data: "name", 
                     responsivePriority: 1
                 },
-                { targets: 1, title: "Gender", data: "gender", responsivePriority: 2},
-                { targets: 2, title: "Town", data: "town", responsivePriority: 3},
-                { targets: 3, title: "County", data: "county", responsivePriority: 4},
+                { targets: 1, title: "Gender", data: "gender", responsivePriority: 3},
+                { targets: 2, title: "Town", data: "town", responsivePriority: 4},
+                { targets: 3, title: "County", data: "county", responsivePriority: 5},
                 { targets: 4, data: "archived", visible: false},
+                { 
+                    targets: 5, 
+                    title: "Delete", 
+                    orderable: false,
+                    responsivePriority: 2,
+                    render: function(data, type, row, meta){
+                        if(userId) return `<button id="btn-delete-client" class="btn" onclick="ClientsModule.deleteConn('${userId}', '${row.id}')" title="Delete Connection"><i class="fa fa-times fa-lg"></i></button>` 
+                        else return `<button id="btn-delete-client" class="btn" onclick="ClientsModule.delete('${userId}', '${row.id}')" title="Delete Connection"><i class="fa fa-times fa-lg"></i></button>`   
+                
+                    }  
+                },
             ],
             initComplete : (ref) => {
-                Table.filters(ref, this.div, [1,2,3], ["Gender", "Town", "County"], true)
+                Table.filters(ref, this.div, [1,2,3, 4], ["Gender", "Town", "County", "Archived"], true)
                 Table.detachSearch(this.div)    
             },
         })
 
         // Module.scroll(this.div)
+    }
+
+    static async delete(userId, clientId){
+        if(await Prompt.confirm("This action will archive client!")){
+            ClientsDB.deactivateClient(clientId)
+            .then(() => {
+                console.log(Notification.display(1, "Client archived"))
+            }).catch(error => {
+                console.log(error.message)
+                console.log(Notification.display(2, "Problem archiving client"))
+            }) 
+        }
+    }
+
+    static async deleteConn(userId, clientId){
+        if(await Prompt.confirm("This action will remove assigned client from user!")){
+            Promise.all([
+                await ClientsDB.deleteConn(userId, clientId),
+                await UsersDB.deleteConn(userId, clientId)
+            ]).then(() => {
+                console.log(Notification.display(1, "Connected deleted"))
+                $('#modal-add-conn').modal('hide')
+            }).catch(error => {
+                console.log(error.message)
+                console.log(Notification.display(2, "Problem deleting connection"))
+            }) 
+        }
     }
 
     addClient(){
@@ -114,7 +149,7 @@ class ClientsModule{
         let marital = $("#add-client-marital").val()
 
         if(this.validateForm(name, gender, dob, mobile, address1, address2, town, county, eircode, marital)){
-            ClientsDB.addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, true)
+            ClientsDB.addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, false, [])
                 .then(() => {
                     $('#modal-add-client').modal('hide')
                 }).catch(error => {
@@ -188,32 +223,101 @@ class ClientsModule{
         }
     }
 
-    // Internal listeners
+    async connForm(){
+        $('#modal-add-conn').modal('show')
+
+        $("#select-client")
+            .empty()
+            .append("<option value='' selected disabled hidden>Select Client</option>")
+            .attr('disabled', false)
+
+        $('#btn-add-conn').attr('disabled', false)
+
+        let allClients
+
+        allClients = await ClientsDB.getActiveClients()
+
+        allClients.forEach(client => {
+            if(!client.users.includes(this.userId)){
+                $("#select-client").append(new Option(`${client.name} : ${client.address1}, ${client.county}`, client.id))
+            }
+        })
+
+        if($('#select-client option').length <= 1){
+            $("#select-client")
+                .empty()
+                .append(new Option('No Clients Found!'))
+                .attr('disabled', true)
+
+            $('#btn-add-conn').attr('disabled', true)
+        }
+
+        $(this.div).on('click', `#btn-add-conn`, () => {
+            this.addConn()
+        })
+    }
+
+    async addConn(){
+        let clientId = $('#select-client').val()
+
+        if(!clientId){
+            Notification.formError("Please select a client!")
+        }else{
+            Notification.formError("")
+
+            await Promise.all([
+                await ClientsDB.addConn(this.userId, clientId),
+                await UsersDB.addConn(this.userId, clientId)
+            ]).then(() => {
+                Notification.display(1, "Connected created")
+                $('#modal-add-conn').modal('hide')
+            }).catch(error => {
+                console.log(error.message)
+                cNotification.display(2, "Problem creating connection")
+            }) 
+        }
+    }
+
     listeners(){
+        // Removes previously set listeners to prevent duplication. 
+        $(this.div).off('click')
+
         // Toggles display of table filters. 
         $(this.div).on('click', `#btn-filters`, (ref) => {
             toggleFilters(this.div)
         })
 
         $(this.div).on('click', '#btn-add', (ref) => {
-            $('#modal-add-client').modal('show')
+            if(this.userId)
+                this.connForm()
+            else
+                $('#modal-add-client').modal('show')
+
         })
 
-        $("#modals").on('click', '#btn-add-client', () => {
+        $(this.div).on('click', '#btn-add-client', () => {
             this.addClient()
         })
-    }
 
-    // External listeners
-    listen(callback){
-        $(this.div).on('click', 'tr', (ref) => {
-            let client = Table.rowClick(this.datatable, ref)
+        $(this.div).on('click', 'tr', (event) => {
+            
+            if($(event.target).is("i")) return 
+            
+            let client = Table.rowClick(this.datatable, event)
 
             // Prevents loading module if table header row is clicked. 
             if(client != undefined){
-                callback(["client", client])
+                this.callback.handle(["client", client])
             }
         })
+    }
+
+    show(){
+        $(this.div).show()
+    }
+
+    hide(){
+        $(this.div).hide()
     }
 }
 

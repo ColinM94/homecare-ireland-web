@@ -1,5 +1,5 @@
 class MedsView{
-    static load(){
+    constructor(){
         this.div = "#meds-view"
 
         $(this.div).text("")
@@ -8,18 +8,16 @@ class MedsView{
             <div id="med-module" class="col-12 w-100 module"></div>
         `)
 
-        let meds = new MedsModule(`${this.div} #meds-module`)
-        meds.listen(this.listener)
-}
-
-    static loadMed(id){
-        new MedModule(`${MedsView.div} #med-module`, id)
-        $('#med-module').show()
+        this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, true)
     }
 
-    static listener(data){
+    loadMed(id){
+        this.medsModule = new MedModule(`${this.div} #med-module`, id)
+    }
+
+    handle(data){
         if(data[0] == "med"){
-            MedsView.loadMed(data[1].id)
+            this.loadMed(data[1].id)
         }
     }
 }

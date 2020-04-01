@@ -2,19 +2,24 @@ class UsersModule{
     // div: string = Div id/class to load module into. 
     // title: string = Title of card. 
     // showSearch: boolean = Show/hide search box. 
-    constructor(div, title, showSearch){
+    // callBack
+    constructor(callback, div, title, showSearch, showAdd){
         this.div = div
+        this.callback = callback
 
         $(`${div}`).load('views/templates/datatable.html', () => {
-            if(!showSearch){
-                $(`${div} #datatable-search`).hide()
-                $(`${div} #btn-filters`).hide()
+            if(showSearch){
+                $(`${div} #datatable-search`).removeClass("d-none")
+                $(`${div} #btn-filters`).removeClass("d-none")
             }
-            $(`${div} #btn-add`).hide()
-            $(`${div} #title`).text(title)
             
+            if(showAdd) $(`${div} #btn-add`).removeClass("d-none")
+            
+            $(`${div} #title`).text(title)
+
+            this.show()
+            this.observe() 
             this.listeners()
-            this.observe()
         })
     }
 
@@ -93,23 +98,27 @@ class UsersModule{
         this.datatable.column(5).search("No").draw();
     }
 
-    // Internal listeners.
     listeners(div){
         // Toggles display of table filters. 
         $(this.div).on('click', '#btn-filters', (ref) => {
             toggleFilters(this.div)
         })
-    }
 
-    // External listeners.
-    listen(callback){
-        $(this.div).on('click', 'tr', (ref) => {
+         $(this.div).on('click', 'tr', (ref) => {
             let user = Table.rowClick(this.datatable, ref)
 
             // Prevents loading module if table header row is clicked. 
             if(user != undefined){
-                callback(["user", user])
+                this.callback.handle(["user", user])
             }
         })
+    }
+
+    show(){
+        $(this.div).show()
+    }
+
+    hide(){
+        $(this.div).hide()
     }
 }

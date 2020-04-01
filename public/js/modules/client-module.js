@@ -3,11 +3,12 @@ class ClientModule{
     // userId: string = Id of user to be loaded from db. 
     constructor(div, clientId){
         this.div = div
-        console.log(div)
-        $(`${div}`).show()
+        this.clientId = clientId
+
         $(`${div}`).load("views/templates/details.html", () => {
             this.listeners()
             this.observe(clientId)
+            $(this.div).show()
         })
     }
 
@@ -39,10 +40,13 @@ class ClientModule{
         Module.appendDetail(this.div, "Address", address)
 
         Module.appendDetail(this.div, "Archived", Convert.boolToText(client.archived))
+
         Module.scroll(this.div)
     }
 
     listeners(){
+        // Removes previously set listeners to prevent duplication. 
+        $(this.div).off('click')
 
     }
 }

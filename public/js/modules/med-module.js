@@ -1,10 +1,11 @@
 class MedModule{
     constructor(div, id){
         this.div = div
-        
+       
         $(`${this.div}`).load("views/med.html", () => {
             this.loadData(id)
             this.listeners()
+            this.show()
         })
     }
 
@@ -34,7 +35,7 @@ class MedModule{
         }) 
 
         med.sideEffects.forEach(side => {
-            $(`${this.div} #med-sides`).append(side + "<br><br>")
+            $(`${this.div} #med-sides`).append(side + "<br>")
         })  
 
         Module.scroll(this.div)
@@ -42,5 +43,13 @@ class MedModule{
 
     listeners(){
 
+    }
+
+    show(){
+        $(this.div).show()
+    }
+
+    hide(){
+        $(this.div).hide()
     }
 }

@@ -1,12 +1,22 @@
 class MedsModule{ 
-    constructor(div){
+    constructor(callback, div, title, showSearch, showAdd){
         this.div = div
-
+        this.callback = callback
+    
         $(`${div}`).load("views/templates/datatable.html", () => {
+            if(showSearch){
+                $(`${div} #datatable-search`).removeClass("d-none")
+                $(`${div} #btn-filters`).removeClass("d-none")
+            } 
+
+            if(showAdd) $(`${div} #btn-add`).removeClass("d-none")
+
+            $(`${this.div} #title`).text(title)
+
             this.observe()
+
             this.listeners()
-            $(`${this.div} #title`).text("Medication")
-            $(`${this.div} #btn-filters`).hide()
+            this.show()
         })
     }
 
@@ -101,14 +111,21 @@ class MedsModule{
         })
     }
 
-    // External listeners.
-    listen(callback){
+    show(){
+        $(this.div).show()
+    }
+
+    hide(){
+        $(this.div).hide()
+    }
+
+    listeners(){
         $(this.div).on('click', 'tr', (ref) => {
             let med = Table.rowClick(this.datatable, ref)
 
             // Prevents loading module if table header row is clicked. 
             if(med != undefined){
-                callback(["med", med])
+                this.callback.handle(["med", med])
             }
         })
     }

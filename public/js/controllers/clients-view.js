@@ -1,5 +1,5 @@
 class ClientsView{
-    static load(){
+    constructor(){
         this.div = "#clients-view"
 
         $(this.div).append(`
@@ -7,19 +7,18 @@ class ClientsView{
             <div id="client-module" class="col-12 w-100 module"></div>
         `)
 
-        let clients = new ClientsModule(`${this.div} #clients-module`, "", true, true)
-        clients.listen(ClientsView.handleEvent)
+        this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, "", true, true)
     }
 
-    static handleEvent(data){
-        let div = `${ClientsView.div} #clients-module`
+    handle(data){
+        let div = `${this.div} #clients-module`
 
         if(data[0] == "client"){
-            ClientsView.loadClient(data[1])
+            this.loadClient(data[1])
         }
     } 
 
-    static loadClient(client){
-        new ClientModule(`${ClientsView.div} #client-module`, client.id)
+    loadClient(client){
+        this.clientModule = new ClientModule(`${this.div} #client-module`, client.id)
     }
 }

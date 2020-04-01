@@ -10,9 +10,23 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
   min-height: 47px;
 }
 
+.module{
+  display: none;
+}
+
+#notification{
+  width: 300px;
+}
+
+#btn-delete-client{
+  width: 100% !important;
+  height: 100% !important;
+  margin: -20px;
+}
+
 @media only screen and (max-width: 575px) {
   main{
-      margin-bottom: 70px;
+    margin-bottom: 70px;
   }
 
   .module{
@@ -21,6 +35,10 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 
   #settings{
     display: none;
+  }
+
+  #notification{
+    padding-bottom: 65px!important;
   }
 }
 
@@ -100,20 +118,17 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
   height: 0;
 }
 
-/* #datatable_filter .form-control::-ms-clear {
-  width : 0;
-  height: 0;
-} */
-
 #datatable-search{
   height: 100%;
 }
 
-/* #btn-filters{
-  position: static;
-} */
+#datatable{
+  text-align: center;
+}
 
 #datatable tr:hover{
   cursor: pointer;
 }
+
+
 
