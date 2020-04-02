@@ -12,7 +12,7 @@ class MedModule{
     loadData(id){
         let doc = db.collection('meds').doc(id)
         
-        let observer = doc.onSnapshot(docSnapshot => {
+        doc.onSnapshot(docSnapshot => {
             let med = new MedModel()
             med.docToMed(docSnapshot)
             this.displayData(med)

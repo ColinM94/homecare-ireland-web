@@ -11,8 +11,6 @@ class ClientsView{
     }
 
     handle(data){
-        let div = `${this.div} #clients-module`
-
         if(data[0] == "client"){
             this.loadClient(data[1])
         }

@@ -25,75 +25,9 @@ class UsersDB{
         return users
     }
 
-    // Returns array of User objects from users. 
-    static async getActiveUsers() {
-        let users = new Array()
-
-        let result = await db.collection('users')
-            .where('active' ,'==', true)
-            .get()
-
-        result.forEach(doc => {
-            let user = new UserModel()   
-            user.docToUser(doc)
-            users.push(user)
-        })
-
-        return users
-    }
-
-    static async getActiveCarers(){
-        let users = new Array()
-
-        let result = await db.collection('users')
-            .where('active' ,'==', true)
-            .where('role', '==', 'Carer')
-            .get()
-
-        result.forEach(doc => {
-            let user = new UserModel()   
-            user.docToUser(doc)
-            users.push(user)
-        })
-
-        return users
-    }
-
-    static async getAdmins(){
-        let users = new Array()
-
-        let result = await db.collection('users')
-            .where('active' ,'==', true)
-            .where('role', '==', 'Admin')
-            .get()
-
-        result.forEach(doc => {
-            let user = new UserModel()   
-            user.docToUser(doc)
-            users.push(user)
-        })
-
-        return users
-    }
-
-    // Returns array of User objects from all docs in users.   
-    static async getDeactiveUsers() {
-        let users = new Array()
-
-        let result = await db.collection('users').where('active' ,'==', false).get()
-
-        result.forEach(doc => {
-            let user = new UserModel()   
-            user.docToUser(doc)
-            users.push(user)
-        })
-
-        return users
-    }
-
     // Adds a new doc to users. 
-    static async addUser(id, role, name, address1, address2, town, county, eircode, active) {
-        let user = new UserModel(id, role, name, address1, address2, town, county, eircode, active)
+    static async addUser(id, role, name, address1, address2, town, county, eircode, archived) {
+        let user = new UserModel(id, role, name, address1, address2, town, county, eircode, archived, [])
         await db.collection("users").add(user.toFirestore())
     }
 
@@ -102,7 +36,7 @@ class UsersDB{
         db.collection('users').doc(userId).delete()
     }
 
-    // Sets users/{userId}/arhived field to true. 
+    // Sets users/{userId}/archived field to true. 
     static async archive(userId) {
         await db.collection('users').doc(userId).update({
             "archived": true
@@ -130,6 +64,7 @@ class UsersDB{
         })
     }
 
+    // Adds {clientId} to users/{usersId}/clients array. 
     static async addConn(userId, clientId){
         let user = await this.getUser(userId)
 
@@ -143,12 +78,13 @@ class UsersDB{
         })
     }
 
+    // Remove {clientId} from users/{userId}/clients array. 
     static async deleteConn(userId, clientId){
         let user = await this.getUser(userId)
 
         let clients = user.clients
 
-        let index = clients.indexOf(userId)
+        let index = clients.indexOf(clientId)
         clients.splice(index)
 
         await db.collection('users').doc(userId).update({

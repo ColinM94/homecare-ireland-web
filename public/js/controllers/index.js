@@ -17,7 +17,7 @@ class Index{
             var password = $("#signin-password").val()
 
             Auth.signIn(email, password)
-                .then(result => {
+                .then(() => {
                     Dashboard.load()
                 }).catch(error => {
                 if(error.message.includes("no user record")){

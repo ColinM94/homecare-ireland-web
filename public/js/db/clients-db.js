@@ -21,46 +21,16 @@ class ClientsDB{
         return clients
     }
 
-    // Returns array of Client objects from all docs in clients.
-    static async getActiveClients() {
-        let clients = new Array()
-        let result = await db.collection('clients').where('archived' ,'==', false).get()
-
-        result.forEach(doc => {
-            let client = new ClientModel()   
-            client.docToClient(doc)
-            clients.push(client)
-        })
-
-        return clients
-    }
-
-    // Returns array of Clients objects from clients where active = true. 
-    static async getDeactiveClients() {
-        let clients = new Array()
-
-        let result 
-        await db.collection('clients').where('active' ,'==', false).get()
-
-        result.forEach(doc => {
-            let client = new ClientModel()   
-            client.docToClient(doc)
-            clients.push(client)
-        })
-
-        return clients
-    }
-
     // Adds a new doc to clients. 
     static async addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active) {  
-        let client = new ClientModel(null, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active)
+        let client = new ClientModel(null, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active, users)
 
         db.collection("clients").add(client.toFirestore())
     }
 
     // Updates existing client doc at clients/{clientId}.
-    static async updateClient(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active) {
-        let client = new ClientModel(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active)
+    static async updateClient(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active, users) {
+        let client = new ClientModel(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active, users)
 
         db.collection("clients").doc(clientId).set(client.toFirestore())
     }
@@ -71,15 +41,16 @@ class ClientsDB{
     }
 
     // Sets clients/{clientId}/active field to true.
-    static async activateClient (clientId) {
+    static async archive(clientId) {
         await db.collection('clients').doc(clientId).update({"archived": false})
     }
 
     // Sets clients/{clientId}/active field to false. 
-    static async deactivateClient (clientId) {
+    static async unArchive (clientId) {
         await db.collection('clients').doc(clientId).update({"archived": true})
     }
 
+    // Adds {userId} to clients/{clientId}/users array.
     static async addConn(userId, clientId){
         let client = await this.getClient(clientId)
 

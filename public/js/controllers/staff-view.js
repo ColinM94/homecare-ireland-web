@@ -14,8 +14,6 @@ class StaffView{
 
     // Handles callbacks from modules. 
     handle(data){
-        let div = `${this.div} #user-module`
-
         if(data[0] == "user"){
             this.loadUser(data[1])
             this.loadClients(data[1])
@@ -33,7 +31,7 @@ class StaffView{
     }
 
     loadClient(client){
-        new ClientModule(`${this.div} #client-module`, client.id)
+        this.clientModule = new ClientModule(`${this.div} #client-module`, client.id)
     }
 }
 

@@ -149,7 +149,7 @@ class ClientsModule{
         let marital = $("#add-client-marital").val()
 
         if(this.validateForm(name, gender, dob, mobile, address1, address2, town, county, eircode, marital)){
-            ClientsDB.addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, false, [])
+            ClientsDB.addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, true)
                 .then(() => {
                     $('#modal-add-client').modal('hide')
                 }).catch(error => {
