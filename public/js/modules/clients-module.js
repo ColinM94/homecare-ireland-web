@@ -4,7 +4,7 @@ class ClientsModule{
     // showSearch: boolean = Show/hide add button. 
     // title: string = Title of card.
     // userId: string = Show clients of this user.   
-    // callback
+    // callBack: class reference = Allows for calling functions in view class. 
     constructor(callback, div, title, showSearch, showAdd, userId){
         this.div = div
         this.callback = callback

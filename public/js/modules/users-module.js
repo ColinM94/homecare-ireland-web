@@ -2,7 +2,7 @@ class UsersModule{
     // div: string = Div id/class to load module into. 
     // title: string = Title of card. 
     // showSearch: boolean = Show/hide search box. 
-    // callBack
+    // callBack: class reference = Allows for calling functions in view class. 
     constructor(callback, div, title, showSearch, showAdd){
         this.div = div
         this.callback = callback
