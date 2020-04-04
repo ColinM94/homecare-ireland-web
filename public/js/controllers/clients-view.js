@@ -10,7 +10,7 @@ class ClientsView{
         `)
 
         if(user) this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, "", true, false, user.id)
-        else this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, "", true, true, user.id)
+        else this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, "", true, true)
     }
 
     handle(data){
