@@ -1,14 +1,16 @@
 class ClientsModule{
+    // callBack: class reference = Allows for calling functions in view class. 
     // div: string = Div id/class to load module into. 
     // showSearch: boolean = Show/hide search box. 
-    // showSearch: boolean = Show/hide add button. 
+    // showAdd: boolean = Show/hide add button. 
     // title: string = Title of card.
     // userId: string = Show clients of this user.   
-    // callBack: class reference = Allows for calling functions in view class. 
     constructor(callback, div, title, showSearch, showAdd, userId){
         this.div = div
         this.callback = callback
         this.userId = userId
+
+        console.log(userId)
 
         $(`${div}`).load("views/templates/datatable.html", () => {
             if(userId) $(`${this.div} #modal`).load("views/modals/add-conn.html")
@@ -25,7 +27,7 @@ class ClientsModule{
             this.observe()
 
             this.listeners()
-            this.show()
+            Module.show(this.div)
         })
     }
 
@@ -78,16 +80,12 @@ class ClientsModule{
                 sSearch: '', searchPlaceholder: "Search..." 
             },
             columnDefs: [
-                { 
-                    targets: 0, 
-                    title: "Name", 
-                    data: "name", 
-                    responsivePriority: 1
-                },
-                { targets: 1, title: "Gender", data: "gender", responsivePriority: 3},
-                { targets: 2, title: "Town", data: "town", responsivePriority: 4},
-                { targets: 3, title: "County", data: "county", responsivePriority: 5},
-                { targets: 4, data: "archived", visible: false},
+                { targets: 0, title: "Name", data: "name", responsivePriority: 1},
+                { targets: 1, title: "Gender", data: "gender", responsivePriority: 2},
+                { targets: 2, title: "DOB", data: "dob", responsivePriority: 3},
+                { targets: 3, title: "Town", data: "town", responsivePriority: 4},
+                { targets: 4, title: "County", data: "county", responsivePriority: 5},
+                { targets: 5, data: "archived", visible: false},
                 { 
                     targets: 5, 
                     title: "Delete", 
@@ -127,7 +125,7 @@ class ClientsModule{
                 await ClientsDB.deleteConn(userId, clientId),
                 await UsersDB.deleteConn(userId, clientId)
             ]).then(() => {
-                console.log(Notification.display(1, "Connected deleted"))
+                console.log(Notification.display(1, "Connection deleted"))
                 $('#modal-add-conn').modal('hide')
             }).catch(error => {
                 console.log(error.message)
@@ -235,7 +233,7 @@ class ClientsModule{
 
         let allClients
 
-        allClients = await ClientsDB.getActiveClients()
+        allClients = await ClientsDB.getClients("active")
 
         allClients.forEach(client => {
             if(!client.users.includes(this.userId)){

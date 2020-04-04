@@ -6,6 +6,7 @@ html,body{
 
 input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 
+/* <!---- MODULES ----> */
 .card-header{
   min-height: 47px;
 }
@@ -16,12 +17,18 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 
 #notification{
   width: 300px;
+
 }
 
 #btn-delete-client{
   width: 100% !important;
   height: 100% !important;
   margin: -20px;
+}
+
+#title{
+  white-space: nowrap;
+  margin-left: 12px;
 }
 
 @media only screen and (max-width: 575px) {
@@ -38,7 +45,10 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
   }
 
   #notification{
-    padding-bottom: 65px!important;
+    /* padding-bottom: 65px!important; */
+    margin-bottom: 65px;
+    margin-right: 10px;
+    width: 200px;
   }
 }
 
@@ -91,7 +101,7 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 
 #bottom-nav{
   height: 70px;
-  z-index: 100;
+  z-index:99;
 }
 
 @media only screen and (max-width: 575px) {

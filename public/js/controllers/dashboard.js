@@ -5,8 +5,9 @@ auth.onAuthStateChanged(user => {
     if(user){
         UsersDB.getUser(user.uid)
             .then(user => {
-                Dashboard.load()
                 currentUser = user
+
+                Dashboard.load()
             })
     }else{
         Auth.signOut()
@@ -18,15 +19,26 @@ class Dashboard{
     static load(){
         $("#main-content").load("views/dashboard.html", () => {
             $('.sidenav-footer-title').text(currentUser.name)
-            $("#modals").load("views/modals.html")
 
-            Dashboard.addLink("staff", "fas fa-user-md", "Staff", true, true)
+            if(currentUser.role == "Carer"){
+                Dashboard.addLink("visits", "fas fa-th-list", "Visits", true, true)
+                this.loadView("visits")
+            }else if(currentUser.role == "Admin"){
+                Dashboard.addLink("staff", "fas fa-user-md", "Staff", true, true)
+                this.loadView("staff")
+            }else if(currentUser.role == "client"){
+                
+            }
+
             Dashboard.addLink("clients", "fas fa-users", "Clients", true, true)
             Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
             Dashboard.addLink("settings", "fas fa-cog", "Settings", true, true)
             Dashboard.addLink("signout", "fas fa-sign-out-alt", "Sign Out", true, false)
-            this.loadView("staff")
+
+
             this.listeners()
+
+
             //  sbAdmin()
         })
     }
@@ -52,19 +64,28 @@ class Dashboard{
     }
 
     // If view doesn't exist it is created, if it exists it is displayed. 
-    static loadView(view){     
+    static loadView(view){  
         switch(view){
             case "staff":
                 if($("#staff-view").text().trim() == "")
-                    new StaffView()
+                    if(currentUser.role == "Admin")
+                        new StaffView()
                 break
             case "clients":
                 if($("#clients-view").text().trim() == "")
-                    new ClientsView
+                    if(currentUser.role == "Admin")
+                        new ClientsView()
+                    else if(currentUser.role == "Carer")
+                        new ClientsView(currentUser)
+                break
+            case "visits":
+                if($("#visits-view").text().trim() == "")
+                    if(currentUser.role == "Carer")
+                        new VisitsView(currentUser)
                 break
             case "meds":
                 if($("#meds-view").text().trim() == "")
-                    new MedsView
+                    new MedsView()
                 break
             case "settings":
                 if($("#settings-view").text().trim() == "")
@@ -73,6 +94,7 @@ class Dashboard{
             }
 
         $('.view').addClass("d-none")
+        console.log(`#${view}-view`)
         $(`#${view}-view`).removeClass("d-none")
         this.navSetActive(`#btn-nav-${view}`)
     }
@@ -104,6 +126,10 @@ class Dashboard{
 
         $(document).on('click', '#btn-nav-clients', () => {
             this.loadView("clients")
+        })
+
+        $(document).on('click', '#btn-nav-visits', () => {
+            this.loadView("visits")
         })
 
         $(document).on('click', '#btn-nav-meds', () => {

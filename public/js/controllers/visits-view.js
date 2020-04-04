@@ -1,16 +1,14 @@
-class ClientsView{
+class VisitsView{
     constructor(user){
-        this.div = "#clients-view"
-        this.user = user
+        this.div = "#visits-view"
+
         $(this.div).append(`
-            <div id="clients-module" class="col-12 w-100 module"></div>
-            <div id="client-module" class="col-12 w-100 module"></div>
             <div id="visits-module" class="col-12 w-100 module"></div>
             <div id="visit-module" class="col-12 w-100 module"></div>
         `)
 
-        if(user) this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, "", true, false, user.id)
-        else this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, "", true, true, user.id)
+        if(user) this.visitsModule = new VisitsModule(this, `${this.div} #visits-module`, "", false, false, user.id)
+        else this.visitsModule = new VisitsModule(this, `${this.div} #visits-module`, "", true, true)
     }
 
     handle(data){

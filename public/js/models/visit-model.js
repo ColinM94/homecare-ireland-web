@@ -1,10 +1,10 @@
 class VisitModel{
-    constructor(id, clientId, userId, clockInTime, clockOutTime, start, end, notes) {
+    constructor(id, clientId, userId, clockIn, clockOut, start, end, notes) {
         this.id = id
         this.clientId = clientId
         this.userId = userId
-        this.clockInTime = clockInTime
-        this.clockOutTime = clockOutTime
+        this.clockIn = clockIn
+        this.clockOut = clockOut
         this.start = start
         this.end = end
         this.notes = notes
@@ -15,8 +15,8 @@ class VisitModel{
         this.id = doc.id
         this.clientId = doc.data().clientId
         this.userId = doc.data().userId
-        this.clockInTime = doc.data().clockInTime
-        this.clockOutTime = doc.data().clockOutTime
+        this.clockIn = doc.data().clockIn
+        this.clockOut = doc.data().clockOut
         this.start = doc.data().start
         this.end = doc.data().end
         this.notes = doc.data().notes
@@ -27,8 +27,8 @@ class VisitModel{
         let visit = {
             clientId : this.clientId,
             userId : this.userId,
-            clockInTime : this.clockInTime,
-            clockOutTime : this.clockOutTime,
+            clockIn : this.clockIn,
+            clockOut : this.clockOut,
             start : this.start,
             end : this.end,
             notes : this.notes

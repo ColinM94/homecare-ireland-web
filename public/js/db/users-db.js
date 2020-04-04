@@ -11,10 +11,24 @@ class UsersDB{
     }
 
     // Returns array of User objects from users. 
-    static async getUsers() {
+    static async getUsers(arg, type) {
         let users = new Array()
 
-        let result = await db.collection('users').get()
+        let ref = db.collection('users')
+
+        if(type == "carer")    
+            ref = ref.where("role", "==", "carer")
+        else if(type == "admin")
+            ref = ref.where("role", "==", "admin")
+        else if(type == "doctor")
+            ref = ref.where("role", "==", "doctor")
+  
+        if(arg == "active")
+            ref = ref.where("archived", "==", false)
+        else if(arg == "inactive")
+            ref = ref.where("archived", "==", true)
+
+        let result = await ref.get()
 
         result.forEach(doc => {
             let user = new UserModel()   

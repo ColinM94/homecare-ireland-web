@@ -17,7 +17,7 @@ class UsersModule{
             
             $(`${div} #title`).text(title)
 
-            this.show()
+            Module.show(div)
             this.observe() 
             this.listeners()
         })
@@ -112,13 +112,5 @@ class UsersModule{
                 this.callback.handle(["user", user])
             }
         })
-    }
-
-    show(){
-        $(this.div).show()
-    }
-
-    hide(){
-        $(this.div).hide()
     }
 }

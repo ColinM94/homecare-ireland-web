@@ -1,9 +1,7 @@
 class VisitsDB{
     // Creates new doc in visitDetails. 
-    static async addVisit(userId, clientId, start, end, note){
-        console.log("adding visits")
-        let notes = [note]
-        let visit = new Visit(null, clientId, userId, "", "", start, end, notes)
+    static async addVisit(userId, clientId, start, end, notes){
+        let visit = new VisitModel(null, clientId, userId, "", "", start, end, notes)
 
         await db.collection("visits").add(visit.toFirestore())
     }
@@ -22,7 +20,7 @@ class VisitsDB{
         let visits = []
 
         docs.forEach(doc => {
-            let visit = new Visit()   
+            let visit = new VisitModel()   
             visit.docToVisit(doc)
             visits.push(visit)
         })
@@ -70,7 +68,7 @@ class VisitsDB{
     static async getVisit(visitId){
         let doc = await db.collection('visits').doc(visitId).get()
         
-        let visit = new Visit()
+        let visit = new VisitModel()
 
         visit.docToVisit(doc)
 

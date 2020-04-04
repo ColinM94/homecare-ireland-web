@@ -8,16 +8,24 @@ class ClientsDB{
     }
     
     // Returns array of Client objects from all docs in clients.
-    static async getClients() {
+    static async getClients(arg) {
         let clients = new Array()
-        let result = await db.collection('clients').get()
+        let ref = db.collection('clients')
 
+        if(arg == "active") {
+            ref = ref.where("archived", "==", false)
+        }else if(arg == "inactive") {
+            ref = ref.where("archived", "==", true)
+        }
+
+        let result = await ref.get()
+   
         result.forEach(doc => {
             let client = new ClientModel()   
             client.docToClient(doc)
             clients.push(client)
         })
-
+        
         return clients
     }
 

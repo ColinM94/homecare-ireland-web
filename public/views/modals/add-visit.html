@@ -1,0 +1,40 @@
+<!-- MODAL ADD VISIT -->
+<div class="modal fade" id="modal-add-visit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Add Visit</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">                    
+                  <i class="fas fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal p-1 mr-2" id="form-add-visit">
+                <input type="hidden" id="userId">
+                <div class="form-group row">
+                  <label class="col-3" for="visit-select-user">Select User</label>
+                  <select class="form-control col-9" id="visit-select-user"></select>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3" for="visit-start">Start</label>
+                  <input type="datetime-local" class="form-control col-sm-9" id="visit-start">
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3" for="visit-end">End</label>
+                  <input type="datetime-local" class="form-control col-sm-9" id="visit-end">
+                </div>
+                <div class="form-group row">
+                  <label class="control-label col-sm-3" for="visit-notes">Notes</label>
+                  <textarea type="text" class="form-control col-sm-9" id="visit-notes"></textarea>
+                </div>
+              </form> 
+          </div>
+          <div class="modal-footer">
+            <div class="form-error text-danger mx-auto"></div>
+            <button class="btn btn-primary" id="btn-add-visit" type="button">Add Visit</button>
+          </div>
+      </div>
+    </div>
+  </div>
+

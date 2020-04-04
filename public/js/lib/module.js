@@ -35,4 +35,12 @@ class Module{
         $(`${div} .card-body`).text("")
     }
 
+    static show(div){
+        $(div).show()
+    }
+
+    hide(div){
+        $(div).hide()
+    }
+
 }
