@@ -17,7 +17,7 @@ class Prompt{
 
         while(result == null){ 
             await this.sleep(200)      
-            console.log(this.userInput)
+           
             if(this.userInput == "yes" || this.userInput == "enter"){
                 result = true
             }else if(this.userInput == "cancel"){

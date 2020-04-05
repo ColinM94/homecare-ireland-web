@@ -1,7 +1,7 @@
 class StaffView{
     constructor(){
         this.div = "#staff-view"
-
+console.log("Heeeyyy")
         $(this.div).append(`
             <div id="users-module" class="col-12 w-100 module"></div>
             <div id="user-module" class="col-12 w-100 module"></div>

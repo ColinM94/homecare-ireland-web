@@ -41,7 +41,8 @@ class UsersDB{
 
     // Adds a new doc to users. 
     static async addUser(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode) {
-        let user = new UserModel(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode, true, [])
+        let settings = {preserveTabState: false}
+        let user = new UserModel(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode, true, [], settings)
         await db.collection("users").doc(id).set(user.toFirestore())
     }
 
@@ -104,5 +105,19 @@ class UsersDB{
         await db.collection('users').doc(userId).update({
             clients: clients
         })
+    }
+
+    static async updateSettings(userId, setting, value){
+        if(setting == "preserveTabState") {
+            console.log("hiii")
+            let user = await this.getUser(userId)
+
+            let settings = user.settings
+
+            settings["preserveTabState"] = value
+            db.collection("users").doc(userId).update({
+                settings: settings
+            })
+        }    
     }
 }

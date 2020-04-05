@@ -1,5 +1,5 @@
 class UserModel {
-    constructor(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode, archived, clients) {
+    constructor(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode, archived, clients, settings) {
         this.id = id
         this.role = role
         this.name = name
@@ -13,6 +13,7 @@ class UserModel {
         this.mobile = mobile
         this.archived = archived
         this.clients = clients
+        this.settings = settings
     }
 
     // Instantiates class with values from firestore document. 
@@ -30,6 +31,7 @@ class UserModel {
         this.mobile = doc.data().mobile
         this.archived = doc.data().archived
         this.clients = doc.data().clients
+        this.settings = doc.data().settings
     }
 
     // Returns object that can be used with Firestore. 
@@ -47,9 +49,10 @@ class UserModel {
             eircode : this.eircode,
             mobile : this.mobile,
             archived: this.archived,
-            clients: this.clients
+            clients: this.clients,
+            settings : this.settings
         }
-
+    
         return user
     }
 }

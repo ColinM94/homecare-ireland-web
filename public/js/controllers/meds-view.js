@@ -8,8 +8,8 @@ class MedsView{
             <div id="med-module" class="col-12 w-100 module"></div>
         `)
 
-        if(user.role == "Admin") this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, true)
-        else if(user.role == "Carer") this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, false)
+        if(user.role == "Admin") this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, true, user)
+        else if(user.role == "Carer") this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, false, user)
     }
 
     loadMed(id){

@@ -1,9 +1,13 @@
 class MedsModule{ 
-    constructor(callback, div, title, showSearch, showAdd){
+    constructor(callback, div, title, showSearch, showAdd, user){
         this.div = div
         this.callback = callback
     
         $(`${div}`).load("views/templates/datatable.html", () => {
+            if(user.role == "Doctor" || user.role == "Admin") {
+                $(`${this.div} #modal`).load("views/modals/add-med.html")
+            }
+
             if(showSearch){
                 $(`${div} #datatable-search`).removeClass("d-none")
                 $(`${div} #btn-filters`).removeClass("d-none")
@@ -137,6 +141,11 @@ class MedsModule{
         // Toggles display of table filters. 
         $(this.div).on('click', '#btn-filters', (ref) => {
             toggleFilters(this.div)
+        })
+
+        // Toggles display of table filters. 
+        $(this.div).on('click', '#btn-add', (ref) => {
+            $("#modal-add-med").modal("show")
         })
     }
 }

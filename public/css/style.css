@@ -7,6 +7,11 @@ html,body{
 input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 
 /* <!---- MODULES ----> */
+.card{
+  padding: 10px;
+  margin: auto;
+}
+
 .card-header{
   min-height: 47px;
 }
@@ -31,6 +36,24 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
   /* margin-left: 12px; */
 }
 
+/* <---- SETTINGS ----> */
+#settings{
+  max-width: 400px;
+}
+
+.settings-option{
+  width: 100%;
+  margin: auto;
+  /* margin: 10px 5px 5px 5px;
+  padding: 10px; */
+  height: 60px;
+}
+
+.settings-btn{
+  width: 100%;
+  height: 100%;
+}
+
 @media only screen and (max-width: 575px) {
   main{
     margin-bottom: 70px;
@@ -38,10 +61,6 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 
   .module{
     padding: 3px;
-  }
-
-  #settings{
-    display: none;
   }
 
   #notification{
@@ -55,10 +74,6 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 @media only screen and (min-width: 576px) {
   main{
       margin-left: 200px;
-  }
-
-  #settings-mobile{
-    display: none;
   }
 }
 
@@ -140,6 +155,4 @@ input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 #datatable tr:hover{
   cursor: pointer;
 }
-
-
 

@@ -10,10 +10,10 @@ class ClientsModule{
         this.callback = callback
         this.userId = userId
 
-        console.log(userId)
 
         $(`${div}`).load("views/templates/datatable.html", () => {
             if(userId) $(`${this.div} #modal`).load("views/modals/add-conn.html")
+            else $(`${this.div} #modal`).load("views/modals/add-client.html")
 
             if(showSearch){
                 $(`${div} #datatable-search`).removeClass("d-none")

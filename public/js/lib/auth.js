@@ -9,7 +9,6 @@ class Auth{
         auth.createUserWithEmailAndPassword(email, password)
             .then((ref) => {
                 UsersDB.addUser(ref.user.uid, role, name, "", "", "", "", "", "", mobile, "")
-                console.log(ref.user.uid)
             })
             .catch(function(error) {
                 console.log(error.code)

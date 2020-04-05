@@ -6,7 +6,8 @@ auth.onAuthStateChanged(user => {
         UsersDB.getUser(user.uid)
             .then(user => {
                 currentUser = user
-
+                observe(user.id)
+                SettingsView.load(user)
                 Dashboard.load()
             })
     }else{
@@ -15,8 +16,29 @@ auth.onAuthStateChanged(user => {
     }   
 })
 
+// Observes DB for changes to this user. 
+function observe(userId){
+    let doc = db.collection('users').doc(userId)
+    doc.onSnapshot(docSnapshot => {
+        let user = new UserModel()
+        user.docToUser(docSnapshot)
+        currentUser = user
+        SettingsView.update(user)
+        Dashboard.preserveState = user.settings["preserveTabState"]
+        // Dashboard.preserveState = user.settings["preserveTabState"]
+    }, err => {
+        console.log(`Encountered error: ${err}`)
+        Notification.display(2, "Problem loading user")
+    })
+}
+
 class Dashboard{
     static load(){
+        // Preserves state of tabs so you can return to where you left off. 
+        // this.preserveState = false
+
+        // $(`#modals`).load("views/modals.html")
+
         $('.sidenav-footer-title').text(`${currentUser.name} (${currentUser.role})`)
 
         if(currentUser.role == "Carer"){
@@ -66,11 +88,16 @@ class Dashboard{
     static loadView(view){  
         switch(view){
             case "staff":
+                if(!this.preserveState) $("#staff-view").text("")
+
                 if($("#staff-view").text().trim() == "")
                     if(currentUser.role == "Admin")
                         new StaffView()
+
                 break
             case "clients":
+                if(!this.preserveState) $("#clients-view").text("")
+
                 if($("#clients-view").text().trim() == "")
                     if(currentUser.role == "Admin")
                         new ClientsView()
@@ -78,25 +105,32 @@ class Dashboard{
                         new ClientsView(currentUser)
                 break
             case "visits":
+                if(!this.preserveState) $("#visits-view").text("")
+
                 if($("#visits-view").text().trim() == "")
-                    if(currentUser.role == "Carer")
-                        new VisitsView(currentUser)
+                    $("#visits-view").text("")
+                        if(currentUser.role == "Carer")
+                            new VisitsView(currentUser)
                 break
             case "meds":
+                if(!this.preserveState) $("#meds-view").text("")
+
                 if($("#meds-view").text().trim() == "")
-                if(currentUser.role == "Admin")
-                    new MedsView(currentUser)
-                else if(currentUser.role == "Carer")
-                    new MedsView(currentUser)
+                    if(currentUser.role == "Admin")
+                        new MedsView(currentUser)
+                    else if(currentUser.role == "Carer")
+                        new MedsView(currentUser)
                 break
             case "settings":
-                if($("#settings-view").text().trim() == "")
-                    SettingsView.load()
+                // if(!this.preserveState) $("#settings-view").text("")
+
+                // if($("#settings-view").text().trim() == "")
+                // console.log(currentUser)
+                //     new SettingsView(currentUser)
                 break        
             }
 
         $('.view').addClass("d-none")
-        console.log(`#${view}-view`)
         $(`#${view}-view`).removeClass("d-none")
         this.navSetActive(`#btn-nav-${view}`)
     }
@@ -138,6 +172,7 @@ class Dashboard{
         })
 
         $(document).on('click', '#btn-nav-settings', () => {
+            console.log("SETTINGS")
             this.loadView("settings")
         })
 

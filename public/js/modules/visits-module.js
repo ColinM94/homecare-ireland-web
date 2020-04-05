@@ -149,7 +149,6 @@ class VisitsModule{
         let start = new Date($('#visit-start').val())
         let end = new Date($('#visit-end').val())
         let notes = $('#visit-notes').val()
-        console.log("User ID: " + userId)
 
         if(!userId){
             Notification.formError("Please select a carer!")
