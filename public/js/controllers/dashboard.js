@@ -11,36 +11,35 @@ auth.onAuthStateChanged(user => {
             })
     }else{
         Auth.signOut()
-        Index.load()
+        document.location.href = "index.html";
     }   
 })
 
 class Dashboard{
     static load(){
-        $("#main-content").load("views/dashboard.html", () => {
-            $('.sidenav-footer-title').text(currentUser.name)
+        $('.sidenav-footer-title').text(`${currentUser.name} (${currentUser.role})`)
 
-            if(currentUser.role == "Carer"){
-                Dashboard.addLink("visits", "fas fa-th-list", "Visits", true, true)
-                this.loadView("visits")
-            }else if(currentUser.role == "Admin"){
-                Dashboard.addLink("staff", "fas fa-user-md", "Staff", true, true)
-                this.loadView("staff")
-            }else if(currentUser.role == "client"){
-                
-            }
-
+        if(currentUser.role == "Carer"){
+            Dashboard.addLink("visits", "fas fa-th-list", "Visits", true, true)
             Dashboard.addLink("clients", "fas fa-users", "Clients", true, true)
             Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
-            Dashboard.addLink("settings", "fas fa-cog", "Settings", true, true)
-            Dashboard.addLink("signout", "fas fa-sign-out-alt", "Sign Out", true, false)
+            this.loadView("visits")
+        }else if(currentUser.role == "Admin"){
+            Dashboard.addLink("staff", "fas fa-user-md", "Staff", true, true)
+            Dashboard.addLink("clients", "fas fa-users", "Clients", true, true)
+            Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
+            this.loadView("staff")
+        }else if(currentUser.role == "client"){
+            
+        }
+
+        Dashboard.addLink("settings", "fas fa-cog", "Settings", true, true)
+        Dashboard.addLink("signout", "fas fa-sign-out-alt", "Sign Out", true, false)
+
+        this.listeners()
 
 
-            this.listeners()
-
-
-            //  sbAdmin()
-        })
+        //  sbAdmin()
     }
 
     static addLink(id, icon, text, web, mobile){
@@ -85,7 +84,10 @@ class Dashboard{
                 break
             case "meds":
                 if($("#meds-view").text().trim() == "")
-                    new MedsView()
+                if(currentUser.role == "Admin")
+                    new MedsView(currentUser)
+                else if(currentUser.role == "Carer")
+                    new MedsView(currentUser)
                 break
             case "settings":
                 if($("#settings-view").text().trim() == "")
@@ -100,7 +102,6 @@ class Dashboard{
     }
 
     static async signOut(){
-        console.log("hi")
         if(await Prompt.confirm("Are you sure you want to sign out?")){
             Auth.signOut()
         }

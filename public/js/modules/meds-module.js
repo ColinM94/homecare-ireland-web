@@ -42,6 +42,10 @@ class MedsModule{
     }
 
     loadTable(meds){
+
+        meds.forEach(med => {
+            console.log(med)
+        })
         if(this.datatable){
             this.datatable
                 .clear()
@@ -50,7 +54,7 @@ class MedsModule{
 
             return
         }
-          
+      
         this.datatable = $(`${this.div} #datatable`).DataTable({
             data: meds,
             // bLengthChange: false,
@@ -68,9 +72,10 @@ class MedsModule{
             },
             columnDefs: [
                 { targets: 0, title: "Name", data: "name", responsivePriority: 1},
+                { targets: 1, title: "Class", data: "type", responsivePriority: 2},
             ],
             initComplete : (ref) => {
-                // Table.filters(ref, this.div, [1,2,3,4], ["Role", "Gender", "Town", "County"], true)
+                Table.filters(ref, this.div, [1], ["Class"], true)
                 Table.detachSearch(this.div)    
             },
         })
@@ -127,6 +132,11 @@ class MedsModule{
             if(med != undefined){
                 this.callback.handle(["med", med])
             }
+        })
+
+        // Toggles display of table filters. 
+        $(this.div).on('click', '#btn-filters', (ref) => {
+            toggleFilters(this.div)
         })
     }
 }

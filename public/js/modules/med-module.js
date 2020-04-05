@@ -28,7 +28,9 @@ class MedModule{
         $(`${this.div} #med-sides`).text("")
 
 
-        $(`${this.div} #title`).text(`${med.name}`)
+        $(`${this.div} #med-name`).append(med.name + "<br><br>")
+        
+        $(`${this.div} #med-class`).append(med.type + "<br><br>")
 
         med.description.forEach(desc => {
             $(`${this.div} #med-desc`).append(desc + "<br><br>")

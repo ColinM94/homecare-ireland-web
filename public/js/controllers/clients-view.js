@@ -9,7 +9,7 @@ class ClientsView{
             <div id="visit-module" class="col-12 w-100 module"></div>
         `)
 
-        if(user) this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, "", true, false, user.id)
+        if(user) this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, "", false, false, user.id)
         else this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, "", true, true)
     }
 
@@ -29,7 +29,7 @@ class ClientsView{
     }
 
     loadVisits(client){
-        this.visitsModule = new VisitsModule(this, `${this.div} #visits-module`, `${client.name}'s Visits`, true, true, client.id)
+        this.visitsModule = new VisitsModule(this, `${this.div} #visits-module`, `${client.name}'s Visits`, false, false, client.id)
     }
 
     loadVisit(visit){

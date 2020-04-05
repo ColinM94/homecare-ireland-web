@@ -1,5 +1,5 @@
 class MedsView{
-    constructor(){
+    constructor(user){
         this.div = "#meds-view"
 
         $(this.div).text("")
@@ -8,7 +8,8 @@ class MedsView{
             <div id="med-module" class="col-12 w-100 module"></div>
         `)
 
-        this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, true)
+        if(user.role == "Admin") this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, true)
+        else if(user.role == "Carer") this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, false)
     }
 
     loadMed(id){

@@ -36,4 +36,10 @@ class Validate{
         else if(mobile.length > 10 || mobile.length < 10) return false
         else return true
     }
+
+    static email(email) 
+    {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) return true
+        return false    
+    }
 }

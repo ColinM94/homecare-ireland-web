@@ -40,9 +40,9 @@ class UsersDB{
     }
 
     // Adds a new doc to users. 
-    static async addUser(id, role, name, address1, address2, town, county, eircode, archived) {
-        let user = new UserModel(id, role, name, address1, address2, town, county, eircode, archived, [])
-        await db.collection("users").add(user.toFirestore())
+    static async addUser(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode) {
+        let user = new UserModel(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode, true, [])
+        await db.collection("users").doc(id).set(user.toFirestore())
     }
 
     // Deletes doc at users/{userId}.

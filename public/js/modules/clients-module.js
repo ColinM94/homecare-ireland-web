@@ -22,6 +22,9 @@ class ClientsModule{
 
             if(showAdd) $(`${div} #btn-add`).removeClass("d-none")
 
+            // Hides header if empty.
+            if(!showAdd && !showSearch && title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
+
             $(`${this.div} #title`).text(title)
 
             this.observe()

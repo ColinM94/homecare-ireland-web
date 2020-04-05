@@ -31,6 +31,6 @@ class VisitsView{
     }
 
     loadVisit(visit){
-        this.visitModule = new VisitModule(this, `${this.div} #visit-module`, visit.id)
+        this.visitModule = new VisitModule(this, `${this.div} #visit-module`, "", visit.id)
     }
 }

@@ -2,12 +2,14 @@ class VisitModule{
     // div: string = Div id/class to load module into. 
     // userId: string = Id of user to be loaded from db. 
     // callBack: class reference = Allows for calling functions in view class. 
-    constructor(callBack, div, visitId){
+    constructor(callBack, div, title, visitId){
         this.div = div
         this.visitId = visitId
         this.callBack = callBack
 
         $(`${this.div}`).load("views/templates/details.html", () => {
+            // Hides header if empty.
+            if(title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
 
             this.observe(visitId)
             this.listeners()
@@ -54,7 +56,7 @@ class VisitModule{
         let notes = ""
 
         visit.notes.forEach(note => {
-            notes += note + `<button><i class="btn-delete-note fas fa-times"></i></button><br>`
+            notes += note + `<button class="float-right"><i class="btn-delete-note fas fa-times"></i></button><br><br>`
         }) 
 
         Module.appendDetail(this.div, "Notes", notes)

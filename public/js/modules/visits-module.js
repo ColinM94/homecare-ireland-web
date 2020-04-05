@@ -20,6 +20,9 @@ class VisitsModule{
 
             if(showAdd) $(`${div} #btn-add`).removeClass("d-none")
 
+            // Hides header if empty.
+            if(!showAdd && !showSearch && title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
+
             $(`${this.div} #title`).text(title)
 
             this.observe()
@@ -51,6 +54,8 @@ class VisitsModule{
                 Notification.display(2, "Problem loading connections")
         })
     }
+
+    // let client = await ClientsDB.getClient(visit.clientId)
 
     loadTable(visits){
         if(this.datatable){
@@ -97,20 +102,20 @@ class VisitsModule{
                 },
                 { 
                     targets: 2, 
-                    title: "End Date", 
+                    title: "Client", 
                     responsivePriority: 1,
                     render: function(data, type, row, meta){
                         return Convert.tsToDate(row.end)
                     }  
                 },
-                { 
-                    targets: 3, 
-                    title: "End Time", 
-                    responsivePriority: 1,
-                    render: function(data, type, row, meta){
-                        return Convert.tsToTime(row.end)
-                    }  
-                },
+                // { 
+                //     targets: 3, 
+                //     title: "End Time", 
+                //     responsivePriority: 1,
+                //     render: function(data, type, row, meta){
+                //         return Convert.tsToTime(row.end)
+                //     }  
+                // },
             ],
             initComplete : (ref) => {
                 // Table.filters(ref, this.div, [1,2,3, 4], ["Gender", "Town", "County", "Archived"], true)
