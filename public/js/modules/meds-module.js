@@ -4,9 +4,9 @@ class MedsModule{
         this.callback = callback
     
         $(`${div}`).load("views/templates/datatable.html", () => {
-            if(user.role == "Doctor" || user.role == "Admin") {
-                $(`${this.div} #modal`).load("views/modals/add-med.html")
-            }
+            // if(user.role == "Doctor" || user.role == "Admin") {
+            //     $(`${this.div} #modal`).load("views/modals/add-med.html")
+            // }
 
             if(showSearch){
                 $(`${div} #datatable-search`).removeClass("d-none")
@@ -17,10 +17,11 @@ class MedsModule{
 
             $(`${this.div} #title`).text(title)
 
-            this.observe()
+            this.createMedForm()
 
+            this.observe()
             this.listeners()
-            this.show()
+            Module.show(this.div)
         })
     }
 
@@ -46,10 +47,6 @@ class MedsModule{
     }
 
     loadTable(meds){
-
-        meds.forEach(med => {
-            console.log(med)
-        })
         if(this.datatable){
             this.datatable
                 .clear()
@@ -85,20 +82,44 @@ class MedsModule{
         })
     }
 
-    // addMed(){
-    //     let name = $("#add-med-name").val()
-    //     let description = $('#add-med-desc').val().split(/\n/)
-    //     let sideEffects = $('#add-med-sides').val().split(/\n/)
+    createMedForm(){
+        let formId = `#add-med`
 
-    //     // Removes empty lines from arrays. 
-    //     description = description.filter(item => item)
-    //     sideEffects = sideEffects.filter(item => item)
+        Module.createForm(this.div, formId, "New Medication", "Add")
+        Module.addField(formId, "text", "med-name", "Name")
+        Module.addField(formId, "text", "med-type", "Class")
+    //     {"Allergenics":"Allergenics","Alternative Medicine":"Alternative Medicine", "Anti Infectives":"Anti Infective", "Antineoplastics":"Antineoplastics",
+    //     "Biologicals":"Biologicals", "Cardiovascular Agents":"Cardiovascular Agents", ""    
+    // })
+        Module.addField(formId, "textarea", "med-description", "Description")
+        Module.addField(formId, "textarea", "med-dosages", "Dosages")
+        Module.addField(formId, "textarea", "med-sides", "Side Effects")
+    }
 
-    //     await MedsDB.addMed(name, description, sideEffects)
-    //         .then(() => {
-    //             $('#modal-add-med').modal('hide')
-    //         })
-    // }
+    addMed(){
+        let name = $(`${this.div} #med-name`).val()
+        let type = $(`${this.div} #med-type`).val()
+        let description = $(`${this.div} #med-description`).val().split(/\n/)
+        let dosages = $(`${this.div} #med-dosages`).val().split(/\n/)
+        let sideEffects = $('#med-sides').val().split(/\n/)
+        
+        if(!name){
+            Notification.formError("Please enter a name!")
+        }else{
+            Notification.formError("")
+
+            // Removes empty lines from arrays. 
+            description = description.filter(item => item)
+            dosages = dosages.filter(item => item)
+            sideEffects = sideEffects.filter(item => item)
+
+            MedsDB.addMed(name, type, description, dosages, sideEffects)
+                .then(() => {
+                    $('#add-med-modal').modal('hide')
+                })
+
+        }
+    }
 
     // Internal listeners.
     listeners(div){
@@ -120,14 +141,6 @@ class MedsModule{
         })
     }
 
-    show(){
-        $(this.div).show()
-    }
-
-    hide(){
-        $(this.div).hide()
-    }
-
     listeners(){
         $(this.div).on('click', 'tr', (ref) => {
             let med = Table.rowClick(this.datatable, ref)
@@ -142,10 +155,13 @@ class MedsModule{
         $(this.div).on('click', '#btn-filters', (ref) => {
             toggleFilters(this.div)
         })
-
-        // Toggles display of table filters. 
+ 
         $(this.div).on('click', '#btn-add', (ref) => {
-            $("#modal-add-med").modal("show")
+            $("#add-med-modal").modal("show")
+        })
+
+        $(this.div).on('click', '#btn-add-med', (ref) => {
+            this.addMed()
         })
     }
 }

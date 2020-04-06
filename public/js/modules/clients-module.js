@@ -84,11 +84,10 @@ class ClientsModule{
             },
             columnDefs: [
                 { targets: 0, title: "Name", data: "name", responsivePriority: 1},
-                { targets: 1, title: "Gender", data: "gender", responsivePriority: 2},
-                { targets: 2, title: "DOB", data: "dob", responsivePriority: 3},
-                { targets: 3, title: "Town", data: "town", responsivePriority: 4},
-                { targets: 4, title: "County", data: "county", responsivePriority: 5},
-                { targets: 5, data: "archived", visible: false},
+                { targets: 1, title: "Gender", data: "gender", responsivePriority: 3},
+                { targets: 2, title: "DOB", data: "dob", responsivePriority: 4},
+                { targets: 3, title: "Town", data: "town", responsivePriority: 5},
+                { targets: 4, title: "County", data: "county", responsivePriority: 6},
                 { 
                     targets: 5, 
                     title: "Delete", 
@@ -100,9 +99,16 @@ class ClientsModule{
                 
                     }  
                 },
+                { 
+                    targets: 6, 
+                    visible: false,
+                    data: function(data){
+                        return data.archived ? "Yes" : "No"
+                    }
+                },
             ],
             initComplete : (ref) => {
-                Table.filters(ref, this.div, [1,2,3, 4], ["Gender", "Town", "County", "Archived"], true)
+                Table.filters(ref, this.div, [1,3,4,6], ["Gender", "Town", "County", "Archived"], true)
                 Table.detachSearch(this.div)    
             },
         })

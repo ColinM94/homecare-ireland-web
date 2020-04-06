@@ -9,7 +9,7 @@ class MedsView{
         `)
 
         if(user.role == "Admin") this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, true, user)
-        else if(user.role == "Carer") this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, false, user)
+        else if(user.role == "Carer" || user.role == "Client") this.meds = new MedsModule(this, `${this.div} #meds-module`, "", true, false, user)
     }
 
     loadMed(id){

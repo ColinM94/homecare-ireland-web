@@ -11,7 +11,7 @@ class VisitsModule{
         this.id = id
             
         $(`${div}`).load("views/templates/datatable.html", () => {
-            if(id.length < 20) $(`${this.div} #modal`).load("views/modals/add-visit.html")
+            // if(id.length < 20) $(`${this.div} #modal`).load("views/modals/add-visit.html")
 
             if(showSearch){
                 $(`${div} #datatable-search`).removeClass("d-none")
@@ -30,7 +30,6 @@ class VisitsModule{
             this.listeners()
             Module.show(this.div)
         })
-
     }
 
     observe(){
@@ -55,9 +54,8 @@ class VisitsModule{
         })
     }
 
-    // let client = await ClientsDB.getClient(visit.clientId)
 
-    loadTable(visits){
+    async loadTable(visits){
         if(this.datatable){
             this.datatable
                 .clear()
@@ -67,6 +65,9 @@ class VisitsModule{
             return
         }
 
+        let clients = await ClientsDB.getClients()
+        console.log(clients)
+        
         this.datatable = $(`${this.div} #datatable`).DataTable({
             data: visits,
             // bLengthChange: false,
@@ -105,17 +106,15 @@ class VisitsModule{
                     title: "Client", 
                     responsivePriority: 1,
                     render: function(data, type, row, meta){
-                        return Convert.tsToDate(row.end)
+                        console.log(row.clientId)
+                        for(var i=0; i<clients.length; i++){
+                            if(clients[i].id == row.clientId){
+                                let name = clients[i].name
+                                return name
+                            }
+                        }
                     }  
                 },
-                // { 
-                //     targets: 3, 
-                //     title: "End Time", 
-                //     responsivePriority: 1,
-                //     render: function(data, type, row, meta){
-                //         return Convert.tsToTime(row.end)
-                //     }  
-                // },
             ],
             initComplete : (ref) => {
                 // Table.filters(ref, this.div, [1,2,3, 4], ["Gender", "Town", "County", "Archived"], true)

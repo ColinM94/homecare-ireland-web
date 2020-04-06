@@ -6,9 +6,14 @@ html,body{
 
 input[type=search]::-ms-clear {  display: none; width : 0; height: 0; }
 
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
 /* <!---- MODULES ----> */
 .card{
-  padding: 10px;
   margin: auto;
 }
 

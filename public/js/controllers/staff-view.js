@@ -1,14 +1,14 @@
 class StaffView{
     constructor(){
         this.div = "#staff-view"
-console.log("Heeeyyy")
+
         $(this.div).append(`
             <div id="users-module" class="col-12 w-100 module"></div>
             <div id="user-module" class="col-12 w-100 module"></div>
-            <div id="visits-module" class="col-12 w-100 module"></div>
-            <div id="visit-module" class="col-12 w-100 module"></div>
             <div id="clients-module" class="col-12 w-100 module"></div>
             <div id="client-module" class="col-12 w-100 module"></div>
+            <div id="visits-module" class="col-12 w-100 module"></div>
+            <div id="visit-module" class="col-12 w-100 module"></div>
         `)
         
         this.usersModule = new UsersModule(this, `${this.div} #users-module`, "", true, false)
@@ -29,23 +29,28 @@ console.log("Heeeyyy")
     }
 
     loadUser(user){ 
-        this.userModule = new UserModule(this, `${this.div} #user-module`, user.id)  
+        this.userModule = new UserModule(this, `${this.div} #user-module`, user.id, `${user.name}`)  
     }
 
     loadVisits(user){
-        this.visitsModule = new VisitsModule(this, `${this.div} #visits-module`, `${user.name}'s Visits`, false, false, user.id)
+        if(user.role == "Carer") {
+            this.visitsModule = new VisitsModule(this, `${this.div} #visits-module`, `${user.name}'s Visits`, false, false, user.id)
+        }else Module.hide(`${this.div} #visits-module`)
+
     }
 
     loadVisit(visit){
-        this.visitModule = new VisitModule(this, `${this.div} #visit-module`, visit.id)
+        this.visitModule = new VisitModule(this, `${this.div} #visit-module`, "Visit Details", visit.id)
     }
 
     loadClients(user){
-        this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, `${user.name}'s Clients`, true, true, user.id)
+        if(user.role == "Carer" || user.role == "Doctor"){
+            this.clientsModule = new ClientsModule(this, `${this.div} #clients-module`, `${user.name}'s Clients`, true, true, user.id)
+        }else Module.hide(`${this.div} #clients-module`)
     }
 
     loadClient(client){
-        this.clientModule = new ClientModule(`${this.div} #client-module`, client.id)
+        this.clientModule = new ClientModule(`${this.div} #client-module`, client.id, `${client.name}'s Details`)
     }
 }
 

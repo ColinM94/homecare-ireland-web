@@ -25,9 +25,9 @@ class MedsDB{
         return meds
     }
 
-    static async addMed(name, description, sideEffects){
-        let med = new Med(null, name, description, sideEffects)
-
+    static async addMed(name, type, description, dosages, sideEffects){
+        let med = new MedModel(null, name, type, description, dosages, sideEffects)
+        console.log(med)
         await db.collection('meds').add(med.toFirestore())
     }
 
@@ -35,12 +35,22 @@ class MedsDB{
         
     }
 
+    // static updateMed(id, name, type, description, dosages, sideEffects){
+    //     db.collection("meds").doc(id).update({
+    //         name: name,
+    //         type: type, 
+    //         description : description,
+    //         dosages: dosages, 
+    //         sideEffects: sideEffects
+    //     })
+    // }
+
     static async deleteMed(id){
         await db.collection('meds').doc(id).delete()
     }
 
-    static async updateMed(id, name, description, sideEffects){
-        let med = new Med(id, name, description, sideEffects)
+    static async updateMed(id, name, type, description, dosages, sideEffects){
+        let med = new MedModel(id, name, type, description, dosages, sideEffects)
         await db.collection("meds").doc(id).set(med.toFirestore())
     }
 }

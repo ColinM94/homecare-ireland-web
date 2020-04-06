@@ -42,4 +42,11 @@ class Validate{
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) return true
         return false    
     }
+
+    static date(input){
+        var reg = /(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/
+
+        if (input.match(reg)) return true
+        else return false
+    }
 }

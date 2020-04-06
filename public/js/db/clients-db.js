@@ -31,14 +31,14 @@ class ClientsDB{
 
     // Adds a new doc to clients. 
     static async addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active) {  
-        let client = new ClientModel(null, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active, users)
+        let client = new ClientModel(null, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active, users, null)
 
         db.collection("clients").add(client.toFirestore())
     }
 
     // Updates existing client doc at clients/{clientId}.
     static async updateClient(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active, users) {
-        let client = new ClientModel(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active, users)
+        let client = new ClientModel(clientId, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, active, users, null)
 
         db.collection("clients").doc(clientId).set(client.toFirestore())
     }
@@ -81,6 +81,12 @@ class ClientsDB{
 
         await db.collection('clients').doc(clientId).update({
             users: users
+        })
+    }
+
+    static async updateKin(clientId, kinId){
+        db.collection("clients").doc(clientId).update({
+            kinId : kinId
         })
     }
 }

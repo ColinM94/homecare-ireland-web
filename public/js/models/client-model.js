@@ -1,5 +1,5 @@
 class ClientModel {
-    constructor(id, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, archived, users){
+    constructor(id, name, gender, dob, mobile, address1, address2, town, county, eircode, marital, archived, users, kinId){
         this.id = id
         this.name = name
         this.gender = gender
@@ -13,6 +13,7 @@ class ClientModel {
         this.marital = marital
         this.archived = archived
         this.users = users
+        this.kinId = kinId
     }
 
     // Instantiates class with values from firestore document. 
@@ -30,6 +31,7 @@ class ClientModel {
         this.marital = doc.data().marital
         this.archived = doc.data().archived
         this.users = doc.data().users
+        this.kinId = doc.data().kinId
     }
 
     // Returns object that can be used with Firestore. 
@@ -46,7 +48,8 @@ class ClientModel {
             eircode : this.eircode,
             marital : this.marital,
             archived : this.archived,
-            users : this.users
+            users : this.users,
+            kinId : this.kinId
         }
 
         return client

@@ -1,30 +1,85 @@
 <div class="bg-primary" id="layoutAuthentication">
     <div id="layoutAuthentication_content">
-        <main>
-            <div class="row m-0">
-                <div class="col-sm-12 col-md-10 col-lg-8 col-xl-4 m-auto">
-                    <div class="card shadow-lg border-0 rounded-lg mt-5">
-                        <div class="card-header">
-                            <h3 class="font-weight-bold my-4 mx-auto">Homecare Ireland</h3></div>
-                        <div class="card-body">
-                            <form id="form-signin">
-                                <div class="form-group"><label class="small mb-1" for="signin-email">Email</label>
-                                    <input class="form-control py-4" id="signin-email" type="email" placeholder="Enter email address" /></div>
-                                <div class="form-group"><label class="small mb-1" for="signin-password">Password</label>
-                                    <input class="form-control py-4" id="signin-password" type="password" placeholder="Enter Password" /></div>
-                                <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                    <button class="btn btn-primary m-auto w-50">Sign In</button>
-                                </div>
-                                <div class="form-error text-danger"></div>
-                            </form>
+        <div class="row m-0">
+            <div class="col-sm-10 col-md-8 col-lg-6 col-xl-6 m-auto">
+                <div class="card shadow-lg border-0 rounded-lg mt-1 mt-sm-5">
+                    <div class="card-header">
+                        <h3 class="font-weight-bold my-0 my-sm-4 mx-auto">Homecare Ireland</h3></div>
+                    <div id="signin" class="card-body">
+                        <form id="form-signin">
+                            <div class="form-group">
+                                <label class="small mb-1" for="signin-email">Email</label>
+                                <input class="form-control py-4" id="signin-email" type="email" placeholder="Enter email address" />
+                            </div>
+                            <div class="form-group">
+                                <label class="small mb-1" for="signin-password">Password</label>
+                                <input class="form-control py-4" id="signin-password" type="password" placeholder="Enter Password" />
+                            </div>
+                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                <button class="btn btn-primary m-auto w-50">Sign In</button>
+                            </div>
+                            <div class="form-group d-flex align-items-center justify-content-between mb-0 mt-3">
+                                <div class="form-error text-danger mx-auto"></div>
+                            </div>
+                            <div class="form-group d-flex align-items-center justify-content-between mb-0 mt-3">
+                                <div class="form-success text-success mx-auto"></div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="signup" class="card-body d-none">
+                        <form id="form-signup">
+                            <div class="form-group row">
+                                <label class="small mb-1" for="signup-email">Email</label>
+                                <input class="form-control" id="signup-email" type="email" placeholder="Enter email address" />
+                            </div>
+                            <div class="form-group row">
+                                <label class="small mb-1" for="signup-password1">Password</label>
+                                <input class="form-control" id="signup-password1" type="password" placeholder="Enter Password" />
+                            </div>
+                            <div class="form-group row">
+                                <label class="small mb-1" for="signup-password2">Re-type Password</label>
+                                <input class="form-control" id="signup-password2" type="password" placeholder="Enter Password" />
+                            </div>
+                            <hr>
+                            <div class="form-group row">
+                                <label class="small mb-1" for="signup-name">Name</label>
+                                <input class="form-control" id="signup-name" type="text" placeholder="Enter Name" />
+                            </div>
+                            <div class="form-group row">
+                                <label class="small mb-1" for="signup-mobile">Mobile</label>
+                                <input class="form-control" id="signup-mobile" type="text" placeholder="Enter Mobile" />
+                            </div>
+                            <div class="form-group row">
+                                <label class="small mb-1" for="signup-role">Role</label>
+                                <select class="form-control" id="signup-role">
+                                  <option value="" selected disabled hidden>Select Role</option>
+                                  <option value="Carer">Carer</option>
+                                  <option value="Doctor">Doctor</option>
+                                  <option value="Client">Next of Kin</option>
+                                  <option value="Admin">Admin</option>
+                                </select>
+                            </div>
+                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                <button class="btn btn-primary m-auto w-50">Sign Up</button>
+                            </div>
+                            <div class="form-group d-flex align-items-center justify-content-between mb-0 mt-3">
+                                <div class="form-error text-danger mx-auto"></div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <div class="small">
+                            <a id="btn-toggle-signup" href="#">Need an account? Sign Up!</a>
                         </div>
-                        <div class="card-footer text-center">
-                            <div class="small"><a href="#">Need an account? Sign Up!</a></div>
+                    </div>
+                    <div class="card-footer text-center d-none">
+                        <div class="small">
+                            <a id="btn-toggle-signup" href="#">Already have an account? Sign In!</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
     <div id="layoutAuthentication_footer">
         <footer class="footer mt-auto footer-dark">
@@ -35,3 +90,42 @@
         </footer>
     </div>
 </div>
+
+<div class="fixed-bottom ml-auto" id="notification">
+    <div id="alert-success" class="alert alert-primary alert-icon bg-green text-light d-none" role="alert">
+        <!-- <button id="alert-close" class="close" type="button">
+            <span aria-hidden="true">×</span>
+        </button> -->
+        <div class="alert-icon-aside">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="alert-icon-content">
+            <h6 class="alert-heading">Success</h6>
+            <span class="alert-content"></span>
+        </div>
+    </div>
+    <div id="alert-error" class="alert alert-secondary alert-icon d-none" role="alert">
+        <button id="alert-close" class="close" type="button">
+            <span aria-hidden="true">×</span>
+        </button>
+        <div class="alert-icon-aside">
+            <i class="fas fa-exclamation fa-lg"></i>
+        </div>
+        <div class="alert-icon-content">
+            <h6 class="alert-heading">Error</h6>
+            <span class="alert-content"></span>
+        </div>
+    </div>
+    <div id="alert-neutral" class="alert alert-primary alert-icon d-none" role="alert">
+        <button id="alert-close" class="close" type="button">
+            <span aria-hidden="true">×</span>
+        </button>
+        <div class="alert-icon-aside">
+            <i class="far fa-flag"></i>
+        </div>
+        <div class="alert-icon-content">
+            <h6 class="alert-heading">Info</h6>
+            <span class="alert-content"></span>
+        </div>
+    </div>
+</div>  

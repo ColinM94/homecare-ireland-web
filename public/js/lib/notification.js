@@ -31,6 +31,10 @@ class Notification{
         $('.form-error').text(message)
     }
 
+    static formSuccess(message){
+        $('.form-success').text(message)
+    }
+
     static listeners(){
         $('#btn-close-msg').on('click touchstart', function(){
             $('#alert-box').css('display', 'none')

@@ -6,13 +6,14 @@ auth.onAuthStateChanged(user => {
         UsersDB.getUser(user.uid)
             .then(user => {
                 currentUser = user
-                observe(user.id)
-                SettingsView.load(user)
-                Dashboard.load()
+
+                if(currentUser.archived == false){
+                    observe(user.id)
+                    Dashboard.load()
+                }
             })
     }else{
         Auth.signOut()
-        document.location.href = "index.html";
     }   
 })
 
@@ -34,34 +35,41 @@ function observe(userId){
 
 class Dashboard{
     static load(){
-        // Preserves state of tabs so you can return to where you left off. 
-        // this.preserveState = false
+        $("#main-content").load("views/dashboard.html", () => {
+            SettingsView.load(currentUser)
+            // Preserves state of tabs so you can return to where you left off. 
+            // this.preserveState = false
 
-        // $(`#modals`).load("views/modals.html")
+            // $(`#modals`).load("views/modals.html")
 
-        $('.sidenav-footer-title').text(`${currentUser.name} (${currentUser.role})`)
+            $('.sidenav-footer-title').text(`${currentUser.name} (${currentUser.role})`)
 
-        if(currentUser.role == "Carer"){
-            Dashboard.addLink("visits", "fas fa-th-list", "Visits", true, true)
-            Dashboard.addLink("clients", "fas fa-users", "Clients", true, true)
-            Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
-            this.loadView("visits")
-        }else if(currentUser.role == "Admin"){
-            Dashboard.addLink("staff", "fas fa-user-md", "Staff", true, true)
-            Dashboard.addLink("clients", "fas fa-users", "Clients", true, true)
-            Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
-            this.loadView("staff")
-        }else if(currentUser.role == "client"){
+            if(currentUser.role == "Carer"){
+                Dashboard.addLink("visits", "fas fa-th-list", "Visits", true, true)
+                Dashboard.addLink("clients", "fas fa-users", "Clients", true, true)
+                Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
+                this.loadView("visits")
+            }else if(currentUser.role == "Admin"){
+                Dashboard.addLink("staff", "fas fa-user-md", "Users", true, true)
+                Dashboard.addLink("clients", "fas fa-users", "Clients", true, true)
+                Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
+                this.loadView("staff")
+            }else if(currentUser.role == "Doctor"){
             
-        }
+            }else if(currentUser.role == "Client"){
+                Dashboard.addLink("client", "fas fa-user", "Next of Kin", true, true)
+                Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
+                this.loadView("client")
+            }
 
-        Dashboard.addLink("settings", "fas fa-cog", "Settings", true, true)
-        Dashboard.addLink("signout", "fas fa-sign-out-alt", "Sign Out", true, false)
+            Dashboard.addLink("settings", "fas fa-cog", "Settings", true, true)
+            Dashboard.addLink("signout", "fas fa-sign-out-alt", "Sign Out", true, false)
 
-        this.listeners()
+            this.listeners()
 
 
-        //  sbAdmin()
+            //  sbAdmin()
+        })
     }
 
     static addLink(id, icon, text, web, mobile){
@@ -88,45 +96,43 @@ class Dashboard{
     static loadView(view){  
         switch(view){
             case "staff":
-                if(!this.preserveState) $("#staff-view").text("")
+                    if(!this.preserveState) $("#staff-view").text("")
 
-                if($("#staff-view").text().trim() == "")
-                    if(currentUser.role == "Admin")
-                        new StaffView()
-
+                    if($("#staff-view").text().trim() == "")
+                        if(currentUser.role == "Admin")
+                            new StaffView()
                 break
             case "clients":
-                if(!this.preserveState) $("#clients-view").text("")
+                    if(!this.preserveState) $("#clients-view").text("")
 
-                if($("#clients-view").text().trim() == "")
-                    if(currentUser.role == "Admin")
-                        new ClientsView()
-                    else if(currentUser.role == "Carer")
-                        new ClientsView(currentUser)
+                    if($("#clients-view").text().trim() == "")
+                        if(currentUser.role == "Admin")
+                            new ClientsView()
+                        else if(currentUser.role == "Carer")
+                            new ClientsView(currentUser)
                 break
             case "visits":
-                if(!this.preserveState) $("#visits-view").text("")
+                    if(!this.preserveState) $("#visits-view").text("")
 
-                if($("#visits-view").text().trim() == "")
-                    $("#visits-view").text("")
+                    if($("#visits-view").text().trim() == "")
                         if(currentUser.role == "Carer")
                             new VisitsView(currentUser)
                 break
             case "meds":
-                if(!this.preserveState) $("#meds-view").text("")
+                    if(!this.preserveState) $("#meds-view").text("")
 
-                if($("#meds-view").text().trim() == "")
-                    if(currentUser.role == "Admin")
+                    if($("#meds-view").text().trim() == "")
                         new MedsView(currentUser)
-                    else if(currentUser.role == "Carer")
-                        new MedsView(currentUser)
+
+                        // if(currentUser.role == "Admin")
+                        // else if(currentUser.role == "Carer")
+                        //     new MedsView(currentUser)
                 break
-            case "settings":
-                // if(!this.preserveState) $("#settings-view").text("")
+            case "client":
+                    if(!this.preserveState) $("#client-view").text("")
 
-                // if($("#settings-view").text().trim() == "")
-                // console.log(currentUser)
-                //     new SettingsView(currentUser)
+                    if($("#client-view").text().trim() == "")
+                        new ClientView(currentUser) 
                 break        
             }
 
@@ -138,6 +144,7 @@ class Dashboard{
     static async signOut(){
         if(await Prompt.confirm("Are you sure you want to sign out?")){
             Auth.signOut()
+            location.reload()
         }
     }
 
@@ -171,8 +178,11 @@ class Dashboard{
             this.loadView("meds")
         })
 
+        $(document).on('click', '#btn-nav-client', () => {
+            this.loadView("client")
+        })
+
         $(document).on('click', '#btn-nav-settings', () => {
-            console.log("SETTINGS")
             this.loadView("settings")
         })
 

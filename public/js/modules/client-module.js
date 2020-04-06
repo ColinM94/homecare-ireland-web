@@ -1,11 +1,17 @@
 class ClientModule{
     // div: string = Div id/class to load module into. 
     // userId: string = Id of user to be loaded from db. 
-    constructor(div, clientId){
+    constructor(div, clientId, title){
         this.div = div
         this.clientId = clientId
 
         $(`${div}`).load("views/templates/details.html", () => {
+
+            // if(showAdd) $(`${div} #btn-add`).removeClass("d-none")
+            $(`${this.div} #title`).text(title)
+            // Hides header if empty.
+            if(title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
+
             this.listeners()
             this.observe(clientId)
             $(this.div).show()
@@ -28,7 +34,7 @@ class ClientModule{
     displayData(client){
         Module.clearDetails(this.div)
 
-        Module.setTitle(this.div, `${client.name}'s Details`)
+        // Module.setTitle(this.div, `${client.name}'s Details`)
 
         Module.appendDetail(this.div, "Name", client.name)
         Module.appendDetail(this.div, "Gender", client.gender)
@@ -41,12 +47,12 @@ class ClientModule{
 
         Module.appendDetail(this.div, "Archived", Convert.boolToText(client.archived))
 
+        // Module.appendButtons(this.div, [["btn-visits", "Show Visits"], ["btn-kind", "Show Next of Kin"]])
         Module.scroll(this.div)
     }
 
     listeners(){
         // Removes previously set listeners to prevent duplication. 
         $(this.div).off('click')
-
     }
 }

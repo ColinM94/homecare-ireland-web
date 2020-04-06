@@ -5,6 +5,7 @@ class ClientsView{
         $(this.div).append(`
             <div id="clients-module" class="col-12 w-100 module"></div>
             <div id="client-module" class="col-12 w-100 module"></div>
+            <div id="kin-module" class="col-12 w-100 module"></div>
             <div id="visits-module" class="col-12 w-100 module"></div>
             <div id="visit-module" class="col-12 w-100 module"></div>
         `)
@@ -25,11 +26,18 @@ class ClientsView{
     } 
 
     loadClient(client){
-        this.clientModule = new ClientModule(`${this.div} #client-module`, client.id)
+        this.clientModule = new ClientModule(`${this.div} #client-module`, client.id, `${client.name}'s Details`)
+
+        if(client.kinId != undefined && client.kinId.length > 25){
+            this.kinModule = new UserModule(this, `${this.div} #kin-module`, client.kinId, `${client.name}'s Next of Kin`)
+        }else{
+            this.kinModule = new UserModule(this, `${this.div} #kin-module`, client.kinId, `${client.name}'s Next of Kin`, "No next of kin!", client)
+        }
+        // else Module.hide(`${this.div} #kin-module`)
     }
 
     loadVisits(client){
-        this.visitsModule = new VisitsModule(this, `${this.div} #visits-module`, `${client.name}'s Visits`, false, false, client.id)
+        this.visitsModule = new VisitsModule(this, `${this.div} #visits-module`, `${client.name}'s Visits`, false, true, client.id)
     }
 
     loadVisit(visit){

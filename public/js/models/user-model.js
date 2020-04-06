@@ -1,5 +1,5 @@
 class UserModel {
-    constructor(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode, archived, clients, settings) {
+    constructor(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode, archived, clients, settings, kinId) {
         this.id = id
         this.role = role
         this.name = name
@@ -14,6 +14,7 @@ class UserModel {
         this.archived = archived
         this.clients = clients
         this.settings = settings
+        this.kinId = kinId
     }
 
     // Instantiates class with values from firestore document. 
@@ -22,7 +23,7 @@ class UserModel {
         this.role = doc.data().role
         this.name = doc.data().name
         this.gender = doc.data().gender
-        this.dob = Convert.tsToDate(doc.data().dob)
+        this.dob = doc.data().dob
         this.address1 = doc.data().address1
         this.address2 = doc.data().address2
         this.town = doc.data().town
@@ -32,6 +33,7 @@ class UserModel {
         this.archived = doc.data().archived
         this.clients = doc.data().clients
         this.settings = doc.data().settings
+        this.kinId = doc.data().kinId
     }
 
     // Returns object that can be used with Firestore. 
@@ -50,7 +52,8 @@ class UserModel {
             mobile : this.mobile,
             archived: this.archived,
             clients: this.clients,
-            settings : this.settings
+            settings : this.settings,
+            kinId : this.kinId
         }
     
         return user

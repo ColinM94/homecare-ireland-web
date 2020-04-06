@@ -2,16 +2,33 @@ class UserModule{
     // div: string = Div id/class to load module into. 
     // userId: string = Id of user to be loaded from db. 
     // callBack: class reference = Allows for calling functions in view class. 
-    constructor(callBack, div, userId){
+    constructor(callBack, div, userId, title, error, client){
         this.div = div
         this.userId = userId
         this.callBack = callBack
+        this.client = client
 
         $(`${this.div}`).load("views/templates/details.html", () => {
+            $(`${this.div} #title`).text(title)
+            if(title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
 
-            this.observe(userId)
+            if(error){
+                $(`${div} #btn-add`).removeClass("d-none")
+                $(`${div} .card-body`).append(`
+                <div class="row">
+                    <div class="col">
+                        <span class="font-weight-bold">${error}</span>
+                    </div>
+                </div>`)
+
+                Module.createForm(this.div, "#add-kin", "Next of Kin", "Add Kin")
+            }else{
+                this.observe(userId)
+            }
+
+
             this.listeners()
-            this.show()
+            Module.show(this.div)
         })
     }
 
@@ -32,7 +49,7 @@ class UserModule{
     display(user){
         Module.clearDetails(this.div)
 
-        Module.setTitle(this.div, `${user.name}'s Details`)
+        // Module.setTitle(this.div, `${user.name}'s Details`)
         
         Module.appendDetail(this.div, "Name", user.name)
         Module.appendDetail(this.div, "Role", user.role)
@@ -50,7 +67,52 @@ class UserModule{
         Module.scroll(this.div)
     }
 
+    addKinForm(){
+        let formId = `#add-kin`
+
+        $(formId).text("")
+
+        UsersDB.getUsers("active", "client")
+            .then(kin => {
+                let options = new Array()
+                let arrayCounter = 0
+
+                kin.forEach(user => {
+                    if(user.kinId == undefined || user.kinId == ""){
+                        options[user.id] = user.name
+                        arrayCounter++
+                    }        
+                })
+
+                Module.addField(formId, "select", "kin", "Select Kin", options)
+
+                if(arrayCounter == 0){
+                    $(`${this.div} #add-kin #kin`)
+                    .empty()
+                    .append(new Option('No Kin Found!'))
+                    .attr('disabled', true)
     
+                $(`${this.div} #btn-add-kin`).attr('disabled', true)
+                }
+            })
+
+        $("#add-kin-modal").modal("show")
+    }
+
+    async addKin(){
+        let userId = $(`${this.div} #add-kin #kin`).val()
+
+        await Promise.all([
+            await ClientsDB.updateKin(this.client.id, userId),
+            await UsersDB.updateKin(userId, this.client.id)
+        ]).then(() => {
+            $("#add-kin-modal").modal("hide")
+        })
+    }       
+
+    removeKin(){
+        
+    }
     
     // Internal listners.
     listeners(){
@@ -60,15 +122,13 @@ class UserModule{
         $(this.div).on('click', `#btn-conn`, () => {
             this.connForm()
         })
-    }
 
-    // Makes div visible. 
-    show(){
-        $(this.div).show()
-    }
+        $(this.div).on('click', `#btn-add-kin`, () => {
+            this.addKin()
+        })
 
-    // Makes div invisible. 
-    hide(){
-        $(this.div).hide()
+        $(this.div).on('click', `#btn-add`, () => {
+            this.addKinForm()
+        })
     }
 }

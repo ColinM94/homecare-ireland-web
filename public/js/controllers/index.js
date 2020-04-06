@@ -4,7 +4,8 @@ $(document).ready(function() {
 
 class Index{
     static load(){
-            this.listeners()
+        $("#main-content").load("views/signin.html")
+        this.listeners()
     }
 
     static signIn(){
@@ -15,8 +16,7 @@ class Index{
             .then((ref) => {
                 UsersDB.getUser(ref.user.uid)
                     .then(user => {
-                        if(user.archived == true) Notification.formError("Your account is not active!") 
-                        else document.location.href = "dashboard.html"
+                        if(user.archived == true) Notification.formError("Your account is not active or is currently awaiting approval!") 
                     })
             }).catch(error => {
             if(error.message.includes("no user record")){
@@ -72,7 +72,7 @@ class Index{
             Auth.signUp(email, password1, name, mobile, role)
                 .then(() => {
                     this.toggleForm()
-                    Notification.display(1, "Your account is awaiting approval")
+                    Notification.formSuccess("Success: Your account is awaiting approval")
                 }).catch(error => {
                 if(error.message.includes("no user record")){
                     $('.form-error').text("Email not found!")
@@ -92,18 +92,23 @@ class Index{
     }
 
     static async listeners(){
-        $('#form-signin').submit(function(event){
+        $(document).on('submit', '#form-signin', () => {
             event.preventDefault()
-            Index.signIn()
+            this.signIn()
         })
 
-        $('#form-signup').submit(function(event){
-            event.preventDefault()
-            Index.signUp()
+        $(document).on('click', '#btn-toggle-signup', () => {
+            this.toggleForm()
         })
 
-        $('#btn-toggle-signup').click(function(){
-            Index.toggleForm()
+        $(document).on('submit', '#form-signup', () => {
+            event.preventDefault()
+            this.signUp()
+        })
+
+        $(document).on('submit', '#form-signin', () => {
+            event.preventDefault()
+            this.signIn()
         })
     }
 }
