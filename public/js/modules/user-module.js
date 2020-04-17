@@ -2,11 +2,12 @@ class UserModule{
     // div: string = Div id/class to load module into. 
     // userId: string = Id of user to be loaded from db. 
     // callBack: class reference = Allows for calling functions in view class. 
-    constructor(callBack, div, userId, title, error, client){
+    constructor(callBack, div, user, title, error, client, archiver){
         this.div = div
-        this.userId = userId
+        this.user = user
         this.callBack = callBack
         this.client = client
+        this.archiver = archiver
 
         $(`${this.div}`).load("views/templates/details.html", () => {
             $(`${this.div} #title`).text(title)
@@ -23,9 +24,8 @@ class UserModule{
 
                 Module.createForm(this.div, "#add-kin", "Next of Kin", "Add Kin")
             }else{
-                this.observe(userId)
+                this.observe()
             }
-
 
             this.listeners()
             Module.show(this.div)
@@ -34,7 +34,7 @@ class UserModule{
 
     // Observes DB for changes to this user. 
     observe(){
-        let doc = db.collection('users').doc(this.userId)
+        let doc = db.collection('users').doc(this.user.id)
         let observer = doc.onSnapshot(docSnapshot => {
             let user = new UserModel()
             user.docToUser(docSnapshot)
@@ -49,12 +49,23 @@ class UserModule{
     display(user){
         Module.clearDetails(this.div)
 
+        if(this.archiver) {
+            if(user.archived){
+                $("#btn-unarchive").removeClass("d-none")
+                $("#btn-archive").addClass("d-none")
+            } 
+            else{
+                $("#btn-archive").removeClass("d-none")
+                $("#btn-unarchive").addClass("d-none")
+            }
+        }
+
         // Module.setTitle(this.div, `${user.name}'s Details`)
         
         Module.appendDetail(this.div, "Name", user.name)
         Module.appendDetail(this.div, "Role", user.role)
         Module.appendDetail(this.div, "Gender", user.gender)
-        Module.appendDetail(this.div, "Date of Birth", user.dob)
+        Module.appendDetail(this.div, "Date of Birth", Format.flipDate(Convert.tsToDate(user.dob)))
         Module.appendDetail(this.div, "Mobile", user.mobile)
 
         let address = Format.address(user.address1, user.address2, user.town, user.county, user.eircode)
@@ -113,6 +124,16 @@ class UserModule{
     removeKin(){
         
     }
+
+    async archive(){
+        if(await Prompt.confirm("This action will archive this user!")){
+            UsersDB.archive(this.user.id)
+        }
+    }
+
+    async unArchive(){
+        UsersDB.unArchive(this.user.id)
+    }
     
     // Internal listners.
     listeners(){
@@ -129,6 +150,14 @@ class UserModule{
 
         $(this.div).on('click', `#btn-add`, () => {
             this.addKinForm()
+        })
+
+        $(this.div).on('click', `#btn-archive`, () => {
+            this.archive()
+        })
+
+        $(this.div).on('click', `#btn-unarchive`, () => {
+            this.unArchive()
         })
     }
 }

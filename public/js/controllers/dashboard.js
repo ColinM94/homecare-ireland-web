@@ -19,6 +19,8 @@ auth.onAuthStateChanged(user => {
 
 // Observes DB for changes to this user. 
 function observe(userId){
+    // showAndroidToast("Hello from webview")
+
     let doc = db.collection('users').doc(userId)
     doc.onSnapshot(docSnapshot => {
         let user = new UserModel()
@@ -32,6 +34,9 @@ function observe(userId){
         Notification.display(2, "Problem loading user")
     })
 }
+
+let webview = false
+function setWebView() { webView = true } // Tells the web app that it is being displayed in an Android WebView
 
 class Dashboard{
     static load(){
@@ -163,6 +168,12 @@ class Dashboard{
 
     static listeners(){
         $(document).on('click', '#btn-nav-staff', () => {
+            try{
+                Android.showAndroidToast("FROM WEBVIEW")
+            }catch(error){
+                // Prevent error from being thrown if not on Android device. 
+            }
+
             this.loadView("staff")
         })
 

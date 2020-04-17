@@ -28,7 +28,6 @@ class Module{
     }
 
     static appendButtons(div, buttons){
-        console.log(div)
         $(`${div} .card-body`).append(`<div class="row">`)
 
         buttons.forEach(button => {
@@ -95,6 +94,7 @@ class Module{
                 <div class="form-group row">
                     <label class="col-4 my-auto" for="${inputId}">${labelText}</label>
                     <select class="form-control col-8" id="${inputId}">
+                    <option disabled selected hidden></option>
                 `)
 
                 for(let key in options){
@@ -115,7 +115,6 @@ class Module{
     }
 
     static addHR(div){
-        console.log(`${div}`)
         $(`${div}`).append("<hr>")
     }
 

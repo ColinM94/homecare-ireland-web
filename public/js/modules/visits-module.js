@@ -66,7 +66,6 @@ class VisitsModule{
         }
 
         let clients = await ClientsDB.getClients()
-        console.log(clients)
         
         this.datatable = $(`${this.div} #datatable`).DataTable({
             data: visits,
@@ -106,7 +105,6 @@ class VisitsModule{
                     title: "Client", 
                     responsivePriority: 1,
                     render: function(data, type, row, meta){
-                        console.log(row.clientId)
                         for(var i=0; i<clients.length; i++){
                             if(clients[i].id == row.clientId){
                                 let name = clients[i].name
@@ -163,7 +161,6 @@ class VisitsModule{
             Notification.formError("")
         
         let n = notes.split("\n")
-        console.log(n)
             await VisitsDB.addVisit(userId, this.clientId, start, end, n)
                 .then(() => {
                     $('#modal-add-visit').modal('hide')

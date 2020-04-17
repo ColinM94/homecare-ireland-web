@@ -10,10 +10,8 @@ class ClientsModule{
         this.callback = callback
         this.userId = userId
 
-
         $(`${div}`).load("views/templates/datatable.html", () => {
             if(userId) $(`${this.div} #modal`).load("views/modals/add-conn.html")
-            else $(`${this.div} #modal`).load("views/modals/add-client.html")
 
             if(showSearch){
                 $(`${div} #datatable-search`).removeClass("d-none")
@@ -26,6 +24,8 @@ class ClientsModule{
             if(!showAdd && !showSearch && title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
 
             $(`${this.div} #title`).text(title)
+
+            this.createClientForm()
 
             this.observe()
 
@@ -67,6 +67,7 @@ class ClientsModule{
 
         let userId = this.userId
 
+        console.log(clients)
         this.datatable = $(`${this.div} #datatable`).DataTable({
             data: clients,
             // bLengthChange: false,
@@ -85,22 +86,18 @@ class ClientsModule{
             columnDefs: [
                 { targets: 0, title: "Name", data: "name", responsivePriority: 1},
                 { targets: 1, title: "Gender", data: "gender", responsivePriority: 3},
-                { targets: 2, title: "DOB", data: "dob", responsivePriority: 4},
+                { 
+                    targets: 2, 
+                    title: "DOB", 
+                    responsivePriority: 4, 
+                    render: function(data, type, row, meta){
+                        return Convert.tsToDate(row.dob)
+                    }  
+                },
                 { targets: 3, title: "Town", data: "town", responsivePriority: 5},
                 { targets: 4, title: "County", data: "county", responsivePriority: 6},
                 { 
                     targets: 5, 
-                    title: "Delete", 
-                    orderable: false,
-                    responsivePriority: 2,
-                    render: function(data, type, row, meta){
-                        if(userId) return `<button id="btn-delete-client" class="btn" onclick="ClientsModule.deleteConn('${userId}', '${row.id}')" title="Delete Connection"><i class="fa fa-times fa-lg"></i></button>` 
-                        else return `<button id="btn-delete-client" class="btn" onclick="ClientsModule.delete('${userId}', '${row.id}')" title="Delete Connection"><i class="fa fa-times fa-lg"></i></button>`   
-                
-                    }  
-                },
-                { 
-                    targets: 6, 
                     visible: false,
                     data: function(data){
                         return data.archived ? "Yes" : "No"
@@ -108,7 +105,7 @@ class ClientsModule{
                 },
             ],
             initComplete : (ref) => {
-                Table.filters(ref, this.div, [1,3,4,6], ["Gender", "Town", "County", "Archived"], true)
+                Table.filters(ref, this.div, [1,3,4,5], ["Gender", "Town", "County", "Archived"], true)
                 Table.detachSearch(this.div)    
             },
         })
@@ -141,6 +138,27 @@ class ClientsModule{
                 console.log(Notification.display(2, "Problem deleting connection"))
             }) 
         }
+    }
+
+    createClientForm(){
+        let formId = `#add-client`
+
+        Module.createForm(this.div, formId, "New Client", "Add Client")
+        
+        Module.addField(formId, "text", "add-client-name", "Name")
+        Module.addField(formId, "select", "add-client-gender", "Gender", {"Male":"Male", "Female":"Female"})
+        Module.addField(formId, "date", "add-client-dob", "DOB")
+        Module.addField(formId, "text", "add-client-mobile", "Mobile")
+        Module.addField(formId, "select", "add-client-marital", "Marital Status", {"Married":"Married", "Widowed":"Widowed", "Not Married":"Not Married"})
+        Module.addField(formId, "text", "add-client-address1", "Address 1")
+        Module.addField(formId, "text", "add-client-address2", "Address 2")
+        Module.addField(formId, "text", "add-client-town", "Town")
+        Module.addField(formId, "select", "add-client-county", "County", 
+        {"Carlow":"Carlow", "Cavan":"Cavan", "Clare":"Clare", "Cork":"Cork", "Donegal":"Donegal", "Dublin":"Dublin","Galway":"Galway", 
+        "Kerry":"Kerry", "Kildare":"Kildare", "Kilkenny":"Kilkenny", "Laois":"Laois", "Leitrim":"Leitrim", "Limerick":"Limerick", 
+        "Longford":"Longford", "Louth":"Louth", "Mayo":"Mayo", "Meath":"Meath", "Monaghan":"Monaghan", "Offaly":"Offaly", "Roscommon":"Roscommon", 
+        "Sligo":"Sligo", "Tipperary":"Tipperary", "Waterford":"Waterford", "Westmeath":"Westmeath", "Wexford":"Wexford", "Wicklow":"Wexford"})
+        Module.addField(formId, "text", "add-client-eircode", "Eircode")
     }
 
     addClient(){
@@ -298,7 +316,7 @@ class ClientsModule{
             if(this.userId)
                 this.connForm()
             else
-                $('#modal-add-client').modal('show')
+                $("#add-client-modal").modal("show")
 
         })
 
@@ -327,9 +345,4 @@ class ClientsModule{
         $(this.div).hide()
     }
 }
-
-
-
-
-
 

@@ -14,15 +14,13 @@ class Convert{
         // return ('0' + date.getDate()).slice(-2)  + "-" + ('0' + (date.getMonth()+1)).slice(-2) + "-" + date.getFullYear() 
     }
 
-    static flipDate(str){
-        return str.split('-').reverse().join('-');
-    }
-
     static tsToDateTime(timestamp){
         var date = new Date(1970, 0, 1) // Epoch
         date.setSeconds(timestamp.seconds)
         return date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + " @ " 
         + date.getHours() + ":" + date.getMinutes()
+
+        // return newDate.split('-').reverse().join('-')
     }
 
     static tsToTime(timestamp){

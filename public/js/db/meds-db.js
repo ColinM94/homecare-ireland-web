@@ -50,7 +50,9 @@ class MedsDB{
     }
 
     static async updateMed(id, name, type, description, dosages, sideEffects){
+        console.log(id)
         let med = new MedModel(id, name, type, description, dosages, sideEffects)
+        console.log(med)
         await db.collection("meds").doc(id).set(med.toFirestore())
     }
 }

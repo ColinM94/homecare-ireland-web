@@ -1,18 +1,21 @@
-// Firebase configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyDvWIKyHILbBQUcVKf3gLjV84fIUgCIr3w",
-    authDomain: "carers-app.firebaseapp.com",
-    databaseURL: "https://carers-app.firebaseio.com",
-    projectId: "carers-app",
-    storageBucket: "carers-app.appspot.com",
-    messagingSenderId: "128407070115",
-    appId: "1:128407070115:web:3903fd81347b8c4cc76616"
-}
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig)
+    // Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyA8fhdnpSnINbDcc7nuSvvXVsKSHAHey4E",
+        authDomain: "homecare-ireland.firebaseapp.com",
+        databaseURL: "https://homecare-ireland.firebaseio.com",
+        projectId: "homecare-ireland",
+        appId: "1:575696180271:web:4506145943301e06afa2da",
+    }
 
-// Initializes Auth and Firestore
-const auth = firebase.auth()
-const db = firebase.firestore()
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig)
+
+    // Initializes Auth and Firestore
+    const auth = firebase.auth()
+    const db = firebase.firestore()
+
+
+
+
 

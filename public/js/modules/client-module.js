@@ -21,7 +21,7 @@ class ClientModule{
     // Loads data and listens for changes. 
     observe(clientId){
         let doc = db.collection('clients').doc(clientId)
-        let observer = doc.onSnapshot(docSnapshot => {
+        doc.onSnapshot(docSnapshot => {
             let client = new ClientModel()
             client.docToClient(docSnapshot)
             this.displayData(client)
@@ -38,7 +38,7 @@ class ClientModule{
 
         Module.appendDetail(this.div, "Name", client.name)
         Module.appendDetail(this.div, "Gender", client.gender)
-        Module.appendDetail(this.div, "Date of Birth", client.dob)
+        Module.appendDetail(this.div, "Date of Birth", Convert.tsToDate(client.dob))
         Module.appendDetail(this.div, "Mobile", client.mobile)
         Module.appendDetail(this.div, "Marital Status", client.marital)
 

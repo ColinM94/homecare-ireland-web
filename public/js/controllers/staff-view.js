@@ -29,7 +29,7 @@ class StaffView{
     }
 
     loadUser(user){ 
-        this.userModule = new UserModule(this, `${this.div} #user-module`, user.id, `${user.name}`)  
+        this.userModule = new UserModule(this, `${this.div} #user-module`, user, `${user.name}`, null, null, true)  
     }
 
     loadVisits(user){

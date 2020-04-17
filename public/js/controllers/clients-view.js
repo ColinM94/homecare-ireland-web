@@ -25,13 +25,15 @@ class ClientsView{
         }
     } 
 
-    loadClient(client){
+    async loadClient(client){
         this.clientModule = new ClientModule(`${this.div} #client-module`, client.id, `${client.name}'s Details`)
 
         if(client.kinId != undefined && client.kinId.length > 25){
-            this.kinModule = new UserModule(this, `${this.div} #kin-module`, client.kinId, `${client.name}'s Next of Kin`)
+            let user = await UsersDB.getUser(client.kinId)
+            this.kinModule = new UserModule(this, `${this.div} #kin-module`, user, `${client.name}'s Next of Kin`, null, null, false)
         }else{
-            this.kinModule = new UserModule(this, `${this.div} #kin-module`, client.kinId, `${client.name}'s Next of Kin`, "No next of kin!", client)
+            let user = await UsersDB.getUser(client.kinId)
+            this.kinModule = new UserModule(this, `${this.div} #kin-module`, user, `${client.name}'s Next of Kin`, "No next of kin!", client, false)
         }
         // else Module.hide(`${this.div} #kin-module`)
     }

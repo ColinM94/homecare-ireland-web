@@ -2,7 +2,7 @@ class MedModule{
     constructor(div, id){
         this.div = div
         this.id = id
-       
+
         $(`${this.div}`).load("views/med.html", () => {
             this.loadData(id)
             this.listeners()
@@ -42,12 +42,11 @@ class MedModule{
         }) 
 
         med.dosages.forEach(x => {
-            console.log(x)
             $(`${this.div} #med-dosages`).append(x + "<br><br>")
         }) 
 
         med.sideEffects.forEach(side => {
-            $(`${this.div} #med-sides`).append(side + "<br>")
+            $(`${this.div} #med-sides`).append(side + "<br><br>")
         })  
 
         Module.scroll(this.div)
@@ -91,7 +90,6 @@ class MedModule{
         $(`${this.div} #edit-med #med-name`).val(this.med.name)
         $(`${this.div} #edit-med #med-type`).val(this.med.type)
 
-        console.log(this.med.description)
         this.med.description.forEach(x => {
             $(`${this.div} #edit-med #med-description`).append(x + "\n\n")
         })
@@ -120,7 +118,10 @@ class MedModule{
         } 
     }
 
-    listeners(){     
+    listeners(){    
+        // Deletes listeners set by previous module instances. 
+        $(this.div).off('click')
+
         $(this.div).on('click', '#btn-delete-med', (ref) => {
             this.deleteMed()
         })

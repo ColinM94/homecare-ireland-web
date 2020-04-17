@@ -10,4 +10,8 @@ class Format{
 
         return address
     }
+
+    static flipDate(str){
+        return str.split('-').reverse().join('-')
+    }
 }

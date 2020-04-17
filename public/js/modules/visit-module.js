@@ -64,6 +64,8 @@ class VisitModule{
         // $(`${this.div} .card-body`).append(`<button id="btn-conn" class="btn btn-primary">Assign Client</button>`)
 
         Module.scroll(this.div)
+
+        if(webView) Module.appendButtons(this.div, [["btn-clockin", "Clock In"], ["btn-clockout", "Clock Out"]])
     }
 
     listeners(){

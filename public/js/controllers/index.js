@@ -16,6 +16,7 @@ class Index{
             .then((ref) => {
                 UsersDB.getUser(ref.user.uid)
                     .then(user => {
+                        console.log(user)
                         if(user.archived == true) Notification.formError("Your account is not active or is currently awaiting approval!") 
                     })
             }).catch(error => {

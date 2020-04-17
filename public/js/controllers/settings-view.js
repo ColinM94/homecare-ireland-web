@@ -20,7 +20,7 @@ class SettingsView{
 
         Module.addField(formId, "text", "name", "Name")
         Module.addField(formId, "date", "dob", "DOB")
-        Module.addField(formId, "select", "gender", "Gender", {"male": "Male", "female": "Female"})
+        Module.addField(formId, "select", "gender", "Gender", {"Male": "Male", "Female": "Female"})
         Module.addField(formId, "text", "mobile", "Mobile")
         // Module.addHR(formId)
 
@@ -75,7 +75,6 @@ class SettingsView{
     }
 
     static updateDetailsForm(){
-        console.log(currentUser)
         $("#update-user-details-modal").modal("show")
 
         $(`#update-user-details #name`).val(currentUser.name)

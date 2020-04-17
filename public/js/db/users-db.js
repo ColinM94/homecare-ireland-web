@@ -6,7 +6,7 @@ class UsersDB{
         let user = new UserModel()
 
         user.docToUser(doc)
-
+        
         return user
     }
 
@@ -92,7 +92,7 @@ class UsersDB{
     // Sets users/{userId}/arhived field to false. 
     static async unArchive (userId) {
         await db.collection('users').doc(userId).update({
-            "archived": true
+            "archived": false
         })
     }
 
