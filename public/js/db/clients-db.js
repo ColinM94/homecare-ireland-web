@@ -50,12 +50,12 @@ class ClientsDB{
 
     // Sets clients/{clientId}/active field to true.
     static async archive(clientId) {
-        await db.collection('clients').doc(clientId).update({"archived": false})
+        await db.collection('clients').doc(clientId).update({"archived": true})
     }
 
     // Sets clients/{clientId}/active field to false. 
     static async unArchive (clientId) {
-        await db.collection('clients').doc(clientId).update({"archived": true})
+        await db.collection('clients').doc(clientId).update({"archived": false})
     }
 
     // Adds {userId} to clients/{clientId}/users array.

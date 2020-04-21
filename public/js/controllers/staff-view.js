@@ -50,7 +50,7 @@ class StaffView{
     }
 
     loadClient(client){
-        this.clientModule = new ClientModule(`${this.div} #client-module`, client.id, `${client.name}'s Details`)
+        this.clientModule = new ClientModule(`${this.div} #client-module`, client, `${client.name}'s Details`, false)
     }
 }
 

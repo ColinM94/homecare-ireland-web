@@ -27,6 +27,26 @@ class Module{
          )
     }
 
+    static appendList(div, name, values){
+        $(`${div} .card-body`).append(`
+            <div class="row">
+                <div class="col">
+                    <span class="font-weight-bold">${name}</span>
+                </div>
+                <div class="col">
+                        
+                `           
+         )
+  
+        values.forEach(value => {
+            $(`${div} .card-body`).append(`
+                <span>${value}</span><br>
+           `)
+        })
+        
+        $(`${div} .card-body`).append(`</div></div><hr>`)
+    }
+
     static appendButtons(div, buttons){
         $(`${div} .card-body`).append(`<div class="row">`)
 

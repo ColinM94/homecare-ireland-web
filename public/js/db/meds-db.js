@@ -17,7 +17,7 @@ class MedsDB{
         let meds = new Array()
 
         result.forEach(doc => {
-            let med = new Medication()   
+            let med = new MedModel()   
             med.docToMed(doc)
             meds.push(med)
         })

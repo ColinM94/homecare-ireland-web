@@ -53,8 +53,7 @@ class UserModule{
             if(user.archived){
                 $("#btn-unarchive").removeClass("d-none")
                 $("#btn-archive").addClass("d-none")
-            } 
-            else{
+            } else{
                 $("#btn-archive").removeClass("d-none")
                 $("#btn-unarchive").addClass("d-none")
             }
@@ -128,11 +127,14 @@ class UserModule{
     async archive(){
         if(await Prompt.confirm("This action will archive this user!")){
             UsersDB.archive(this.user.id)
+            // Module.hide(this.div)
+            Notification.display(3, "User archived")
         }
     }
 
     async unArchive(){
         UsersDB.unArchive(this.user.id)
+        Notification.display(3, "User restored")
     }
     
     // Internal listners.

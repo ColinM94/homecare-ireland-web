@@ -110,7 +110,11 @@ class ClientsModule{
             },
         })
 
-        // Module.scroll(this.div)
+        // Filters out archived users by default. 
+        this.datatable.column(5).search("No").draw()
+
+        // Displays default filter. 
+        $(`${this.div} #Archived-filter`).val("No")    
     }
 
     static async delete(userId, clientId){
@@ -174,9 +178,10 @@ class ClientsModule{
         let marital = $("#add-client-marital").val()
 
         if(this.validateForm(name, gender, dob, mobile, address1, address2, town, county, eircode, marital)){
-            ClientsDB.addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, true)
+            ClientsDB.addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, false)
                 .then(() => {
-                    $('#modal-add-client').modal('hide')
+                    $('#add-client-modal').modal('hide')
+                    Notification.display(2, "Client created")
                 }).catch(error => {
                     console.log(error.message)
                     Notification.display(2, "Unable to add client")
@@ -324,12 +329,11 @@ class ClientsModule{
             this.addClient()
         })
 
-        $(this.div).on('click', 'tr', (event) => {
-            
+        $(this.div).on('click', 'tr', (event) => {     
             if($(event.target).is("i")) return 
             
             let client = Table.rowClick(this.datatable, event)
-
+            
             // Prevents loading module if table header row is clicked. 
             if(client != undefined){
                 this.callback.handle(["client", client])

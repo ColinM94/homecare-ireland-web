@@ -95,7 +95,10 @@ class UsersModule{
         })
         
         // Filters out archived users by default. 
-        this.datatable.column(5).search("No").draw();
+        this.datatable.column(5).search("No").draw()
+
+        // Displays default filter. 
+        $(`${this.div} #Archived-filter`).val("No")    
     }
 
     listeners(div){

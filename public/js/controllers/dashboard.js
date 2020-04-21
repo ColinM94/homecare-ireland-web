@@ -60,7 +60,8 @@ class Dashboard{
                 Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
                 this.loadView("staff")
             }else if(currentUser.role == "Doctor"){
-            
+                Dashboard.addLink("clients", "fas fa-users", "Clients", true, true)
+                Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)            
             }else if(currentUser.role == "Client"){
                 Dashboard.addLink("client", "fas fa-user", "Next of Kin", true, true)
                 Dashboard.addLink("meds", "fas fa-tablets", "Medication", true, true)
@@ -113,7 +114,7 @@ class Dashboard{
                     if($("#clients-view").text().trim() == "")
                         if(currentUser.role == "Admin")
                             new ClientsView()
-                        else if(currentUser.role == "Carer")
+                        else if(currentUser.role == "Carer" || currentUser.role == "Doctor")
                             new ClientsView(currentUser)
                 break
             case "visits":

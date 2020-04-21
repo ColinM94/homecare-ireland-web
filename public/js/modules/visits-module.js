@@ -18,12 +18,14 @@ class VisitsModule{
                 $(`${div} #btn-filters`).removeClass("d-none")
             } 
 
-            if(showAdd) $(`${div} #btn-add`).removeClass("d-none")
+            if(showAdd && currentUser.role == "Admin") $(`${div} #btn-add`).removeClass("d-none")
 
             // Hides header if empty.
             if(!showAdd && !showSearch && title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
 
             $(`${this.div} #title`).text(title)
+
+
 
             this.observe()
 
@@ -134,7 +136,7 @@ class VisitsModule{
 
             // Add carers connected to this client to dropdown list.
             clients.forEach(client => {
-                $("#visit-select-user").append(new Option(`${client.name} : ${client.address1}`, client.id))
+                if(client.role == "Carer") $("#visit-select-user").append(new Option(`${client.name} : ${client.address1}`, client.id))
             })
         })
 
@@ -147,21 +149,25 @@ class VisitsModule{
         let end = new Date($('#visit-end').val())
         let notes = $('#visit-notes').val()
 
+        console.log(end)
+
         if(!userId){
             Notification.formError("Please select a carer!")
         }else if(!start){
             Notification.formError("Please select a start date!")
         }else if(Date.now() > start){
             Notification.formError("New visits cannot take place in the past!")
-        }else if(!end){
-            Notification.formError("Please select an end date!")
+        }else if(start.toString() == "Invalid Date"){
+            Notification.formError("Please select a valid start date!")
+        }else if(end.toString() == "Invalid Date"){
+            Notification.formError("Please select a valid end date!")
         }else if(start > end){
             Notification.formError("The visit cannot end before it starts!")
         }else{
             Notification.formError("")
         
-        let n = notes.split("\n")
-            await VisitsDB.addVisit(userId, this.clientId, start, end, n)
+            let n = notes.split("\n")
+            await VisitsDB.addVisit(userId, this.id, start, end, n)
                 .then(() => {
                     $('#modal-add-visit').modal('hide')
                 }).catch(error => {
@@ -176,7 +182,8 @@ class VisitsModule{
             this.visitForm()
         })
 
-        $(this.div).on('click', '#btn-add-visit', (ref) => {
+        $(document).on('click', '#btn-add-visit', (ref) => {
+            console.log("Heeeyy")
             this.addVisit()
         })
 

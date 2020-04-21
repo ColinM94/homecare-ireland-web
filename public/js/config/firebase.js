@@ -5,7 +5,9 @@
         authDomain: "homecare-ireland.firebaseapp.com",
         databaseURL: "https://homecare-ireland.firebaseio.com",
         projectId: "homecare-ireland",
-        appId: "1:575696180271:web:4506145943301e06afa2da",
+        storageBucket: "homecare-ireland.appspot.com",
+        messagingSenderId: "575696180271",
+        appId: "1:575696180271:web:4506145943301e06afa2da"
     }
 
     // Initialize Firebase

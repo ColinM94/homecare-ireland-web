@@ -28,11 +28,15 @@ class VisitsDB{
         return visits
     }
 
-    static async addNote(visit, note){
-        let notes = visit.notes
-        notes.push(note)
-        
+    static async addNote(id, newNotes){
+        let visit = await this.getVisit(id)
 
+        let notes = visit.notes
+
+        newNotes.forEach(newNote => {
+            notes.push(newNote)
+        })
+        
         await db.collection("visits").doc(visit.id).set({"notes": notes}, {merge:true})
     }
 

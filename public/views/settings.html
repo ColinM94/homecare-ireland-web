@@ -40,6 +40,110 @@
     </div>
 </div>
 
+<!-- MODAL UPDATE USER -->
+<div class="modal fade" id="modal-update-user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Update Your Details</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">                    
+                  <i class="fas fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+              <form id="form-add-client">
+                <div class="form-group row">
+                  <label class="col-3" for="add-client-name">Name</label>
+                  <input type="text" class="form-control col-9" id="add-client-name" title="Name">
+                </div>
+                <div class="form-group row">
+                  <label class="col-3" for="gender">Gender</label>
+                  <select class="form-control col-9" id="add-client-gender">
+                    <option value="" selected disabled hidden>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group row">
+                  <label class="col-3" for="add-client-dob">Date of Birth</label>
+                  <input type="date" class="form-control col-9" id="add-client-dob">
+                </div>
+                <div class="form-group row">
+                  <label class="col-3" for="add-client-mobile">Mobile</label>
+                  <input type="text" class="form-control col-9" id="add-client-mobile">
+                </div>
+                <div class="form-group row">
+                  <label class="col-3" for="add-client-address1">Address 1</label>
+                  <input type="text" class="form-control col-9" id="add-client-address1">
+                </div>
+                <div class="form-group row">
+                  <label class="col-3" for="add-client-address2">Address 2</label>
+                  <input type="text" class="form-control col-9" id="add-client-address2">
+                </div>
+                <div class="form-group row">
+                  <label class="col-3" for="add-client-town">Town</label>
+                  <input type="text" class="form-control col-9" id="add-client-town">
+                </div>
+                <div class="form-group row">
+                  <label class="col-3" for="add-client-county">County</label>
+                  <select class="form-control form-select col-9" id="add-client-county">
+                    <option value="" selected disabled hidden>Select County</option>
+                    <option value="Carlow">Carlow</option>
+                    <option value="Cavan">Cavan</option>
+                    <option value="Clare">Clare</option>
+                    <option value="Cork">Cork</option>
+                    <option value="Donegal">Donegal</option>
+                    <option value="Dublin">Dublin</option>
+                    <option value="Galway">Galway</option>
+                    <option value="Kerry">Kerry</option>
+                    <option value="Kildare">Kildare</option>
+                    <option value="Kilkenny">Kilkenny</option>
+                    <option value="Laois">Laois</option>
+                    <option value="Leitrim">Leitrim</option>
+                    <option value="Limerick">Limerick</option>
+                    <option value="Longford">Longford</option>
+                    <option value="Louth">Louth</option>
+                    <option value="Mayo">Mayo</option>
+                    <option value="Meath">Meath</option>
+                    <option value="Monaghan">Monaghan</option>
+                    <option value="Offaly">Offaly</option>
+                    <option value="Roscommon">Roscommon</option>
+                    <option value="Sligo">Sligo</option>
+                    <option value="Tipperary">Tipperary</option>
+                    <option value="Waterford">Waterford</option>
+                    <option value="Westmeath">Westmeath</option>
+                    <option value="Wexford">Wexford</option>
+                    <option value="Wicklow">Wicklow</option>
+                  </select>
+                </div>
+                <div class="form-group row">
+                  <label class="col-3" for="add-client-eircode">Eircode</label>
+                  <input type="text" class="form-control col-9" id="add-client-eircode">
+                </div>
+                <div class="form-group row">
+                  <label class="col-3" for="add-client-marital">Marital Status</label>
+                  <select class="form-control form-select col-9" id="add-client-marital">
+                    <option value="" selected disabled hidden>Select Marital Status</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                    <option value="Widowed">Widowed</option>
+                    <option value="Divorced">Divorced</option>
+                    <option value="Relationship">Relationship</option>
+                  </select>
+                </div>
+              </form>       
+          </div>
+          <div class="modal-footer">
+            <div class="form-error text-danger mx-auto"></div>
+            <button class="btn btn-primary" id="btn-add-client" type="button">Update</button>
+          </div>
+      </div>
+    </div>
+  </div>
+
+
 <!-- <div id="settings">
     Put settings here
 </div> -->

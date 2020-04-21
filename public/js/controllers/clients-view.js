@@ -26,7 +26,7 @@ class ClientsView{
     } 
 
     async loadClient(client){
-        this.clientModule = new ClientModule(`${this.div} #client-module`, client.id, `${client.name}'s Details`)
+        this.clientModule = new ClientModule(`${this.div} #client-module`, client, `${client.name}`, true)
 
         if(client.kinId != undefined && client.kinId.length > 25){
             let user = await UsersDB.getUser(client.kinId)
@@ -43,6 +43,6 @@ class ClientsView{
     }
 
     loadVisit(visit){
-        this.visitModule = new VisitModule(this, `${this.div} #visit-module`, visit.id)
+        this.visitModule = new VisitModule(this, `${this.div} #visit-module`, "", visit.id)
     }
 }

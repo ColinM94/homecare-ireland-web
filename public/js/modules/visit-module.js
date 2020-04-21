@@ -10,7 +10,7 @@ class VisitModule{
         $(`${this.div}`).load("views/templates/details.html", () => {
             // Hides header if empty.
             if(title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
-
+            this.createNoteForm()
             this.observe(visitId)
             this.listeners()
             Module.show(this.div)
@@ -53,22 +53,66 @@ class VisitModule{
         Module.appendDetail(this.div, "Clock In", Convert.tsToDateTime(visit.clockIn))
         Module.appendDetail(this.div, "Clock Out", Convert.tsToDateTime(visit.clockOut))
 
-        let notes = ""
+        // $(`${this.div} .card-body`).append("Notes<br><br>")
+        
+        // $(`${div} .card-body`).append(`
+        //     <div class="row">
+        //         <div class="col">
+        //             <span class="font-weight-bold">${name}</span>
+        //         </div>
+        //         <div class="col">
+        //             <span>${value}</span>
+        //         </div>
+        //     </div>
+        //     <hr>`   
+        //  )
 
-        visit.notes.forEach(note => {
-            notes += note + `<button class="float-right"><i class="btn-delete-note fas fa-times"></i></button><br><br>`
-        }) 
+        // visit.notes.forEach(note => {
+        //     // notes += note + `<button class="float-right"><i class="btn-delete-note fas fa-times"></i></button><br><br>`
+        //     $(`${this.div} .card-body`).append(note)
+        // }) 
 
-        Module.appendDetail(this.div, "Notes", notes)
+        // $(`${this.div} .card-body`).append("<hr>")
+
+        Module.appendList(this.div, "Notes", visit.notes)
 
         // $(`${this.div} .card-body`).append(`<button id="btn-conn" class="btn btn-primary">Assign Client</button>`)
 
         Module.scroll(this.div)
 
-        if(webView) Module.appendButtons(this.div, [["btn-clockin", "Clock In"], ["btn-clockout", "Clock Out"]])
+        if(webview) Module.appendButtons(this.div, [["btn-clockin", "Clock In"], ["btn-clockout", "Clock Out"]])
+        Module.appendButtons(this.div, [["btn-add-note", "Add Note"]])
+    }
+
+    createNoteForm(){
+        let formId = `#add-visit-notes`
+
+        Module.createForm(this.div, formId, "Notes", "Add Notes")
+        
+        Module.addField(formId, "textarea", "visit-notes", "Notes")
+    }
+
+    addNotes(){
+        let notes = $('#visit-notes').val().split(/\n/)
+
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+
+        for(let i=0; i<notes.length;i++){
+            notes[i] = `${date} @ ${time} by ${currentUser.name}: ${notes[i]}` 
+        }
+        
+        VisitsDB.addNote(this.visitId, notes)
     }
 
     listeners(){
+        $(this.div).on('click', `#btn-add-note`, () => {
+            $("#add-visit-notes-modal").modal("show")
+        })
 
+        $(this.div).on('click', `#btn-add-visit-notes`, () => {
+            this.addNotes()
+        })
     }
 }

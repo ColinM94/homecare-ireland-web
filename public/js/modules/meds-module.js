@@ -105,6 +105,8 @@ class MedsModule{
         
         if(!name){
             Notification.formError("Please enter a name!")
+        }else if(!type){
+            Notification.formError("Please enter a type!")
         }else{
             Notification.formError("")
 
@@ -157,6 +159,7 @@ class MedsModule{
         })
  
         $(this.div).on('click', '#btn-add', (ref) => {
+            $('#add-med')[0].reset();
             $("#add-med-modal").modal("show")
         })
 
