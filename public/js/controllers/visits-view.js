@@ -23,7 +23,10 @@ class VisitsView{
     } 
 
     loadClient(client){
+
+
         this.clientModule = new ClientModule(`${this.div} #client-module`, client.id)
+        
     }
 
     loadVisits(client){

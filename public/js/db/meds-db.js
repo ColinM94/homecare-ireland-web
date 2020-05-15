@@ -4,7 +4,7 @@ class MedsDB{
     static async getMed(id) {
         let result = await db.collection('meds').doc(id).get()
 
-        let med = new Medication()
+        let med = new MedModel()
 
         med.docToMed(result)
 

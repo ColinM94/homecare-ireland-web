@@ -19,8 +19,6 @@ auth.onAuthStateChanged(user => {
 
 // Observes DB for changes to this user. 
 function observe(userId){
-    // showAndroidToast("Hello from webview")
-
     let doc = db.collection('users').doc(userId)
     doc.onSnapshot(docSnapshot => {
         let user = new UserModel()
@@ -35,12 +33,12 @@ function observe(userId){
     })
 }
 
-let webview = false
-function setWebView() { webView = true } // Tells the web app that it is being displayed in an Android WebView
+// let webview = false // Tells the web app that it is being displayed in an Android WebView
 
 class Dashboard{
     static load(){
         $("#main-content").load("views/dashboard.html", () => {
+            // Android.isWebview()
             SettingsView.load(currentUser)
             // Preserves state of tabs so you can return to where you left off. 
             // this.preserveState = false
@@ -150,7 +148,8 @@ class Dashboard{
     static async signOut(){
         if(await Prompt.confirm("Are you sure you want to sign out?")){
             Auth.signOut()
-            location.reload()
+            Index.load()
+            // location.reload()
         }
     }
 

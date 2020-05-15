@@ -1,7 +1,7 @@
 class VisitsDB{
     // Creates new doc in visitDetails. 
     static async addVisit(userId, clientId, start, end, notes){
-        let visit = new VisitModel(null, clientId, userId, "", "", start, end, notes)
+        let visit = new VisitModel(null, clientId, userId, new Date(0), new Date(0), start, end, notes)
 
         await db.collection("visits").add(visit.toFirestore())
     }
@@ -67,6 +67,21 @@ class VisitsDB{
 
     static async deleteVisit(visitId){
         db.collection('visits').doc(visitId).delete()
+    }
+
+    static async clockIn(visitId){
+        let clockIn = new Date(Date.now())
+        console.log(clockIn)
+        await db.collection('visits').doc(visitId).update({
+            clockIn: clockIn
+        })
+    }
+
+    static async clockOut(visitId){
+        let clockOut = new Date(Date.now())
+        await db.collection('visits').doc(visitId).update({
+            clockOut: clockOut
+        })
     }
 
     static async getVisit(visitId){

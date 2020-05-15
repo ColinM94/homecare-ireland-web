@@ -32,8 +32,7 @@ class ClientsView{
             let user = await UsersDB.getUser(client.kinId)
             this.kinModule = new UserModule(this, `${this.div} #kin-module`, user, `${client.name}'s Next of Kin`, null, null, false)
         }else{
-            let user = await UsersDB.getUser(client.kinId)
-            this.kinModule = new UserModule(this, `${this.div} #kin-module`, user, `${client.name}'s Next of Kin`, "No next of kin!", client, false)
+            this.kinModule = new UserModule(this, `${this.div} #kin-module`, null, `${client.name}'s Next of Kin`, "No next of kin!", client, false)
         }
         // else Module.hide(`${this.div} #kin-module`)
     }

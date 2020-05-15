@@ -17,6 +17,6 @@ class SettingsModel{
             preserveTabState : this.preserveTabState
         }
 
-        return med
+        return settings
     }
 }

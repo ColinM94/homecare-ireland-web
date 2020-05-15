@@ -18,14 +18,12 @@ class VisitsModule{
                 $(`${div} #btn-filters`).removeClass("d-none")
             } 
 
-            if(showAdd && currentUser.role == "Admin") $(`${div} #btn-add`).removeClass("d-none")
+            if(currentUser.role == "Admin") $(`${div} #btn-add`).removeClass("d-none")
 
             // Hides header if empty.
             if(!showAdd && !showSearch && title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
 
             $(`${this.div} #title`).text(title)
-
-
 
             this.observe()
 
@@ -149,8 +147,6 @@ class VisitsModule{
         let end = new Date($('#visit-end').val())
         let notes = $('#visit-notes').val()
 
-        console.log(end)
-
         if(!userId){
             Notification.formError("Please select a carer!")
         }else if(!start){
@@ -183,7 +179,6 @@ class VisitsModule{
         })
 
         $(document).on('click', '#btn-add-visit', (ref) => {
-            console.log("Heeeyy")
             this.addVisit()
         })
 

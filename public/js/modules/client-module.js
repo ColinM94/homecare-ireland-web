@@ -5,7 +5,7 @@ class ClientModule{
         this.div = div
         this.client = client
         this.archiver = archiver
-
+        
         $(`${div}`).load("views/templates/details.html", () => {
 
             // if(showAdd) $(`${div} #btn-add`).removeClass("d-none")
@@ -16,7 +16,7 @@ class ClientModule{
             if(currentUser.role == "Doctor") this.createPrescForm()
 
             this.listeners()
-            this.observe(client)
+            this.observe()
             $(this.div).show()
         })
     }
@@ -73,8 +73,34 @@ class ClientModule{
 
         Module.appendDetail(this.div, "Archived", Convert.boolToText(client.archived))
 
-        if(currentUser.role == "Doctor") Module.appendButtons(this.div, [["btn-prescribe", "Prescribe Medication"]])
+        $(`${this.div} .card-body`).append(`
+                <div class="row">
+                    <div class="col">
+                        <span class="font-weight-bold">Prescriptions</span>
+                        <button class="btn" id="btn-prescribe" title="Add Prescription"><i class="fas fa-plus fa-lg"></i></button>
+                    </div>
+                </div>
+                `)
 
+            if(currentUser.role != "Doctor") $("#btn-prescribe").addClass("d-none")
+
+        db.collection("prescriptions")
+            .where('clientId', '==', this.client.id).get()
+            .then(prescs => {
+                prescs.forEach(doc => {
+                    let presc = new PrescModel()
+                    presc.docToPresc(doc)
+
+                    MedsDB.getMed(presc.medId)
+                        .then(med => {
+                            $(`${this.div} .card-body`).append(`
+                                <div class="row mb-2">
+                                    <span class="col">Medication: ${med.name}<br>Dosage: ${presc.dosage}<br>Notes: ${presc.notes}</span>
+                                </div>
+                        `) 
+                    })
+                })
+            })
 
         // Module.appendButtons(this.div, [["btn-visits", "Show Visits"], ["btn-kind", "Show Next of Kin"]])
         Module.scroll(this.div)
@@ -87,11 +113,31 @@ class ClientModule{
 
         let meds = await MedsDB.getMeds()
 
-        Module.addField(formId, "select", "add-med-name", "Name")
+        Module.addField(formId, "select", "add-med-name", "Medication")
+        Module.addField(formId, "text", "add-med-dosage", "Dosage")
+        Module.addField(formId, "text", "add-med-notes", "Notes")
 
         meds.forEach(med => {
-            $("#add-med-name").append(`sdfsdfds`)
+            $("#add-med-name").append(new Option(med.name, med.id))
         })
+    }
+
+    addPresc(){
+        let medId = $("#add-med-name").val()
+        let dosage = $("#add-med-dosage").val()
+        let notes = $("#add-med-notes").val()
+
+        let prescription = new PrescModel(null, medId, this.client.id, dosage, notes)
+
+        db.collection("prescriptions").add(prescription.toFirestore())
+            .then(() => {
+                Notification.display(1, "Prescription added")
+                $("#add-prescription-modal").modal("hide")
+            }).catch(error => {
+                console.log(error.message)
+                Notification.display(2, "Unable to add prescription")
+            })
+
     }
 
     listeners(){
@@ -107,7 +153,12 @@ class ClientModule{
         })
 
         $(this.div).on('click', `#btn-prescribe`, () => {
+            // $('#add-prescription')[0].reset();
             $("#add-prescription-modal").modal("show")
+        })
+
+        $(this.div).on('click', `#btn-add-prescription`, () => {
+            this.addPresc()
         })
     }
 }

@@ -67,7 +67,6 @@ class ClientsModule{
 
         let userId = this.userId
 
-        console.log(clients)
         this.datatable = $(`${this.div} #datatable`).DataTable({
             data: clients,
             // bLengthChange: false,
@@ -181,7 +180,7 @@ class ClientsModule{
             ClientsDB.addClient(name, gender, dob, mobile, address1, address2, town, county, eircode, marital, false)
                 .then(() => {
                     $('#add-client-modal').modal('hide')
-                    Notification.display(2, "Client created")
+                    Notification.display(1, "Client created")
                 }).catch(error => {
                     console.log(error.message)
                     Notification.display(2, "Unable to add client")
@@ -320,9 +319,10 @@ class ClientsModule{
         $(this.div).on('click', '#btn-add', (ref) => {
             if(this.userId)
                 this.connForm()
-            else
+            else{
+                document.getElementById("add-client").reset();
                 $("#add-client-modal").modal("show")
-
+            }
         })
 
         $(this.div).on('click', '#btn-add-client', () => {

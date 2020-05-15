@@ -69,7 +69,6 @@ class UsersDB{
         this.updateUser(user.toFirestore())
     }
 
-
     // Adds a new doc to users. 
     static async addUser(id, role, name, gender, dob, address1, address2, town, county, mobile, eircode) {
         let settings = {preserveTabState: false}

@@ -14,7 +14,7 @@ class UserModule{
             if(title == "") $(`${div} .card-header`).removeClass("d-inline-flex").addClass("d-none")
 
             if(error){
-                $(`${div} #btn-add`).removeClass("d-none")
+                if(currentUser.role == "Admin") $(`${div} #btn-add`).removeClass("d-none")
                 $(`${div} .card-body`).append(`
                 <div class="row">
                     <div class="col">
@@ -22,7 +22,7 @@ class UserModule{
                     </div>
                 </div>`)
 
-                Module.createForm(this.div, "#add-kin", "Next of Kin", "Add Kin")
+                if(currentUser.role == "Admin") Module.createForm(this.div, "#add-kin", "Next of Kin", "Add Kin")
             }else{
                 this.observe()
             }

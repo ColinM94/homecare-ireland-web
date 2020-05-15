@@ -32,7 +32,6 @@ class MedModule{
         $(`${this.div} #med-desc`).text("")
         $(`${this.div} #med-sides`).text("")
 
-
         // $(`${this.div} #med-name`).append(med.name + "<br><br>")
         
         $(`${this.div} #med-class`).append(med.type + "<br>")

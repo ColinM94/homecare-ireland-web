@@ -76,7 +76,16 @@ class UsersModule{
                     data: "name", 
                     responsivePriority: 1
                 },
-                { targets: 1, title: "Role", data: "role", responsivePriority: 2},
+                // { targets: 1, title: "Role", data: "role", responsivePriority: 2},
+                {   
+                    targets: 1, 
+                    title: "Role",
+                    responsivePriority: 2,
+                    data: function(data){
+                        if(data.role == "Client") return "Next of Kin"
+                        else return data.role
+                    }
+                },
                 { targets: 2, title: "Gender", data: "gender", responsivePriority: 3},
                 { targets: 3, title: "Town", data: "town", responsivePriority: 4},
                 { targets: 4, title: "County", data: "county", responsivePriority: 5},

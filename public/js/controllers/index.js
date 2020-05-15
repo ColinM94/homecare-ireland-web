@@ -1,3 +1,5 @@
+var webview = false
+
 $(document).ready(function() {
     Index.load()
 })
@@ -6,6 +8,17 @@ class Index{
     static load(){
         $("#main-content").load("views/signin.html")
         this.listeners()
+
+        try{
+            AndroidInterface.showToast("Loaded")
+            webview = true
+            // Notification.display(2, "Is a webview")
+
+        }catch(error){
+            // Notification.display(2, "Not a webview")
+            // Notification.display(2, erroe.message)
+            // webview = false
+        }
     }
 
     static signIn(){
@@ -88,6 +101,7 @@ class Index{
     }
     
     static toggleForm(){
+        console.log("TOGGLEING")
         $('#signup').toggleClass("d-none")
         $('#signin').toggleClass("d-none")
     }

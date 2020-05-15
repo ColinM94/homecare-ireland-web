@@ -24,4 +24,90 @@
     </div> 
 </main>
 
+<!-- MODAL ADD VISIT -->
+<div class="modal fade" id="modal-add-visit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Add Visit</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">                    
+                  <i class="fas fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal p-1 mr-2" id="form-add-visit">
+                <input type="hidden" id="visit_userid">
+                <div class="form-group row">
+                  <!-- <label class="col-3" for="visit-select-user">Select User</label> -->
+                  <select class="form-control col-12" id="visit-select-user"></select>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3" for="visit-start">Start</label>
+                  <input type="datetime-local" class="form-control col-sm-9" id="visit-start">
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3" for="visit-end">End</label>
+                  <input type="datetime-local" class="form-control col-sm-9" id="visit-end">
+                </div>
+                <div class="form-group row d-none">
+                  <label class="control-label col-sm-3" for="visit-notes" hidden>Notes</label>
+                  <textarea type="text" class="form-control col-sm-9" id="visit-notes" hidden></textarea>
+                </div>
+              </form> 
+          </div>
+          <div class="modal-footer">
+            <div class="form-error text-danger mx-auto"></div>
+            <button class="btn btn-primary" id="btn-add-visit" type="button">Add Visit</button>
+          </div>
+      </div>
+    </div>
+  </div>
+
         
+  <!-- MODAL MEDICATION -->
+<div class="modal fade" id="modal-medication" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modal-med-title"></h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">                    
+                <i class="fas fa-times"></i></span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <!-- <span class="font-weight-bold"></span><span id="modal-med-name"></span><br> -->
+            <span class="font-weight-bold">Class: </span><span id="modal-med-class"></span><br><br>
+            <span class="font-weight-bold">Description: </span><span id="modal-med-description"></span>
+            <span class="font-weight-bold">Dosages: </span><span id="modal-med-dosages"></span><br>
+            <span class="font-weight-bold">Side Effects: </span><span id="modal-med-sides"></span><br>
+          </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+  </div>
+</div>
+
+  <!-- MODAL CLOCK -->
+  <div class="modal fade" id="modal-clock" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-clock-title">Clock</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">                    
+                  <i class="fas fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+              <h2>Awaiting NFC tag.....</h2>
+              <span id="clock-client-id" style="display: none"></span>
+            </div>
+          <div class="modal-footer">
+          </div>
+      </div>
+    </div>
+  </div>
+
+

@@ -23,7 +23,7 @@ class VisitModule{
         doc.onSnapshot(docSnapshot => {
             let visit = new VisitModel()
             visit.docToVisit(docSnapshot)
-
+            this.visit = visit
             this.display(visit)
         }, err => {
             console.log(`Encountered error: ${err}`)
@@ -50,8 +50,19 @@ class VisitModule{
 
         Module.appendDetail(this.div, "Start", Convert.tsToDateTime(visit.start))
         Module.appendDetail(this.div, "End", Convert.tsToDateTime(visit.end))
-        Module.appendDetail(this.div, "Clock In", Convert.tsToDateTime(visit.clockIn))
-        Module.appendDetail(this.div, "Clock Out", Convert.tsToDateTime(visit.clockOut))
+
+        if(visit.clockIn.seconds == 0){
+            Module.appendDetail(this.div, "Clock In", "Not clocked")
+            Module.appendDetail(this.div, "Clock Out", "Not clocked")
+        }else{
+            Module.appendDetail(this.div, "Clock In", Convert.tsToDateTime(visit.clockIn))
+            if(visit.clockOut.seconds != 0) Module.appendDetail(this.div, "Clock Out", Convert.tsToDateTime(visit.clockOut))
+            else Module.appendDetail(this.div, "Clock Out", "Not Clocked")
+        }
+
+
+
+
 
         // $(`${this.div} .card-body`).append("Notes<br><br>")
         
@@ -80,14 +91,33 @@ class VisitModule{
 
         Module.scroll(this.div)
 
-        if(webview) Module.appendButtons(this.div, [["btn-clockin", "Clock In"], ["btn-clockout", "Clock Out"]])
-        Module.appendButtons(this.div, [["btn-add-note", "Add Note"]])
+        Module.appendButtons(this.div, [["btn-add-note", "Add Note"], ["btn-clockin", "Clock In"], ["btn-clockout", "Clock Out"]])
+        
+        if(currentUser.role == "Client") $("#btn-add-note").addClass("d-none")
+
+        if(webview){
+            if(visit.clockIn.seconds == 0){
+                $("#btn-clockin").removeClass("d-none")
+                $("#btn-clockout").addClass("d-none")
+            } 
+            else if(visit.clockIn.seconds != 0 && visit.clockOut.seconds == 0) {
+                $("#btn-clockin").addClass("d-none")
+                $("#btn-clockout").removeClass("d-none")
+            }else{
+                $("#btn-clockin").addClass("d-none")
+                $("#btn-clockout").addClass("d-none")                
+            }
+        }else{
+            console.log("Not a webview")
+            $("#btn-clockin").addClass("d-none")
+            $("#btn-clockout").addClass("d-none")    
+        }
     }
 
     createNoteForm(){
         let formId = `#add-visit-notes`
 
-        Module.createForm(this.div, formId, "Notes", "Add Notes")
+        Module.createForm(this.div, formId, "Notes", "Add Note")
         
         Module.addField(formId, "textarea", "visit-notes", "Notes")
     }
@@ -104,15 +134,65 @@ class VisitModule{
         }
         
         VisitsDB.addNote(this.visitId, notes)
+            .then(() => {
+                $("#add-visit-notes-modal").modal("hide")
+
+            })
+    }
+
+    clock(){
+        if(this.visit.clientId == nfcId){
+            if(this.visit.clockIn.seconds == 0){
+                VisitsDB.clockIn(this.visit.id)
+                    .then(() => {
+                        $("#modal-clock").modal("hide")
+                        Notification.display(1, "Clocked in")
+                    }).catch(error => {
+                        Notification.display(2, error.message)
+                    })
+            }else if(this.visit.clockOut.seconds == 0){
+                VisitsDB.clockOut(this.visit.id)
+                    .then(() => {
+                        $("#modal-clock").modal("hide")
+                        Notification.display(1, "Clocked out")
+                    }).catch(error => {
+                        Notification.display(2, error.message)
+                    })
+            }
+        }else{
+        }     
+    }
+
+    static async sleep(msec) {
+        return new Promise(resolve => setTimeout(resolve, msec));
     }
 
     listeners(){
         $(this.div).on('click', `#btn-add-note`, () => {
+            $("#visit-notes").val("")
             $("#add-visit-notes-modal").modal("show")
         })
 
         $(this.div).on('click', `#btn-add-visit-notes`, () => {
             this.addNotes()
+        })
+
+        $(this.div).on('click', `#btn-add-visit-notes`, () => {
+            this.addNotes()
+        })
+
+        $(this.div).on('click', `#btn-clockin`, () => {
+            $("#modal-clock-title").text("Clock In")
+            $("#modal-clock").modal("show")
+        })
+
+        $(this.div).on('click', `#btn-clockout`, () => {
+            $("#modal-clock-title").text("Clock Out")
+            $("#modal-clock").modal("show")
+        })
+
+        $(document).on("custom", "#nfc", () => {
+            this.clock()
         })
     }
 }
